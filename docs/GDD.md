@@ -64,6 +64,8 @@ MVP single player; co-op depois. Porte futuro para mobile.
 
 ## 9. Arte e áudio
 
+- Estilo visual e paleta: `docs/ESTILO-VISUAL.md` e `assets/palette/paleta.json`.
+
 - Pixel art. Mistura de: download de bancos de arte, geração por IA, criação manual e geração
   por prompt. Padronizar paleta e resolução por família de assets antes de produzir em massa.
 - Sem dublagem no MVP.

@@ -1,0 +1,21 @@
+{
+  "nome": "Pós-guerra decadente — paleta base v0.1",
+  "observacao": "Cores fixas. Sombras puxam para azul/roxo, luz puxa para amarelo/laranja. Não usar preto puro nem branco puro.",
+  "contorno": { "contorno": "#0d0f14" },
+  "pedra_concreto": { "sombra": "#3b3f4a", "base": "#4b4f5a", "meio": "#5b6172", "luz": "#9aa3b5" },
+  "metal": { "escuro": "#2a2e3a", "meio": "#5b6172", "luz": "#9aa3b5", "brilho": "#cdd3df" },
+  "ferrugem": { "sombra": "#4a2416", "base": "#7a3b22", "luz": "#a4582f" },
+  "latao": { "sombra": "#6b4a1f", "base": "#b8893a", "luz": "#e0b860" },
+  "madeira_couro": { "cabelo": "#2b1d14", "madeira": "#5a3a22", "couro": "#4a2f2a" },
+  "pele": { "base": "#e0a77a" },
+  "musgo_vida_teimosa": { "sombra": "#3a5434", "base": "#5a8048" },
+  "arcano_ciano": { "sombra": "#1f7f99", "base": "#3fe0ff", "brilho": "#d2faff" },
+  "arcano_roxo": { "sombra": "#4a2a8a", "base": "#8a4dff" },
+  "alerta_sangue": { "sombra": "#8c1f1f", "base": "#d13b3b" },
+  "fundo_noite": { "escuro": "#16181f", "claro": "#22262f" },
+  "regra_de_uso": {
+    "arcano_ciano_e_roxo": "no maximo 5% dos pixels de uma cena",
+    "alerta_sangue": "so para perigo imediato ou dano",
+    "musgo": "so em ruinas e interior de areas abandonadas"
+  }
+}
