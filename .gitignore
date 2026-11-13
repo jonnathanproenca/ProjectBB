@@ -1,0 +1,17 @@
+# Godot 4
+.godot/
+*.import
+*.tmp
+*.translation
+.mono/
+data_*/
+builds/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/

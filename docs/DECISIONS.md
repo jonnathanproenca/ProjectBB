@@ -1,0 +1,16 @@
+# Registro de decisões (ADR)
+
+| # | Decisão | Motivo | Status |
+|---|---|---|---|
+| ADR-001 | Engine: Godot 4.7+ | Gratuita, portátil, sem instalação admin, 2D e 3D, boa para RPG de turnos, porte futuro | Aceita |
+| ADR-002 | Renderer: GL Compatibility | Roda em mais hardware e facilita porte para mobile | Aceita |
+| ADR-003 | Regras: SRD 5.2 (CC-BY-4.0) | Base aberta, evita marca "D&D" e licenças fechadas | Aceita |
+| ADR-004 | Plataforma-alvo: PC; mobile depois | Escopo do MVP | Aceita |
+| ADR-005 | Single player no MVP; co-op depois | Escopo do MVP | Aceita |
+| ADR-006 | Nível máximo 5 no MVP, configurável | Escopo; regra do D&D até 20 | Aceita |
+| ADR-007 | Grupo limitado por `GameConfig.PARTY_MAX_SIZE` | Facilitar ajuste sem refatorar | Aceita |
+| ADR-008 | Classes, origens e espécies predefinidas; multiclasse liberada | Escopo do MVP | Aceita |
+| ADR-009 | Arte em pixel art com mistura de fontes | Pedido do time | Aceita |
+| ADR-010 | Sem voz no MVP; música procedural ou com licença clara | Escopo e licenças | Aceita |
+| ADR-011 | História e estratégia de negócio não definidas | Serão definidas depois | Adiada |
+| ADR-012 | Skills de game dev do catálogo copiadas para `.claude/skills` (Apache-2.0, ver NOTICE) | Projeto já nasce com o contexto | Aceita |

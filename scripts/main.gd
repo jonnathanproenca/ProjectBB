@@ -1,0 +1,84 @@
+extends Control
+## Demo de teste no navegador. Usa apenas as regras puras de scripts/rules/dnd_rules.gd.
+## Serve para validar o build web: rolagem de d20, modificador, proficiência, XP e dano.
+
+var _output: Label
+var _str_input: SpinBox
+var _level_input: SpinBox
+var _xp_input: SpinBox
+var _defense_input: SpinBox
+
+
+func _ready() -> void:
+	var box := VBoxContainer.new()
+	box.set_anchors_preset(Control.PRESET_FULL_RECT)
+	box.add_theme_constant_override("separation", 12)
+	box.offset_left = 40
+	box.offset_top = 40
+	box.offset_right = -40
+	box.offset_bottom = -40
+	add_child(box)
+
+	var title := Label.new()
+	title.text = "RPG D&D — teste de regras (SRD 5.2)"
+	title.add_theme_font_size_override("font_size", 28)
+	box.add_child(title)
+
+	_str_input = _spin_row(box, "Valor de atributo", 1, 20, 16)
+	_level_input = _spin_row(box, "Nível (teto %d)" % GameConfig.MAX_LEVEL, 1, GameConfig.MAX_LEVEL, 1)
+	_xp_input = _spin_row(box, "XP acumulado", 0, 400000, 300)
+	_defense_input = _spin_row(box, "Defesa do alvo", 0, 300, 50)
+
+	var roll_button := Button.new()
+	roll_button.text = "Rolar d20 + modificador de atributo"
+	roll_button.pressed.connect(_on_roll_pressed)
+	box.add_child(roll_button)
+
+	var update_button := Button.new()
+	update_button.text = "Recalcular nível, proficiência e dano"
+	update_button.pressed.connect(_refresh)
+	box.add_child(update_button)
+
+	_output = Label.new()
+	_output.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(_output)
+
+	_refresh()
+
+
+func _spin_row(parent: Node, label_text: String, min_v: int, max_v: int, start: int) -> SpinBox:
+	var row := HBoxContainer.new()
+	var label := Label.new()
+	label.text = label_text
+	label.custom_minimum_size = Vector2(260, 0)
+	row.add_child(label)
+	var spin := SpinBox.new()
+	spin.min_value = min_v
+	spin.max_value = max_v
+	spin.value = start
+	spin.rounded = true
+	spin.value_changed.connect(func(_v: float) -> void: _refresh())
+	row.add_child(spin)
+	parent.add_child(row)
+	return spin
+
+
+func _refresh() -> void:
+	var level := mini(int(_level_input.value), GameConfig.MAX_LEVEL)
+	var xp := int(_xp_input.value)
+	var mod := DndRules.ability_modifier(int(_str_input.value))
+	var prof := DndRules.proficiency_bonus(level)
+	var level_by_xp := DndRules.level_for_xp(xp, GameConfig.MAX_LEVEL)
+	var dmg := DndRules.mitigated_damage(10.0, _defense_input.value)
+	_output.text = "Modificador: %+d | Proficiência: %+d | Nível pelo XP: %d | Dano base 10 contra defesa %d: %d" % [
+		mod, prof, level_by_xp, int(_defense_input.value), dmg,
+	]
+
+
+func _on_roll_pressed() -> void:
+	var roll := randi_range(1, 20)
+	var mod := DndRules.ability_modifier(int(_str_input.value))
+	var prof := DndRules.proficiency_bonus(int(_level_input.value))
+	_output.text = "d20 = %d | total com modificador (%+d) = %d | proficiência de referência +%d" % [
+		roll, mod, roll + mod, prof,
+	]
