@@ -20,7 +20,7 @@ func _initialize() -> void:
 	var wall: Dictionary = {}
 	for y in range(10):
 		wall[Vector2i(1, y)] = true
-	var walled := CombatRules.reachable(Vector2i(0, 0), 5, wall, Vector2i(10, 10))
+	var walled := CombatRules.reachable(Vector2i(0, 0), 20, wall, Vector2i(10, 10))
 	_check(not walled.has(Vector2i(2, 0)), "parede bloqueia a passagem")
 	_check(walled.size() == 10, "lado esquerdo da parede tem 10 células")
 
