@@ -22,7 +22,7 @@ Status: proposta v0.1. Valores marcados como **(padrão)** podem ser ajustados.
 
 ## Dano
 
-- Fórmula de defesa em razão: `dano × K / (K + defesa)` (ADR-005 do GDD, `scripts/rules/dnd_rules.gd`).
+- Fórmula de defesa em razão: `dano × K / (K + defesa)` (GDD, seção 4; implementada em `scripts/rules/dnd_rules.gd`).
 
 ## Armas-foco arcanas (rifle)
 
