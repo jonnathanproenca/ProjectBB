@@ -28,6 +28,12 @@ MVP single player; co-op depois. Porte futuro para mobile.
 | Espécies | Predefinidas (SRD) | Ampliar |
 | Multiclasse | Sim, com pré-requisitos de atributo | — |
 
+## 3.1 Cenário
+
+- Pós-guerra decadente, tom trágico e político (ADR-013 e ADR-015).
+- Tecnologia arcano-mecânica: armas de fogo convertidas em focos arcanos que disparam magia.
+- Detalhes visuais em `docs/ESTILO-VISUAL.md`. História e nome do mundo: adiados.
+
 ## 4. Regras
 
 - Base: SRD 5.2 (CC-BY-4.0). Evitar o nome "D&D" como marca no título e no marketing.
