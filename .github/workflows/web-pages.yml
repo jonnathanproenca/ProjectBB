@@ -73,6 +73,13 @@ jobs:
       - name: Garantir arquivo de entrada
         run: test -f build/web/index.html
 
+      - name: Incluir páginas de apoio (comparação de estética)
+        run: |
+          mkdir -p build/web/estetica
+          cp -r site/estetica/. build/web/estetica/
+          mkdir -p build/web/assets/estetica
+          cp -r assets/estetica/. build/web/assets/estetica/
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

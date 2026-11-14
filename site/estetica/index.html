@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparação de estética — pós-guerra decadente</title>
+<style>
+  :root { --bg:#16181f; --panel:#22262f; --txt:#e6e8ee; --muted:#9aa3b5; --acc:#3fe0ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width:1280px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:26px; margin:0 0 6px; }
+  h2 { font-size:19px; margin:32px 0 8px; }
+  .lead { color:var(--muted); margin:0 0 24px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; }
+  figure { margin:0; background:var(--panel); border-radius:10px; overflow:hidden; }
+  figure img { display:block; width:100%; height:auto; image-rendering:auto; }
+  figcaption { padding:14px 16px 16px; }
+  figcaption strong { display:block; font-size:17px; margin-bottom:4px; }
+  .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:99px; margin-bottom:8px; }
+  .ok { background:#1f5f3a; color:#c9f5d9; }
+  .mid { background:#5a4a1f; color:#f5e6b8; }
+  .no { background:#5a1f1f; color:#f5c9c9; }
+  ul { margin:6px 0 0 18px; padding:0; color:var(--muted); }
+  li { margin:3px 0; }
+  .verdict { background:var(--panel); border-left:4px solid var(--acc); padding:16px 18px; border-radius:6px; margin-top:28px; }
+  .prompts { font-size:13px; color:var(--muted); }
+  details { background:var(--panel); border-radius:8px; padding:12px 16px; margin-top:12px; }
+  summary { cursor:pointer; color:var(--txt); }
+  pre { white-space:pre-wrap; background:#16181f; padding:12px; border-radius:6px; font-size:12px; color:#c9d1e0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Comparação de estética — pós-guerra decadente</h1>
+  <p class="lead">Três amostras geradas por IA externa, com o mesmo assunto (engenheira-maga, rifle arcano e tile de rua em ruínas) e paletas diferentes. Referência de decisão: <code>docs/ESTILO-VISUAL.md</code> e <code>assets/palette/paleta.json</code>.</p>
+
+  <div class="grid">
+    <figure>
+      <img src="../assets/estetica/03-ferrugem-latao.jpg" alt="Ferrugem e latão: engenheira com casaco remendado, rifle de latão com cristal ciano e tile em ruínas">
+      <figcaption>
+        <span class="tag ok">Recomendada como base</span>
+        <strong>A — Ferrugem e latão</strong>
+        <ul>
+          <li>Decadência visível: remendos, escombros, metal oxidado</li>
+          <li>Rifle arcano bem lido como arma-foco</li>
+          <li>Paleta quente, alinhada ao guia (ferrugem, latão)</li>
+          <li>Fraco: marrom domina, personagem perde contraste com o fundo</li>
+          <li>Fraco: textos e amostras de cor apareceram na imagem</li>
+        </ul>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="../assets/estetica/02-noite-azul.jpg" alt="Noite azul-grafite: engenheira sob chuva, rifle com cristal roxo e rua molhada com poste">
+      <figcaption>
+        <span class="tag mid">Recomendada como variante noturna</span>
+        <strong>B — Noite azul-grafite</strong>
+        <ul>
+          <li>Melhor tom trágico e político: chuva, casaco remendado, clima opressivo</li>
+          <li>Paleta fria, próxima da base do guia</li>
+          <li>Fraco: arma parece mais moderna do que decadente</li>
+          <li>Fraco: roxo na luminária passa de 5% da cena</li>
+        </ul>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="../assets/estetica/01-musgo.jpg" alt="Musgo e recuperação: engenheira com casaco de lona, rifle de madeira e latão com cristal ciano e rua com musgo">
+      <figcaption>
+        <span class="tag no">Descartada como base</span>
+        <strong>C — Musgo e recuperação</strong>
+        <ul>
+          <li>Mais bonita e legível</li>
+          <li>Fraco: tom de aventura de fantasia, mais esperançoso do que o pedido</li>
+          <li>Fraco: luminária limpa demais para um mundo decadente</li>
+          <li>Uso possível: só em ruínas abandonadas, como prevê o guia</li>
+        </ul>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="verdict">
+    <strong>Decisão proposta:</strong>
+    <ul>
+      <li>Base de cenário e personagem: estética A (ferrugem e latão).</li>
+      <li>Cenas noturnas e chuvosas: estética B (noite azul-grafite).</li>
+      <li>Musgo: somente em áreas abandonadas.</li>
+      <li>Pendência: reduzir as amostras para o tamanho e a paleta do guia (32×48, 32×32, 30 cores) antes de usar em jogo.</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Prompts usados (em inglês)</summary>
+    <pre>Estética A — Ferrugem e latão: warm dusty palette dominated by rust and brass (#4a2416, #7a3b22, #a4582f, #6b4a1f, #b8893a, #e0b860, #5a3a22, #e0a77a), cyan #3fe0ff only for the crystal. Mood: tired, tragic, worn. No neon, no text or logos.
+
+Estética B — Noite azul-grafite: cold night palette (#16181f, #22262f, #2a2e3a, #3b3f4a, #5b6172, #9aa3b5, #cdd3df), violet #8a4dff and #4a2a8a sparingly. Mood: lonely, political, rainy. No bright neon, no text or logos.
+
+Estética C — Musgo e recuperação: moss (#3a5434, #5a8048), grey stone, brass, rust accent, teal crystal (#1f7f99, #3fe0ff). Mood: tragic but quietly hopeful. No neon, no text or logos.</pre>
+  </details>
+</main>
+</body>
+</html>
