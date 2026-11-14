@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Armas e equipamentos — primeira versão</title>
+<style>
+  :root { --bg:#16181f; --panel:#22262f; --txt:#e6e8ee; --muted:#9aa3b5; --acc:#3fe0ff; --line:#2e3340; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.45 system-ui, sans-serif; }
+  main { max-width:1200px; margin:0 auto; padding:28px 16px 60px; }
+  h1 { font-size:24px; margin:0 0 6px; }
+  h2 { font-size:19px; margin:34px 0 4px; }
+  .count { color:var(--muted); font-size:13px; font-weight:400; }
+  .lead, .note { color:var(--muted); margin:0 0 12px; font-size:14px; }
+  nav { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px; position:sticky; top:0; background:var(--bg); padding:8px 0; }
+  nav a { color:var(--txt); text-decoration:none; background:var(--panel); border:1px solid var(--line); padding:6px 12px; border-radius:99px; font-size:14px; }
+  nav a:hover { border-color:var(--acc); color:var(--acc); }
+  .wrap { overflow-x:auto; background:var(--panel); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; min-width:640px; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { color:var(--muted); font-weight:600; font-size:13px; background:#1b1e26; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Armas e equipamentos — primeira versão</h1>
+  <p class="lead">Proposta v0.1. Uma tabela por categoria. Documento completo em <code>docs/ITENS.md</code>.</p>
+  <nav><a href="#armas">Armas</a> <a href="#armaduras">Armaduras</a> <a href="#luvas">Luvas</a> <a href="#calcas">Calças</a> <a href="#sapatos">Sapatos</a> <a href="#elmos">Elmos</a> <a href="#capas">Capas</a> <a href="#aneis">Anéis</a> <a href="#amuletos">Amuletos</a></nav>
+<section id="armas"><h2>Armas <span class="count">30</span></h2><p class="note">Dados seguem o padrão D&amp;D (SRD). Armas de foco somam o catalisador ao dano (ver `docs/COMBATE.md`).</p><div class="wrap"><table><thead><tr><th>#</th><th>Arma</th><th>Categoria</th><th>Dano</th><th>Tipo</th><th>Propriedades</th><th>Alcance</th></tr></thead><tbody>
+<tr><td>1</td><td>Adaga</td><td>Corpo a corpo leve</td><td>1d4</td><td>Perfurante</td><td>Acuidade, arremesso</td><td>6/18 m</td></tr>
+<tr><td>2</td><td>Faca de trincheira</td><td>Corpo a corpo leve</td><td>1d4</td><td>Perfurante</td><td>Leve, acuidade</td><td>—</td></tr>
+<tr><td>3</td><td>Clava</td><td>Corpo a corpo simples</td><td>1d4</td><td>Contundente</td><td>Leve</td><td>—</td></tr>
+<tr><td>4</td><td>Espada curta</td><td>Corpo a corpo marcial</td><td>1d6</td><td>Perfurante</td><td>Acuidade, leve</td><td>—</td></tr>
+<tr><td>5</td><td>Machado de mão</td><td>Corpo a corpo simples</td><td>1d6</td><td>Cortante</td><td>Leve, arremesso</td><td>6/18 m</td></tr>
+<tr><td>6</td><td>Maça</td><td>Corpo a corpo simples</td><td>1d6</td><td>Contundente</td><td>—</td><td>—</td></tr>
+<tr><td>7</td><td>Bastão de ferro</td><td>Corpo a corpo simples</td><td>1d6</td><td>Contundente</td><td>Versátil (1d8)</td><td>—</td></tr>
+<tr><td>8</td><td>Lança</td><td>Corpo a corpo simples</td><td>1d6</td><td>Perfurante</td><td>Arremesso, versátil (1d8)</td><td>6/18 m</td></tr>
+<tr><td>9</td><td>Espada longa</td><td>Corpo a corpo marcial</td><td>1d8</td><td>Cortante</td><td>Versátil (1d10)</td><td>—</td></tr>
+<tr><td>10</td><td>Martelo de guerra</td><td>Corpo a corpo marcial</td><td>1d8</td><td>Contundente</td><td>Versátil (1d10)</td><td>—</td></tr>
+<tr><td>11</td><td>Machado de batalha</td><td>Corpo a corpo marcial</td><td>1d8</td><td>Cortante</td><td>Versátil (1d10)</td><td>—</td></tr>
+<tr><td>12</td><td>Chicote</td><td>Corpo a corpo marcial</td><td>1d4</td><td>Cortante</td><td>Acuidade, alcance</td><td>4,5 m</td></tr>
+<tr><td>13</td><td>Foice de campo</td><td>Corpo a corpo marcial</td><td>1d6</td><td>Cortante</td><td>Alcance</td><td>3 m</td></tr>
+<tr><td>14</td><td>Montante de campanha</td><td>Corpo a corpo marcial</td><td>2d6</td><td>Cortante</td><td>Pesada, duas mãos</td><td>—</td></tr>
+<tr><td>15</td><td>Alabarda</td><td>Corpo a corpo marcial</td><td>1d10</td><td>Cortante</td><td>Pesada, alcance, duas mãos</td><td>3 m</td></tr>
+<tr><td>16</td><td>Arco curto</td><td>À distância marcial</td><td>1d6</td><td>Perfurante</td><td>Munição, duas mãos</td><td>24/96 m</td></tr>
+<tr><td>17</td><td>Besta leve</td><td>À distância marcial</td><td>1d8</td><td>Perfurante</td><td>Munição, recarga, duas mãos</td><td>24/96 m</td></tr>
+<tr><td>18</td><td>Arco longo</td><td>À distância marcial</td><td>1d8</td><td>Perfurante</td><td>Munição, pesada, duas mãos</td><td>45/180 m</td></tr>
+<tr><td>19</td><td>Pistola automática</td><td>À distância marcial</td><td>1d6</td><td>Perfurante</td><td>Munição, leve</td><td>9/30 m</td></tr>
+<tr><td>20</td><td>Revólver</td><td>À distância marcial</td><td>1d8</td><td>Perfurante</td><td>Munição (tambor de 6), leve</td><td>12/36 m</td></tr>
+<tr><td>21</td><td>Rifle de repetição</td><td>À distância marcial</td><td>1d10</td><td>Perfurante</td><td>Munição, duas mãos</td><td>60/240 m</td></tr>
+<tr><td>22</td><td>Espingarda de cano duplo</td><td>À distância marcial</td><td>2d8</td><td>Perfurante</td><td>Munição, duas mãos, dispersão</td><td>9/27 m</td></tr>
+<tr><td>23</td><td>Rifle arcano</td><td>Foco arcano</td><td>1d8 + catalisador</td><td>Arcano</td><td>Foco, munição de cristal, duas mãos</td><td>60/240 m</td></tr>
+<tr><td>24</td><td>Pistola arcana</td><td>Foco arcano</td><td>1d6 + catalisador</td><td>Arcano</td><td>Foco, leve</td><td>15/45 m</td></tr>
+<tr><td>25</td><td>Cajado-foco</td><td>Foco arcano</td><td>1d6 + catalisador</td><td>Arcano</td><td>Foco, versátil (1d8)</td><td>—</td></tr>
+<tr><td>26</td><td>Lança-cristal</td><td>Foco arcano</td><td>1d8 + catalisador</td><td>Arcano</td><td>Foco, arremesso</td><td>9/27 m</td></tr>
+<tr><td>27</td><td>Lançador de pulso</td><td>Foco arcano</td><td>1d8 elétrico</td><td>Elétrico</td><td>Foco, cone</td><td>4,5 m (cone)</td></tr>
+<tr><td>28</td><td>Lança-chamas</td><td>Foco combustível</td><td>2d6 ígneo</td><td>Ígneo</td><td>Foco, área (cone), pesada, duas mãos</td><td>4,5 m (cone)</td></tr>
+<tr><td>29</td><td>Granada de vapor</td><td>Consumível</td><td>2d6 vapor</td><td>Vapor</td><td>Arremesso, área (raio de 3 m)</td><td>9/27 m</td></tr>
+<tr><td>30</td><td>Canhão de mão</td><td>Pesada</td><td>2d10</td><td>Perfurante</td><td>Pesada, duas mãos, recarga</td><td>30/120 m</td></tr>
+</tbody></table></div></section>
+<section id="armaduras"><h2>Armaduras <span class="count">13</span></h2><p class="note">Regras de CA e limites seguem o SRD. Armaduras do pós-guerra são propostas.</p><div class="wrap"><table><thead><tr><th>#</th><th>Armadura</th><th>Tipo</th><th>CA base</th><th>Limite de Destreza</th><th>Força mín.</th><th>Furtividade</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Acolchoada</td><td>Leve</td><td>11 + Des</td><td>Sem limite</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>2</td><td>Couro</td><td>Leve</td><td>11 + Des</td><td>Sem limite</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>3</td><td>Couro batido</td><td>Leve</td><td>12 + Des</td><td>Sem limite</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>4</td><td>Gibão de peles</td><td>Média</td><td>12 + Des</td><td>2</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>5</td><td>Colete de trincheira</td><td>Média</td><td>13 + Des</td><td>2</td><td>—</td><td>Normal</td><td>Pós-guerra</td></tr>
+<tr><td>6</td><td>Cota de malha</td><td>Média</td><td>13 + Des</td><td>2</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>7</td><td>Peitoral</td><td>Média</td><td>14 + Des</td><td>2</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>8</td><td>Manto de placas remendadas</td><td>Média</td><td>14 + Des</td><td>2</td><td>—</td><td>Normal</td><td>Pós-guerra</td></tr>
+<tr><td>9</td><td>Meia-armadura</td><td>Média</td><td>15 + Des</td><td>2</td><td>—</td><td>Normal</td><td>SRD</td></tr>
+<tr><td>10</td><td>Couraça de campo</td><td>Pesada</td><td>16</td><td>—</td><td>13</td><td>Desvantagem</td><td>Pós-guerra</td></tr>
+<tr><td>11</td><td>Cota de talas</td><td>Pesada</td><td>17</td><td>—</td><td>15</td><td>Desvantagem</td><td>SRD</td></tr>
+<tr><td>12</td><td>Exoesqueleto de latão</td><td>Pesada</td><td>17</td><td>—</td><td>13</td><td>Desvantagem</td><td>Pós-guerra, sintonia</td></tr>
+<tr><td>13</td><td>Armadura de placas</td><td>Pesada</td><td>18</td><td>—</td><td>15</td><td>Desvantagem</td><td>SRD</td></tr>
+</tbody></table></div></section>
+<section id="luvas"><h2>Luvas <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Classes sugeridas</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Luvas de lona</td><td>+1 em testes de Destreza para consertar máquinas</td><td>Mecânico de Campo</td><td></td></tr>
+<tr><td>2</td><td>Luvas de couro reforçado</td><td>Uma vez por combate, impede desarme do inimigo</td><td>Guerreiro, Paladino</td><td></td></tr>
+<tr><td>3</td><td>Luvas de forja</td><td>Resistência a dano ígneo (metade)</td><td>Piromante, Ferreiro de Guerra</td><td></td></tr>
+<tr><td>4</td><td>Luvas de precisão</td><td>+1 em testes de Destreza (prestidigitação)</td><td>Ladino, Espião Político</td><td></td></tr>
+<tr><td>5</td><td>Luvas de disparo firme</td><td>+1 de dano com arma de foco</td><td>Atirador Arcano</td><td></td></tr>
+<tr><td>6</td><td>Luvas de vapor</td><td>Recarrega 1 carga sem gastar ação, uma vez por descanso curto</td><td>Taumaturgo do Vapor</td><td></td></tr>
+<tr><td>7</td><td>Luvas de ferro remendado</td><td>Ataques desarmados causam 1d4 contundente</td><td>Monge</td><td></td></tr>
+<tr><td>8</td><td>Luvas de juramento</td><td>Cura 1d4 ao tocar um aliado, uma vez por descanso curto</td><td>Clérigo, Paladino</td><td></td></tr>
+</tbody></table></div></section>
+<section id="calcas"><h2>Calças <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Classes sugeridas</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Calça de lona</td><td>+1 em testes de Atletismo (escalada)</td><td>Qualquer</td><td></td></tr>
+<tr><td>2</td><td>Calça de couro</td><td>Resistência a dano cortante de estilhaços (metade)</td><td>Mecânico de Campo, Sabotador</td><td></td></tr>
+<tr><td>3</td><td>Calça de campanha</td><td>Deslocamento +1,5 m (1 casa)</td><td>Mercenário, Condutor</td><td></td></tr>
+<tr><td>4</td><td>Calça de remendo</td><td>+1 em testes de Carisma em bairros pobres</td><td>Espião Político, Propagandista</td><td></td></tr>
+<tr><td>5</td><td>Calça de sobrevivente</td><td>Vantagem em testes contra veneno</td><td>Sobrevivente de Abrigo</td><td></td></tr>
+<tr><td>6</td><td>Calça de ferroviário</td><td>+1 em testes de Acrobacia (equilíbrio)</td><td>Monge, Garra-Negra</td><td></td></tr>
+<tr><td>7</td><td>Calça de malha</td><td>Sem efeito extra; base para armaduras pesadas</td><td>Cavaleiro de Aço</td><td></td></tr>
+<tr><td>8</td><td>Calça de gala da facção</td><td>+1 em Influência com a facção de origem</td><td>Bardo, Estrategista</td><td></td></tr>
+</tbody></table></div></section>
+<section id="sapatos"><h2>Sapatos <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Classes sugeridas</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Sandálias de trincheira</td><td>Ignora terreno difícil de escombros</td><td>Monge, Navegador de Ruínas</td><td></td></tr>
+<tr><td>2</td><td>Botas de couro</td><td>+1 em Furtividade em ruínas</td><td>Ladino, Caçador de Recompensas</td><td></td></tr>
+<tr><td>3</td><td>Botas de campo</td><td>Deslocamento +1,5 m (1 casa)</td><td>Patrulheiro, Mensageiro Rápido</td><td></td></tr>
+<tr><td>4</td><td>Botas de ferro</td><td>Resistência a derrubada, uma vez por combate</td><td>Guerreiro, Sentinela de Muralha</td><td></td></tr>
+<tr><td>5</td><td>Botas de trilho</td><td>+1 em Acrobacia</td><td>Monge, Duelista</td><td></td></tr>
+<tr><td>6</td><td>Botas de sola de borracha</td><td>+1 em Furtividade (silêncio)</td><td>Ladino, Garra-Negra</td><td></td></tr>
+<tr><td>7</td><td>Patins de vapor</td><td>Deslocamento +3 m, uma vez por descanso curto</td><td>Condutor, Taumaturgo do Vapor</td><td></td></tr>
+<tr><td>8</td><td>Botas de combate ferroviárias</td><td>Chute como ataque bônus, 1d4 contundente</td><td>Monge, Mercenário</td><td></td></tr>
+</tbody></table></div></section>
+<section id="elmos"><h2>Elmos <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Classes sugeridas</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Capacete de trincheira</td><td>CA +1</td><td>Guerreiro, Mercenário</td><td></td></tr>
+<tr><td>2</td><td>Elmo de latão</td><td>CA +1; +1 em testes contra ilusões</td><td>Paladino, Inquisidor</td><td></td></tr>
+<tr><td>3</td><td>Chapéu de campo com viseira</td><td>+1 em Percepção</td><td>Patrulheiro, Sentinela de Torre</td><td></td></tr>
+<tr><td>4</td><td>Máscara de gás arcana</td><td>Resistência a vapor e fumaça</td><td>Taumaturgo do Vapor, Alquimista de Campo</td><td></td></tr>
+<tr><td>5</td><td>Elmo de aço com viseira</td><td>CA +1; -1 em Percepção (visão periférica)</td><td>Cavaleiro de Aço</td><td></td></tr>
+<tr><td>6</td><td>Óculos de bronze</td><td>+1 em Investigação para ler máquinas</td><td>Mecânico de Campo, Navegador de Ruínas</td><td></td></tr>
+<tr><td>7</td><td>Coifa de malha</td><td>CA +1</td><td>Bárbaro, Duelista</td><td></td></tr>
+<tr><td>8</td><td>Auscultador de rádio</td><td>+1 em testes de sinal</td><td>Radiotelegrafista, Técnico de Sinal</td><td></td></tr>
+</tbody></table></div></section>
+<section id="capas"><h2>Capas <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Classes sugeridas</th><th>Observação</th></tr></thead><tbody>
+<tr><td>1</td><td>Capa de lona</td><td>+1 em Furtividade em chuva</td><td>Caçador de Recompensas, Garra-Negra</td><td></td></tr>
+<tr><td>2</td><td>Capa de couro</td><td>Resistência a frio (metade)</td><td>Patrulheiro, Sobrevivente de Abrigo</td><td></td></tr>
+<tr><td>3</td><td>Capa de sombra</td><td>+1 em Furtividade à noite</td><td>Ladino, Espião Político</td><td></td></tr>
+<tr><td>4</td><td>Capa de bandeira</td><td>+1 em Carisma em áreas da facção</td><td>Bardo, Milícia Urbana</td><td></td></tr>
+<tr><td>5</td><td>Capa de viajante</td><td>Deslocamento +1,5 m em terreno aberto</td><td>Mensageiro Rápido, Condutor</td><td></td></tr>
+<tr><td>6</td><td>Capa de trincheira</td><td>+1 CA contra ataques à distância (cobertura)</td><td>Guerreiro, Paladino</td><td></td></tr>
+<tr><td>7</td><td>Manto de chama</td><td>Resistência a dano ígneo</td><td>Piromante, Bombardeiro</td><td></td></tr>
+<tr><td>8</td><td>Capa de sinal</td><td>Dá a aliados em alcance 1 sinal por rodada</td><td>Estrategista, Radiotelegrafista</td><td></td></tr>
+</tbody></table></div></section>
+<section id="aneis"><h2>Anéis <span class="count">8</span></h2><p class="note">Sintonia limita a quantidade de itens mágicos ativos, como no SRD.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Sintonia</th><th>Classes sugeridas</th></tr></thead><tbody>
+<tr><td>1</td><td>Anel de latão</td><td>+1 em testes de Inteligência para reparo</td><td>Não</td><td>Mecânico de Campo</td></tr>
+<tr><td>2</td><td>Anel de foco</td><td>+1 de dano com arma de foco</td><td>Sim</td><td>Atirador Arcano, Mago-Engenheiro</td></tr>
+<tr><td>3</td><td>Anel de cristal</td><td>Recarrega 1 carga, uma vez por descanso curto</td><td>Sim</td><td>Bruxo, Feiticeiro</td></tr>
+<tr><td>4</td><td>Anel de proteção</td><td>+1 CA</td><td>Sim</td><td>Qualquer</td></tr>
+<tr><td>5</td><td>Anel de sinal</td><td>Mensagem silenciosa a aliados, uma vez por dia</td><td>Não</td><td>Radiotelegrafista</td></tr>
+<tr><td>6</td><td>Anel de brasa</td><td>Resistência a dano ígneo</td><td>Sim</td><td>Piromante</td></tr>
+<tr><td>7</td><td>Anel de sobrevivente</td><td>Vantagem em testes de Constituição contra fome e sede</td><td>Não</td><td>Sobrevivente de Abrigo</td></tr>
+<tr><td>8</td><td>Anel de juramento</td><td>+1 em testes de Carisma com a facção</td><td>Sim</td><td>Paladino, Bardo</td></tr>
+</tbody></table></div></section>
+<section id="amuletos"><h2>Amuletos <span class="count">8</span></h2><p class="note">Efeitos são propostas para revisão.</p><div class="wrap"><table><thead><tr><th>#</th><th>Item</th><th>Efeito (proposta)</th><th>Sintonia</th><th>Classes sugeridas</th></tr></thead><tbody>
+<tr><td>1</td><td>Medalhão de família</td><td>+1 em Carisma com a facção de origem</td><td>Não</td><td>Qualquer</td></tr>
+<tr><td>2</td><td>Relicário de santo</td><td>Cura 1 PV no descanso curto</td><td>Sim</td><td>Clérigo, Médico de Campanha</td></tr>
+<tr><td>3</td><td>Amuleto de chumbo</td><td>Resistência a dano de radiação (metade)</td><td>Sim</td><td>Sobrevivente de Abrigo</td></tr>
+<tr><td>4</td><td>Pingente de rádio</td><td>Comunicação com aliados em até 300 m</td><td>Não</td><td>Radiotelegrafista</td></tr>
+<tr><td>5</td><td>Corrente de bronze</td><td>+1 em testes contra medo</td><td>Sim</td><td>Paladino, Bárbaro</td></tr>
+<tr><td>6</td><td>Talismã de bateria</td><td>+1 carga arcana por descanso longo</td><td>Sim</td><td>Mago-Engenheiro, Mecânico de Campo</td></tr>
+<tr><td>7</td><td>Símbolo de ordem</td><td>+1 na CD contra milagres inimigos</td><td>Sim</td><td>Inquisidor, Padre-Soldado</td></tr>
+<tr><td>8</td><td>Amuleto de flecha</td><td>Dado extra de dano, uma vez por combate</td><td>Sim</td><td>Atirador Arcano, Arqueiro Ancestral</td></tr>
+</tbody></table></div></section>
+
+</main>
+</body>
+</html>

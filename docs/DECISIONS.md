@@ -26,3 +26,4 @@
 | ADR-022 | Rifle é foco arcano: disparo comum sem custo, disparos especiais limitados por descanso curto ou longo conforme a classe | Pedido do time, referência de magias no Baldur's Gate 3 | Aceita |
 | ADR-023 | Formas de poder: Magia, Arcano, Combustível, Influência, Milagre (Instinto proposto) | Pedido do time | Aceita (Instinto: proposta) |
 | ADR-024 | 50 classes propostas, corte final de 12, MVP de 5 | Pedido do time | Aceita |
+| ADR-025 | Primeira versão de armas (30) e equipamentos por categoria (armaduras, luvas, calças, sapatos, elmos, capas, anéis, amuletos), dados D&D/SRD com efeitos propostos | Pedido do time | Aceita (efeitos: propostas) |
