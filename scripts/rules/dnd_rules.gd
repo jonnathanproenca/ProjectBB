@@ -42,3 +42,12 @@ static func mitigated_damage(raw: float, defense: float, k: float = 100.0) -> in
 ## Limite de resistência percentual (75% por padrão, convenção comum de RPG).
 static func clamp_resistance(percent: float, cap: float = 75.0) -> float:
 	return clampf(percent, -100.0, cap)
+
+
+## Acerto de ataque (d20 + modificador contra CA). Crítico (20) sempre acerta; 1 sempre erra.
+static func attack_hits(d20: int, mod: int, ac: int) -> bool:
+	if d20 == 20:
+		return true
+	if d20 == 1:
+		return false
+	return d20 + mod >= ac

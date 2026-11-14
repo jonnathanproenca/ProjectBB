@@ -30,6 +30,11 @@ func _initialize() -> void:
 	_check(DndRules.clamp_resistance(90.0) == 75.0, "resistência limitada a 75%")
 	_check(DndRules.clamp_resistance(-150.0) == -100.0, "vulnerabilidade limitada a -100%")
 
+	_check(DndRules.attack_hits(20, -5, 30), "crítico sempre acerta")
+	_check(not DndRules.attack_hits(1, 10, 1), "natural 1 sempre erra")
+	_check(DndRules.attack_hits(10, 3, 13), "10 + 3 = 13 acerta CA 13")
+	_check(not DndRules.attack_hits(9, 3, 13), "9 + 3 = 12 erra CA 13")
+
 	if _failures == 0:
 		print("OK: todos os testes de regra passaram.")
 		quit(0)

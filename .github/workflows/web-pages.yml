@@ -45,6 +45,12 @@ jobs:
       - name: Testes de combate
         run: godot --headless --path . -s res://scripts/tests/test_combat_rules.gd
 
+      - name: Checar compilação dos scripts
+        run: godot --headless --path . --script res://.claude/skills/godot/godot-gdscript/assets/check_scripts_compile.gd
+
+      - name: Rodar cena de combate (fumaça)
+        run: godot --headless --path . --quit-after 300 res://scenes/combat.tscn
+
   build-web:
     needs: test
     runs-on: ubuntu-latest

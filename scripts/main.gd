@@ -39,6 +39,10 @@ func _ready() -> void:
 	update_button.pressed.connect(_refresh)
 	box.add_child(update_button)
 
+	var combat_button := Button.new()
+	combat_button.text = "Abrir combate MVP"
+	combat_button.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/combat.tscn"))
+	box.add_child(combat_button)
 	_add_links(box)
 
 	_output = Label.new()
