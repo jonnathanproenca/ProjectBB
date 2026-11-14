@@ -39,6 +39,8 @@ func _ready() -> void:
 	update_button.pressed.connect(_refresh)
 	box.add_child(update_button)
 
+	_add_links(box)
+
 	_output = Label.new()
 	_output.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(_output)
@@ -82,3 +84,33 @@ func _on_roll_pressed() -> void:
 	_output.text = "d20 = %d | total com modificador (%+d) = %d | proficiência de referência +%d" % [
 		roll, mod, roll + mod, prof,
 	]
+
+
+## Links para os documentos publicados junto com o build.
+## No web, o caminho é relativo à página; no desktop, usa a URL completa.
+const LINKS := [
+	["Comparação de estética", "estetica/", "https://jonnathanproenca.github.io/ProjectBB/estetica/"],
+	["Classes (50 → 12)", "classes/", "https://jonnathanproenca.github.io/ProjectBB/classes/"],
+	["Armas e equipamentos", "itens/", "https://jonnathanproenca.github.io/ProjectBB/itens/"],
+]
+
+
+func _add_links(box: VBoxContainer) -> void:
+	var title := Label.new()
+	title.text = "Documentos do projeto"
+	box.add_child(title)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	box.add_child(row)
+	for item in LINKS:
+		var button := Button.new()
+		button.text = item[0]
+		button.pressed.connect(_open_link.bind(item[1], item[2]))
+		row.add_child(button)
+
+
+func _open_link(relative_path: String, url: String) -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.open('%s', '_blank')" % relative_path)
+	else:
+		OS.shell_open(url)
