@@ -42,6 +42,9 @@ jobs:
       - name: Testes de regra
         run: godot --headless --path . -s res://scripts/tests/test_dnd_rules.gd
 
+      - name: Testes de combate
+        run: godot --headless --path . -s res://scripts/tests/test_combat_rules.gd
+
   build-web:
     needs: test
     runs-on: ubuntu-latest
