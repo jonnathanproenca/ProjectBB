@@ -46,6 +46,8 @@ MVP single player; co-op depois. Porte futuro para mobile.
 
 ## 5. Combate (MVP)
 
+Detalhes em `docs/COMBATE.md`. Classes em `docs/CLASSES.md`.
+
 - Grade tática, turnos por iniciativa.
 - Ações: atacar, mover, usar item, ação bônus, reação, magia (quando houver).
 - Alvo de design (ponto de partida, não medido): inimigo normal cai em 2–4 golpes do jogador
@@ -69,6 +71,10 @@ MVP single player; co-op depois. Porte futuro para mobile.
 - Teto de nível configurável em `GameConfig.MAX_LEVEL` (5 no MVP).
 
 ## 9. Arte e áudio
+
+- Idiomas: português (padrão), inglês e espanhol (ADR-016).
+- Controles: mouse e teclado, gamepad (PS4, Xbox, GameSir) e touch (ADR-017).
+- Save: local (desktop) e IndexedDB do navegador (web) (ADR-018).
 
 - Estilo visual e paleta: `docs/ESTILO-VISUAL.md` e `assets/palette/paleta.json`.
 
