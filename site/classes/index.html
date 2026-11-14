@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classes — 50 propostas, corte de 12</title>
+<style>
+  :root { --bg:#16181f; --panel:#22262f; --txt:#e6e8ee; --muted:#9aa3b5; --acc:#3fe0ff; --line:#2e3340; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.45 system-ui, sans-serif; }
+  main { max-width:1400px; margin:0 auto; padding:28px 16px 60px; }
+  h1 { font-size:24px; margin:0 0 6px; }
+  .lead { color:var(--muted); margin:0 0 16px; }
+  .legend { color:var(--muted); font-size:13px; margin:0 0 14px; }
+  .filters { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .filters button { background:var(--panel); color:var(--txt); border:1px solid var(--line); padding:6px 12px; border-radius:99px; cursor:pointer; font:inherit; }
+  .filters button.on { border-color:var(--acc); color:var(--acc); }
+  .wrap { overflow-x:auto; background:var(--panel); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; min-width:1100px; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { position:sticky; top:0; background:#1b1e26; color:var(--muted); font-weight:600; font-size:13px; }
+  td.nome { font-weight:600; }
+  td.c { text-align:center; color:var(--acc); }
+  tr.c12 td.nome { color:#ffffff; }
+  tr:not(.c12) { opacity:.55; }
+  tr.hide { display:none; }
+  .notes { margin-top:18px; color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Classes — 50 propostas, corte final de 12</h1>
+  <p class="lead">Proposta v0.2. Base: SRD 5.2 reimaginado no pós-guerra, mais classes novas. Os documentos completos estão em <code>docs/CLASSES.md</code>.</p>
+  <div class="legend">
+    <strong>Formas de poder:</strong> Magia · Arcano (catalisador e máquina) · Combustível (fogo, pólvora, vapor) · Influência (voz e política) · Milagre (fé e ordem). Proposta adicional: Instinto.<br>
+    <strong>Descanso:</strong> C = curto · L = longo · — = sem disparos especiais.
+  </div>
+  <div class="filters">
+    <button class="on" data-f="all">Todas (50)</button>
+    <button data-f="c12">Corte final (12)</button>
+    <button data-f="mvp">MVP (5)</button>
+  </div>
+  <div class="wrap">
+  <table id="t">
+    <thead><tr><th>#</th><th>Classe</th><th>Base</th><th>Atributo de dano</th><th>Ataques (nív. 1 / 3 / 5)</th><th>Forma de poder</th><th>Magias / fonte</th><th>Descanso</th><th>Corte 12</th><th>MVP</th></tr></thead>
+    <tbody>
+<tr class="c12 mvp"><td class="">1</td><td class="nome">Guerreiro</td><td class="">Fighter</td><td class="">For / Des</td><td class="">Corpo; distância (3); investida (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c">✔</td></tr>
+<tr class="c12 mvp"><td class="">2</td><td class="nome">Clérigo</td><td class="">Cleric</td><td class="">Sab</td><td class="">Corpo; cura (1); área de fé (5)</td><td class="">Milagre</td><td class="">Milagres do domínio</td><td class="">L: 1 disparo</td><td class="c">✔</td><td class="c">✔</td></tr>
+<tr class="c12 mvp"><td class="">3</td><td class="nome">Ladino</td><td class="">Rogue</td><td class="">Des</td><td class="">Corpo furtivo; distância (1); golpe em posição (3)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c">✔</td></tr>
+<tr class="c12 mvp"><td class="">4</td><td class="nome">Mago-Engenheiro</td><td class="">Wizard</td><td class="">Int</td><td class="">Distância (1); área (3); controle (5)</td><td class="">Arcano</td><td class="">Fórmulas arcanas (espaços de magia)</td><td class="">L: espaços de magia</td><td class="c">✔</td><td class="c">✔</td></tr>
+<tr class="c12 mvp"><td class="">5</td><td class="nome">Atirador Arcano</td><td class="">Gunslinger (novo)</td><td class="">Des</td><td class="">Distância (1); precisão (3); perfuração (5)</td><td class="">Arcano</td><td class="">Disparos de rifle</td><td class="">C: 3 disparos</td><td class="c">✔</td><td class="c">✔</td></tr>
+<tr class="c12"><td class="">6</td><td class="nome">Piromante</td><td class="">Novo</td><td class="">Int</td><td class="">Fogo à distância (1); área (3); incêndio (5)</td><td class="">Combustível</td><td class="">Chamas e brasas</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">7</td><td class="nome">Bardo</td><td class="">Bard</td><td class="">Car</td><td class="">Canção à distância (1); suporte (3); controle social (5)</td><td class="">Influência</td><td class="">Canções e discursos</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">8</td><td class="nome">Paladino</td><td class="">Paladin</td><td class="">For / Car</td><td class="">Corpo (1); juramento (3); cura (5)</td><td class="">Milagre</td><td class="">Milagres de juramento</td><td class="">L: 1 disparo</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">9</td><td class="nome">Bárbaro</td><td class="">Barbarian</td><td class="">For</td><td class="">Corpo (1); fúria (3); investida (5)</td><td class="">Instinto</td><td class="">—</td><td class="">L: 1 disparo</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">10</td><td class="nome">Mecânico de Campo</td><td class="">Artificer (novo)</td><td class="">Int</td><td class="">Distância (1); construção (3); reparo (5)</td><td class="">Arcano</td><td class="">Fórmulas de peça</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">11</td><td class="nome">Monge</td><td class="">Monk</td><td class="">Des / Sab</td><td class="">Corpo rápido (1); ataques extras (3); golpe atordoante (5)</td><td class="">Instinto</td><td class="">—</td><td class="">—</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class="c12"><td class="">12</td><td class="nome">Bruxo</td><td class="">Warlock</td><td class="">Car</td><td class="">Distância (1); pacto (3); drenagem (5)</td><td class="">Arcano</td><td class="">Pactos com máquina ou fantasma</td><td class="">C: 2 disparos</td><td class="c">✔</td><td class="c"></td></tr>
+<tr class=""><td class="">13</td><td class="nome">Druida</td><td class="">Druid</td><td class="">Sab</td><td class="">Corpo (1); forma animal (3); área natural (5)</td><td class="">Instinto</td><td class="">Natureza e musgo</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">14</td><td class="nome">Patrulheiro</td><td class="">Ranger</td><td class="">Des / Sab</td><td class="">Distância (1); caçada (3); dupla (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">15</td><td class="nome">Feiticeiro</td><td class="">Sorcerer</td><td class="">Car</td><td class="">Distância (1); área (3); risco (5)</td><td class="">Magia</td><td class="">Magia inata</td><td class="">L: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">16</td><td class="nome">Sabotador</td><td class="">Novo</td><td class="">Int</td><td class="">Distância (1); armadilha (3); área explosiva (5)</td><td class="">Combustível</td><td class="">Minas e explosivos</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">17</td><td class="nome">Médico de Campanha</td><td class="">Battle medic (novo)</td><td class="">Sab</td><td class="">Corpo (1); cura de combate (3); cura em área (5)</td><td class="">Milagre</td><td class="">Curas de campo</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">18</td><td class="nome">Espião Político</td><td class="">Spy (novo)</td><td class="">Des / Car</td><td class="">Corpo furtivo (1); distância (3); informação (5)</td><td class="">Influência</td><td class="">Persuasão e disfarce</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">19</td><td class="nome">Condutor</td><td class="">Pilot (novo)</td><td class="">Des</td><td class="">Veículo (1); atropelamento (3); fuga (5)</td><td class="">Arcano</td><td class="">Motor de cristal</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">20</td><td class="nome">Caçador de Recompensas</td><td class="">Bounty hunter (novo)</td><td class="">Des / Sab</td><td class="">Distância (1); captura (3); perseguição (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">21</td><td class="nome">Exorcista de Máquinas</td><td class="">Machine exorcist (novo)</td><td class="">Sab</td><td class="">Corpo (1); purificação (3); cura de máquina (5)</td><td class="">Milagre</td><td class="">Rituais de máquina</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">22</td><td class="nome">Artilheiro Pesado</td><td class="">Novo</td><td class="">For</td><td class="">Armas pesadas (1); área (3); cerco (5)</td><td class="">Combustível</td><td class="">—</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">23</td><td class="nome">Cavaleiro de Aço</td><td class="">Novo</td><td class="">For / Con</td><td class="">Corpo (1); defesa (3); impacto (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">24</td><td class="nome">Duelista</td><td class="">Novo</td><td class="">Des</td><td class="">Corpo preciso (1); contra-ataque (3); sequência (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">25</td><td class="nome">Radiotelegrafista</td><td class="">Novo</td><td class="">Int</td><td class="">Distância (1); sinal (3); interferência (5)</td><td class="">Arcano</td><td class="">Sinais e interferência</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">26</td><td class="nome">Propagandista</td><td class="">Novo</td><td class="">Car</td><td class="">Voz à distância (1); moral (3); conversão (5)</td><td class="">Influência</td><td class="">Discursos</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">27</td><td class="nome">Padre-Soldado</td><td class="">Novo</td><td class="">For / Sab</td><td class="">Corpo (1); bênção (3); luz (5)</td><td class="">Milagre</td><td class="">Bênçãos de combate</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">28</td><td class="nome">Inquisidor</td><td class="">Novo</td><td class="">Sab</td><td class="">Distância (1); anulação (3); caça a magos (5)</td><td class="">Milagre</td><td class="">Anulação arcana</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">29</td><td class="nome">Curandeiro de Ervas</td><td class="">Novo</td><td class="">Sab</td><td class="">Distância leve (1); cura (3); antídoto (5)</td><td class="">Instinto</td><td class="">Ervas e tônicos</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">30</td><td class="nome">Ferreiro de Guerra</td><td class="">Novo</td><td class="">Int / For</td><td class="">Corpo (1); reforço de arma (3); arma especial (5)</td><td class="">Combustível</td><td class="">Têmperas e forjas</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">31</td><td class="nome">Alquimista de Campo</td><td class="">Novo</td><td class="">Int</td><td class="">Distância (1); bomba (3); área química (5)</td><td class="">Combustível</td><td class="">Misturas</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">32</td><td class="nome">Eletro-Arcanista</td><td class="">Novo</td><td class="">Int</td><td class="">Raio à distância (1); cadeia (3); sobrecarga (5)</td><td class="">Arcano</td><td class="">Raios</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">33</td><td class="nome">Navegador de Ruínas</td><td class="">Novo</td><td class="">Int / Sab</td><td class="">Distância (1); mapa (3); emboscada (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">34</td><td class="nome">Sentinela de Muralha</td><td class="">Novo</td><td class="">Con</td><td class="">Corpo (1); guarda (3); contragolpe (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">35</td><td class="nome">Mercenário</td><td class="">Novo</td><td class="">For / Con</td><td class="">Corpo (1); distância (3); contrato (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">36</td><td class="nome">Garra-Negra</td><td class="">Novo</td><td class="">Des</td><td class="">Corpo furtivo (1); sombra (3); execução (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">37</td><td class="nome">Milícia Urbana</td><td class="">Novo</td><td class="">For / Car</td><td class="">Corpo (1); comando (3); cerco urbano (5)</td><td class="">Influência</td><td class="">Ordens de guerra</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">38</td><td class="nome">Mensageiro Rápido</td><td class="">Novo</td><td class="">Des</td><td class="">Distância (1); velocidade (3); evasão (5)</td><td class="">Arcano</td><td class="">Motor de velocidade</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">39</td><td class="nome">Ilusionista de Propaganda</td><td class="">Novo</td><td class="">Car / Int</td><td class="">Distância (1); ilusão (3); confusão (5)</td><td class="">Magia</td><td class="">Ilusões</td><td class="">L: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">40</td><td class="nome">Taumaturgo do Vapor</td><td class="">Novo</td><td class="">Int</td><td class="">Distância (1); vapor (3); área (5)</td><td class="">Combustível</td><td class="">Vapor e pressão</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">41</td><td class="nome">Cozinheiro de Campanha</td><td class="">Novo</td><td class="">Sab</td><td class="">Suporte (1); moral (3); cura leve (5)</td><td class="">Influência</td><td class="">Refeições</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">42</td><td class="nome">Sobrevivente de Abrigo</td><td class="">Novo</td><td class="">Con</td><td class="">Corpo (1); resistência (3); surto (5)</td><td class="">Instinto</td><td class="">—</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">43</td><td class="nome">Arqueiro Ancestral</td><td class="">Novo</td><td class="">Des</td><td class="">Distância (1); flecha de cristal (3); chuva (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">44</td><td class="nome">Bombardeiro</td><td class="">Novo</td><td class="">Des / Int</td><td class="">Distância (1); área (3); bombardeio (5)</td><td class="">Combustível</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">45</td><td class="nome">Mestre de Armas</td><td class="">Novo</td><td class="">For / Des</td><td class="">Corpo (1); múltiplas armas (3); maestria (5)</td><td class="">Sem forma</td><td class="">—</td><td class="">C: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">46</td><td class="nome">Técnico de Sinal</td><td class="">Novo</td><td class="">Int</td><td class="">Distância (1); sinal (3); bloqueio (5)</td><td class="">Arcano</td><td class="">Sinais</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">47</td><td class="nome">Coveiro de Guerra</td><td class="">Novo</td><td class="">Sab</td><td class="">Corpo (1); dreno (3); rito de sepultura (5)</td><td class="">Milagre</td><td class="">Rituais de sepultura</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">48</td><td class="nome">Estrategista</td><td class="">Novo</td><td class="">Int</td><td class="">Suporte (1); comando (3); plano (5)</td><td class="">Influência</td><td class="">Ordens táticas</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">49</td><td class="nome">Sentinela de Torre</td><td class="">Novo</td><td class="">Des / Sab</td><td class="">Distância (1); vigia (3); tiro longo (5)</td><td class="">Instinto</td><td class="">—</td><td class="">C: 2 disparos</td><td class="c"></td><td class="c"></td></tr>
+<tr class=""><td class="">50</td><td class="nome">Vidente de Ruínas</td><td class="">Novo</td><td class="">Sab</td><td class="">Distância (1); visão (3); aviso (5)</td><td class="">Milagre</td><td class="">Visões</td><td class="">L: 1 disparo</td><td class="c"></td><td class="c"></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="notes">A tabela de armas e dados de dano vem depois, com base nesta tabela de classes.</p>
+</main>
+<script>
+  const btns = document.querySelectorAll('.filters button');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x => x.classList.remove('on')); b.classList.add('on');
+    const f = b.dataset.f;
+    document.querySelectorAll('#t tbody tr').forEach(tr => {
+      const show = f === 'all' || tr.classList.contains(f);
+      tr.classList.toggle('hide', !show);
+    });
+  }));
+</script>
+</body>
+</html>
