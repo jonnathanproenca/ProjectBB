@@ -7,7 +7,7 @@ config_version=5
 
 config/name="RPG D&D (working title)"
 config/description="RPG de turnos estilo D&D 5e (SRD 5.2) com influências de Baldur's Gate 3. MVP single player, depois co-op."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/login.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
