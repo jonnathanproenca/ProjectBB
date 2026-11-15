@@ -5,6 +5,8 @@ extends Control
 const LOGIN_SCENE := "res://scenes/login.tscn"
 const SLOT_SIZE := Vector2(380, 440)
 const LARGURA_TEXTO: float = 228.0
+## Campo do nome e botões: 20 px da borda da chapa de cada lado (miolo começa em 86 px da borda).
+const LARGURA_CAMPO: float = 208.0
 
 var _slots: Array = []
 var _creating_slot: int = -1
@@ -63,7 +65,8 @@ func _build_slot(index: int) -> Control:
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("classe"), _valor(dados["class"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s %d  %s %d" % [UiText.t("nivel"), nivel, UiText.t("xp"), int(dados["xp"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("tempo_jogo"), _tempo(int(dados["play_time_s"]))], 22.0, LARGURA_TEXTO))
-	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(200, 52))
+	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	jogar.disabled = true
 	jogar.tooltip_text = UiText.t("em_breve")
 	caixa.add_child(jogar)
@@ -72,14 +75,14 @@ func _build_slot(index: int) -> Control:
 
 func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	var area := Control.new()
-	area.custom_minimum_size = Vector2(300, 48)
+	area.custom_minimum_size = Vector2(LARGURA_CAMPO, 48)
 	area.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	caixa.add_child(area)
 
 	# Campo de digitação transparente; o nome aparece por cima com as letras recortadas.
 	var entrada := LineEdit.new()
 	entrada.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	entrada.custom_minimum_size = Vector2(300, 48)
+	entrada.custom_minimum_size = Vector2(LARGURA_CAMPO, 48)
 	entrada.clip_contents = true
 	entrada.max_length = ProfileRules.NAME_MAX_LENGTH
 	entrada.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -92,16 +95,16 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	area.add_child(centro)
-	var nome_letras := UiKit.letras("", 30.0, 260.0)
+	var nome_letras := UiKit.letras("", 30.0, LARGURA_CAMPO - 16.0)
 	centro.add_child(nome_letras)
 	# Dica só aparece com o campo vazio e sem foco; com texto, mostra o nome.
 	var atualizar := func() -> void:
 		if entrada.text == "":
-			nome_letras.set_text_letters(UiText.t("nome_perfil"), 30.0, 260.0)
+			nome_letras.set_text_letters(UiText.t("nome_perfil"), 30.0, LARGURA_CAMPO - 16.0)
 			nome_letras.modulate = Color(1, 1, 1, 0.45)
 			nome_letras.visible = not entrada.has_focus()
 		else:
-			nome_letras.set_text_letters(entrada.text, 30.0, 260.0)
+			nome_letras.set_text_letters(entrada.text, 30.0, LARGURA_CAMPO - 16.0)
 			nome_letras.modulate = Color.WHITE
 			nome_letras.visible = true
 	entrada.text_changed.connect(func(_texto: String) -> void: atualizar.call())
@@ -114,12 +117,14 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	erro.add_theme_color_override("font_color", Color(1.0, 0.5, 0.4))
 	caixa.add_child(erro)
 
-	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(200, 52))
+	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	criar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	criar.pressed.connect(func() -> void: _try_create(index, entrada.text, erro))
 	entrada.text_submitted.connect(func(texto: String) -> void: _try_create(index, texto, erro))
 	caixa.add_child(criar)
 
-	var cancelar := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(200, 52))
+	var cancelar := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	cancelar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
 	entrada.grab_focus()

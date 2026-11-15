@@ -68,6 +68,7 @@ static func botao(texto: String, altura: float, tamanho: Vector2) -> Button:
 	b.flat = true
 	b.custom_minimum_size = tamanho
 	var txt := letras(texto, altura, tamanho.x - 16.0)
+	txt.alignment = BoxContainer.ALIGNMENT_CENTER
 	txt.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	b.add_child(txt)
 	b.mouse_entered.connect(func() -> void: txt.modulate = Color(1.25, 1.15, 0.9))
