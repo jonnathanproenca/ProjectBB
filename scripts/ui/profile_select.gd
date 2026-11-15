@@ -5,8 +5,8 @@ extends Control
 const LOGIN_SCENE := "res://scenes/login.tscn"
 const SLOT_SIZE := Vector2(380, 440)
 const LARGURA_TEXTO: float = 228.0
-## Tela de exemplo de batalha (combate por turnos) aberta pelo botão Jogar.
-const COMBATE_SCENE := "res://scenes/combat.tscn"
+## Tela de exemplo aberta pelo botão Jogar (demo de teste no navegador).
+const COMBATE_SCENE := "res://scenes/main.tscn"
 ## Campo do nome: 40 px de folga em cada lado (20 px antes + 20 px pedidos) a partir da borda da chapa.
 const LARGURA_CAMPO: float = 168.0
 ## Botões Criar, Cancelar e Jogar: mesma largura da área útil da chapa.
