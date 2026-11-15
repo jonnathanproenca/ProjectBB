@@ -29,8 +29,6 @@ func _montar() -> void:
 	caixa.add_theme_constant_override("separation", 24)
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
 	_centro.add_child(caixa)
-	caixa.add_child(UiKit.letras(UiText.t("perfis_titulo"), 46.0))
-
 	var grade := HBoxContainer.new()
 	grade.add_theme_constant_override("separation", 22)
 	caixa.add_child(grade)

@@ -70,7 +70,26 @@ func _texto_comum(ch: String, h: float) -> Label:
 	return label
 
 
+const DIR_ACENTOS := "res://assets/ui/alfabeto/acentos/"
+const ACENTOS := {
+	"ç": "minusculas/c_cedilha", "Ç": "maiusculas/C_cedilha",
+	"ã": "minusculas/a_til", "Ã": "maiusculas/A_til",
+	"õ": "minusculas/o_til", "Õ": "maiusculas/O_til",
+	"á": "minusculas/a_agudo", "Á": "maiusculas/A_agudo",
+	"é": "minusculas/e_agudo", "É": "maiusculas/E_agudo",
+	"í": "minusculas/i_agudo", "Í": "maiusculas/I_agudo",
+	"ó": "minusculas/o_agudo", "Ó": "maiusculas/O_agudo",
+	"ú": "minusculas/u_agudo", "Ú": "maiusculas/U_agudo",
+	"â": "minusculas/a_circunflexo", "Â": "maiusculas/A_circunflexo",
+	"ê": "minusculas/e_circunflexo", "Ê": "maiusculas/E_circunflexo",
+	"ô": "minusculas/o_circunflexo", "Ô": "maiusculas/O_circunflexo",
+	"à": "minusculas/a_grave", "À": "maiusculas/A_grave",
+}
+
+
 static func _caminho(ch: String) -> String:
+	if ACENTOS.has(ch):
+		return DIR_ACENTOS + ACENTOS[ch] + ".png"
 	if ch >= "A" and ch <= "Z":
 		return DIR_MAIUSCULAS + ch + ".png"
 	if ch >= "a" and ch <= "z":
