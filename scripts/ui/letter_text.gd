@@ -1,7 +1,7 @@
 class_name LetterText
 extends HBoxContainer
 ## Texto montado com as letras recortadas do alfabeto (assets/ui/alfabeto).
-## Caracteres sem letra (pontuação, símbolos) saem como texto comum.
+## Caracteres sem letra (ex.: : . , / ( ) ) saem como texto comum.
 
 const DIR_MAIUSCULAS := "res://assets/ui/alfabeto/maiusculas/"
 const DIR_MINUSCULAS := "res://assets/ui/alfabeto/minusculas/"
@@ -88,11 +88,19 @@ const ACENTOS := {
 
 
 const DIR_NUMEROS := "res://assets/ui/alfabeto/numeros/"
+const DIR_SIMBOLOS := "res://assets/ui/alfabeto/simbolos/"
+const SIMBOLOS := {
+	"!": "exclamacao", "?": "interrogacao", "@": "arroba", "#": "cerquilha",
+	"$": "cifrao", "%": "porcento", "&": "ecomercial", "*": "asterisco",
+	"+": "mais", "-": "traco", "=": "igual",
+}
 
 
 static func _caminho(ch: String) -> String:
 	if ACENTOS.has(ch):
 		return DIR_ACENTOS + ACENTOS[ch] + ".png"
+	if SIMBOLOS.has(ch):
+		return DIR_SIMBOLOS + SIMBOLOS[ch] + ".png"
 	if ch >= "0" and ch <= "9":
 		return DIR_NUMEROS + ch + ".png"
 	if ch >= "A" and ch <= "Z":
