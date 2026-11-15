@@ -7,6 +7,14 @@ RPG de turnos estilo D&D (SRD 5.2) com influências de Baldur's Gate 3. Godot 4.
 1. Baixar o Godot 4.7 (ou superior) na versão portátil (zip) e extrair em uma pasta do usuário.
 2. Abrir o `project.godot` pelo executável do Godot.
 
+## Gemini (MCP do projeto)
+
+1. Instalar a dependência: `pip install -r mcp_servers/gemini/requirements.txt`.
+2. Configurar a variável `GEMINI_API_KEY` no ambiente da sessão (não no repositório).
+3. O MCP `gemini` (arquivo `.mcp.json`) expõe a ferramenta `pedir_prompt`.
+
+Opcional: `GEMINI_MODEL` troca o modelo padrão (`gemini-2.5-flash`).
+
 ## Testes de regra (headless)
 
 ```

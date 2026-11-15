@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gemini": {
+      "command": "python",
+      "args": ["mcp_servers/gemini/server.py"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    }
+  }
+}
