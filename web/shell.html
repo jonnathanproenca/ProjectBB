@@ -18,8 +18,7 @@
 			transition: opacity 0.4s ease; z-index: 10;
 		}
 		#carregando.oculto { opacity: 0; pointer-events: none; }
-		#carregando img { width: 180px; height: auto; }
-		#carregando .nome { font-size: 18px; letter-spacing: 0.25em; }
+		#carregando img { width: 240px; height: auto; }
 		#barra { width: 220px; height: 4px; background: #2a1c16; border-radius: 2px; overflow: hidden; }
 		#progresso { width: 0%; height: 100%; background: #f2d28a; transition: width 0.2s linear; }
 		#barra.indefinida #progresso { width: 35%; animation: vai-e-volta 1.2s ease-in-out infinite alternate; }
@@ -30,8 +29,7 @@
 <body>
 	<canvas id="canvas"></canvas>
 	<div id="carregando">
-		<img src="mann-systems-logo.png" alt="Mann Systems">
-		<div class="nome">MANN SYSTEMS</div>
+		<img src="mann-systems-lockup.png" alt="Mann Systems Games">
 		<div id="barra" class="indefinida"><div id="progresso"></div></div>
 		<div id="erro"></div>
 	</div>
