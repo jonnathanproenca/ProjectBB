@@ -79,6 +79,8 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	# Campo de digitação transparente; o nome aparece por cima com as letras recortadas.
 	var entrada := LineEdit.new()
 	entrada.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	entrada.custom_minimum_size = Vector2(300, 48)
+	entrada.clip_contents = true
 	entrada.max_length = ProfileRules.NAME_MAX_LENGTH
 	entrada.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	entrada.add_theme_color_override("font_color", Color(0, 0, 0, 0))
@@ -90,17 +92,22 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	area.add_child(centro)
-	var nome_letras := UiKit.letras(UiText.t("nome_perfil"), 30.0, 280.0)
-	nome_letras.modulate = Color(1, 1, 1, 0.45)
+	var nome_letras := UiKit.letras("", 30.0, 260.0)
 	centro.add_child(nome_letras)
-	entrada.text_changed.connect(func(texto: String) -> void:
-		if texto == "":
-			nome_letras.set_text_letters(UiText.t("nome_perfil"), 30.0, 280.0)
+	# Dica só aparece com o campo vazio e sem foco; com texto, mostra o nome.
+	var atualizar := func() -> void:
+		if entrada.text == "":
+			nome_letras.set_text_letters(UiText.t("nome_perfil"), 30.0, 260.0)
 			nome_letras.modulate = Color(1, 1, 1, 0.45)
+			nome_letras.visible = not entrada.has_focus()
 		else:
-			nome_letras.set_text_letters(texto, 30.0, 280.0)
+			nome_letras.set_text_letters(entrada.text, 30.0, 260.0)
 			nome_letras.modulate = Color.WHITE
-	)
+			nome_letras.visible = true
+	entrada.text_changed.connect(func(_texto: String) -> void: atualizar.call())
+	entrada.focus_entered.connect(func() -> void: atualizar.call())
+	entrada.focus_exited.connect(func() -> void: atualizar.call())
+	atualizar.call()
 
 	var erro := Label.new()
 	erro.add_theme_font_size_override("font_size", 14)
