@@ -14,7 +14,7 @@ application/boot_splash/show_image=true
 application/boot_splash/image="res://assets/ui/splash/mann_systems_splash.png"
 application/boot_splash/fullsize=true
 application/boot_splash/use_filter=true
-application/boot_splash/bg_color=Color(0.043, 0.047, 0.071, 1)
+application/boot_splash/bg_color=Color(0.071, 0.047, 0.039, 1)
 
 [autoload]
 
