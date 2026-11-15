@@ -1,28 +1,49 @@
 """Servidor MCP mínimo para pedir prompts ao Gemini.
 
-A chave vem da variável de ambiente GEMINI_API_KEY, configurada no ambiente da
-sessão do projeto. Nunca escreva a chave neste arquivo nem no repositório.
+A chave vem da variável de ambiente GEMINI_API_KEY ou, se ela não existir, do
+arquivo gemini.env na raiz do projeto (ignorado pelo git). Nunca escreva a chave
+neste arquivo nem no repositório.
 """
 
 import json
 import os
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+ENV_FILE = Path(__file__).resolve().parents[2] / "gemini.env"
 
 mcp = FastMCP("gemini")
+
+
+def _load_key() -> str:
+    """Lê GEMINI_API_KEY do ambiente; se vazia, do arquivo gemini.env do projeto."""
+    key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if key:
+        return key
+    if ENV_FILE.is_file():
+        for linha in ENV_FILE.read_text(encoding="utf-8").splitlines():
+            nome, _, valor = linha.partition("=")
+            if nome.strip() == "GEMINI_API_KEY":
+                valor = valor.strip().strip('"').strip("'")
+                if valor and valor != "substitua_aqui":
+                    return valor
+    return ""
 
 
 @mcp.tool()
 def pedir_prompt(pedido: str, modelo: str = DEFAULT_MODEL) -> str:
     """Envia um pedido ao Gemini e devolve o texto da resposta."""
-    key = os.environ.get("GEMINI_API_KEY", "")
+    key = _load_key()
     if not key:
-        raise RuntimeError("GEMINI_API_KEY não está configurada no ambiente da sessão.")
+        raise RuntimeError(
+            "GEMINI_API_KEY não encontrada: defina a variável de ambiente ou "
+            "preencha o arquivo gemini.env na raiz do projeto."
+        )
 
     body = json.dumps({"contents": [{"parts": [{"text": pedido}]}]}).encode("utf-8")
     req = urllib.request.Request(
