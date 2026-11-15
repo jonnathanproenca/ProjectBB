@@ -10,10 +10,16 @@ config/description="RPG de turnos estilo D&D 5e (SRD 5.2) com influências de Ba
 run/main_scene="res://scenes/login.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+application/boot_splash/show_image=true
+application/boot_splash/image="res://assets/ui/splash/mann_systems_splash.png"
+application/boot_splash/fullsize=true
+application/boot_splash/use_filter=true
+application/boot_splash/bg_color=Color(0.043, 0.047, 0.071, 1)
 
 [autoload]
 
 GameConfig="*res://scripts/config/game_config.gd"
+UserSettings="*res://scripts/config/user_settings.gd"
 
 [display]
 

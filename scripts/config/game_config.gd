@@ -5,6 +5,9 @@ extends Node
 ## Tamanho máximo do grupo (party). Ajustar aqui; o código não assume 4 fixo.
 const PARTY_MAX_SIZE: int = 4
 
+## Número de slots de perfil na seleção após Entrar.
+const PROFILE_SLOTS_MAX: int = 3
+
 ## Nível máximo do MVP. A regra do D&D vai até 20; aumentar aqui quando for liberado.
 const MAX_LEVEL: int = 5
 

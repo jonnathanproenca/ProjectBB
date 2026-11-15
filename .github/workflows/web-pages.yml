@@ -45,6 +45,9 @@ jobs:
       - name: Testes de combate
         run: godot --headless --path . -s res://scripts/tests/test_combat_rules.gd
 
+      - name: Testes de perfil e configurações
+        run: godot --headless --path . -s res://scripts/tests/test_profile_rules.gd
+
       - name: Checar compilação dos scripts
         run: godot --headless --path . --script res://.claude/skills/godot/godot-gdscript/assets/check_scripts_compile.gd
 

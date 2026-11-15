@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>$GODOT_PROJECT_NAME</title>
+	<link rel="icon" href="favicon.ico" sizes="any">
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+	$GODOT_HEAD_INCLUDE
+	<style>
+		html, body { margin: 0; height: 100%; background: #0b0c12; overflow: hidden; }
+		canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+		#carregando {
+			position: fixed; inset: 0; display: flex; flex-direction: column;
+			align-items: center; justify-content: center; gap: 18px;
+			background: #0b0c12; color: #e6e8f0; font-family: system-ui, sans-serif;
+			transition: opacity 0.4s ease; z-index: 10;
+		}
+		#carregando.oculto { opacity: 0; pointer-events: none; }
+		#carregando img { width: 180px; height: auto; }
+		#carregando .nome { font-size: 18px; letter-spacing: 0.25em; }
+		#barra { width: 220px; height: 4px; background: #1c1f2b; border-radius: 2px; overflow: hidden; }
+		#progresso { width: 0%; height: 100%; background: #4aa8f0; transition: width 0.2s linear; }
+		#barra.indefinida #progresso { width: 35%; animation: vai-e-volta 1.2s ease-in-out infinite alternate; }
+		@keyframes vai-e-volta { from { margin-left: 0; } to { margin-left: 65%; } }
+		#erro { display: none; max-width: 360px; text-align: center; font-size: 14px; color: #f08a7a; }
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<div id="carregando">
+		<img src="mann-systems-logo.png" alt="Mann Systems">
+		<div class="nome">MANN SYSTEMS</div>
+		<div id="barra" class="indefinida"><div id="progresso"></div></div>
+		<div id="erro"></div>
+	</div>
+	<script src="$GODOT_URL"></script>
+	<script>
+		const GODOT_CONFIG = $GODOT_CONFIG;
+		const tela = document.getElementById('carregando');
+		const barra = document.getElementById('barra');
+		const progresso = document.getElementById('progresso');
+		const erro = document.getElementById('erro');
+		const engine = new Engine(GODOT_CONFIG);
+		engine.startGame({
+			onProgress: function (atual, total) {
+				if (total > 0) {
+					barra.classList.remove('indefinida');
+					progresso.style.width = Math.min(100, Math.round((atual / total) * 100)) + '%';
+				}
+			},
+		}).then(function () {
+			tela.classList.add('oculto');
+		}, function (err) {
+			erro.style.display = 'block';
+			erro.textContent = 'Não foi possível abrir o jogo: ' + err;
+		});
+	</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/login_screen.gd" id="1_login"]
-[ext_resource type="Texture2D" path="res://assets/ui/login/login_fundo.jpg" id="2_bg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/login_background.tscn" id="2_bg"]
 
 [node name="LoginScreen" type="Control"]
 layout_mode = 3
@@ -12,35 +12,27 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_login")
 
-[node name="Frame" type="AspectRatioContainer" parent="."]
+[node name="Background" parent="." instance=ExtResource("2_bg")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.62
+anchor_right = 0.5
+anchor_bottom = 0.62
+offset_left = -140.0
+offset_right = 140.0
+offset_bottom = 130.0
 grow_horizontal = 2
-grow_vertical = 2
-ratio = 1.7916667
+theme_override_constants/separation = 16
 
-[node name="Art" type="TextureRect" parent="Frame"]
+[node name="Entrar" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(280, 56)
 layout_mode = 2
-texture = ExtResource("2_bg")
-expand_mode = 1
-stretch_mode = 5
+text = "Entrar"
 
-[node name="Entrar" type="Button" parent="Frame/Art"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4128
-anchor_top = 0.457
-anchor_right = 0.5872
-anchor_bottom = 0.5247
-flat = true
-
-[node name="Opcoes" type="Button" parent="Frame/Art"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4128
-anchor_top = 0.5977
-anchor_right = 0.5872
-anchor_bottom = 0.6654
-flat = true
+[node name="Opcoes" type="Button" parent="Menu"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+text = "Opções"

@@ -1,37 +1,20 @@
 extends Control
-## Tela de login do Project BB, sem usuário e senha por enquanto:
-## o jogo roda local ou no navegador, sem banco centralizado.
-## Entrar abre o teste de regras; Opções ainda não tem tela.
+## Menu frontal do login: Entrar e Opções. O fundo vem de scenes/ui/login_background.tscn.
+## Sem usuário e senha por enquanto. Entrar vai à seleção de perfil.
 
-const MAIN_SCENE := "res://scenes/main.tscn"
+const PROFILE_SCENE := "res://scenes/profile_select.tscn"
+const OPTIONS_SCENE := "res://scenes/options.tscn"
 const HOVER_TINT := Color(1.25, 1.15, 0.9)
 
-@onready var _entrar: Button = $Frame/Art/Entrar
-@onready var _opcoes: Button = $Frame/Art/Opcoes
-
-var _aviso: Label
+@onready var _entrar: Button = $Menu/Entrar
+@onready var _opcoes: Button = $Menu/Opcoes
 
 
 func _ready() -> void:
-	_entrar.pressed.connect(_on_entrar)
-	_opcoes.pressed.connect(_on_opcoes)
+	_entrar.text = UiText.t("entrar")
+	_opcoes.text = UiText.t("opcoes")
+	_entrar.pressed.connect(func() -> void: get_tree().change_scene_to_file(PROFILE_SCENE))
+	_opcoes.pressed.connect(func() -> void: get_tree().change_scene_to_file(OPTIONS_SCENE))
 	for botao: Button in [_entrar, _opcoes]:
 		botao.mouse_entered.connect(func() -> void: botao.modulate = HOVER_TINT)
 		botao.mouse_exited.connect(func() -> void: botao.modulate = Color.WHITE)
-
-	_aviso = Label.new()
-	_aviso.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	_aviso.offset_top = -48.0
-	_aviso.offset_bottom = -16.0
-	_aviso.add_theme_font_size_override("font_size", 18)
-	_aviso.visible = false
-	add_child(_aviso)
-
-
-func _on_entrar() -> void:
-	get_tree().change_scene_to_file(MAIN_SCENE)
-
-
-func _on_opcoes() -> void:
-	_aviso.text = "Opções: em breve."
-	_aviso.visible = true

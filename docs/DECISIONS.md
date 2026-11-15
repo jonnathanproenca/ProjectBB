@@ -27,3 +27,5 @@
 | ADR-023 | Formas de poder: Magia, Arcano, Combustível, Influência, Milagre (Instinto proposto) | Pedido do time | Aceita (Instinto: proposta) |
 | ADR-024 | 50 classes propostas, corte final de 12, MVP de 5 | Pedido do time | Aceita |
 | ADR-025 | Primeira versão de armas (30) e equipamentos por categoria (armaduras, luvas, calças, sapatos, elmos, capas, anéis, amuletos), dados D&D/SRD com efeitos propostos | Pedido do time | Aceita (efeitos: propostas) |
+| ADR-026 | Fluxo de entrada: login (Entrar, Opções) sobre fundo separado, seleção de perfil com até 3 slots (criação só com nome nesta etapa), Opções com idioma (pt-BR, en, es) e brilho salvos em user:// | Pedido do time | Aceita |
+| ADR-027 | Carregamento web e splash com a marca Mann Systems no lugar do Godot; favicon do jogo (engrenagem com cristal) | Pedido do time | Aceita |
