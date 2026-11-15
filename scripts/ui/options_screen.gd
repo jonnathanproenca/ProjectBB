@@ -1,80 +1,64 @@
 extends Control
-## Opções: idioma e brilho. Mudanças valem na hora e são salvas em user://settings.cfg.
+## Opções: idioma e brilho, sobre a chapa com rebite. Mudanças valem na hora e
+## são salvas em user://settings.cfg. Ao trocar o idioma, a tela é montada de novo.
 
 const LOGIN_SCENE := "res://scenes/login.tscn"
 
-var _titulo: Label
-var _idioma_label: Label
-var _idioma: OptionButton
-var _brilho_label: Label
-var _brilho: HSlider
-var _brilho_valor: Label
-var _voltar: Button
+var _centro: CenterContainer
+var _valor_brilho: Label
 
 
 func _ready() -> void:
-	var centro := CenterContainer.new()
-	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(centro)
+	_centro = CenterContainer.new()
+	_centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_centro)
+	_montar()
 
-	var caixa := VBoxContainer.new()
-	caixa.custom_minimum_size = Vector2(420, 0)
-	caixa.add_theme_constant_override("separation", 18)
-	centro.add_child(caixa)
 
-	_titulo = _label("", 32)
-	caixa.add_child(_titulo)
+func _montar() -> void:
+	for filho in _centro.get_children():
+		_centro.remove_child(filho)
+		filho.queue_free()
 
-	_idioma_label = _label("", 18)
-	caixa.add_child(_idioma_label)
-	_idioma = OptionButton.new()
+	var chapa := UiKit.chapa(Vector2(560, 480))
+	_centro.add_child(chapa)
+	var caixa := UiKit.miolo(chapa)
+	caixa.add_theme_constant_override("separation", 12)
+
+	caixa.add_child(UiKit.letras(UiText.t("opcoes_titulo"), 46.0, 408.0))
+	caixa.add_child(UiKit.letras(UiText.t("idioma"), 26.0, 408.0))
+	var idioma := OptionButton.new()
 	for i in range(SettingsRules.LOCALES.size()):
-		_idioma.add_item(SettingsRules.LOCALE_LABELS[i], i)
-	_idioma.select(SettingsRules.LOCALES.find(UserSettings.locale))
-	_idioma.item_selected.connect(_on_idioma_selected)
-	caixa.add_child(_idioma)
+		idioma.add_item(SettingsRules.LOCALE_LABELS[i], i)
+	idioma.select(SettingsRules.LOCALES.find(UserSettings.locale))
+	idioma.item_selected.connect(_on_idioma_selected)
+	caixa.add_child(idioma)
 
-	_brilho_label = _label("", 18)
-	caixa.add_child(_brilho_label)
-	_brilho = HSlider.new()
-	_brilho.min_value = SettingsRules.BRIGHTNESS_MIN
-	_brilho.max_value = SettingsRules.BRIGHTNESS_MAX
-	_brilho.step = 0.05
-	_brilho.value = UserSettings.brightness
-	_brilho.value_changed.connect(_on_brilho_changed)
-	caixa.add_child(_brilho)
-	_brilho_valor = _label("", 16)
-	caixa.add_child(_brilho_valor)
+	caixa.add_child(UiKit.letras(UiText.t("brilho"), 26.0, 408.0))
+	var brilho := HSlider.new()
+	brilho.min_value = SettingsRules.BRIGHTNESS_MIN
+	brilho.max_value = SettingsRules.BRIGHTNESS_MAX
+	brilho.step = 0.05
+	brilho.value = UserSettings.brightness
+	brilho.value_changed.connect(_on_brilho_changed)
+	caixa.add_child(brilho)
+	_valor_brilho = Label.new()
+	_valor_brilho.text = "%d%%" % roundi(UserSettings.brightness * 100.0)
+	_valor_brilho.add_theme_font_size_override("font_size", 18)
+	_valor_brilho.add_theme_color_override("font_color", Color("e8d5b0"))
+	caixa.add_child(_valor_brilho)
 
-	_voltar = Button.new()
-	_voltar.custom_minimum_size = Vector2(200, 48)
-	_voltar.pressed.connect(func() -> void: get_tree().change_scene_to_file(LOGIN_SCENE))
-	caixa.add_child(_voltar)
-
-	_atualizar_textos()
-
-
-func _atualizar_textos() -> void:
-	_titulo.text = UiText.t("opcoes_titulo")
-	_idioma_label.text = UiText.t("idioma")
-	_brilho_label.text = UiText.t("brilho")
-	_brilho_valor.text = "%d%%" % roundi(_brilho.value * 100.0)
-	_voltar.text = UiText.t("voltar")
+	var voltar := UiKit.botao(UiText.t("voltar"), 40.0, Vector2(220, 56))
+	voltar.pressed.connect(func() -> void: get_tree().change_scene_to_file(LOGIN_SCENE))
+	caixa.add_child(voltar)
 
 
 func _on_idioma_selected(index: int) -> void:
 	UserSettings.set_locale(SettingsRules.LOCALES[index])
-	_atualizar_textos()
+	_montar()
 
 
 func _on_brilho_changed(value: float) -> void:
 	UserSettings.set_brightness(value)
-	_atualizar_textos()
-
-
-func _label(texto: String, tamanho: int) -> Label:
-	var label := Label.new()
-	label.text = texto
-	label.add_theme_font_size_override("font_size", tamanho)
-	return label
+	_valor_brilho.text = "%d%%" % roundi(UserSettings.brightness * 100.0)

@@ -29,3 +29,4 @@
 | ADR-025 | Primeira versão de armas (30) e equipamentos por categoria (armaduras, luvas, calças, sapatos, elmos, capas, anéis, amuletos), dados D&D/SRD com efeitos propostos | Pedido do time | Aceita (efeitos: propostas) |
 | ADR-026 | Fluxo de entrada: login (Entrar, Opções) sobre fundo separado, seleção de perfil com até 3 slots (criação só com nome nesta etapa), Opções com idioma (pt-BR, en, es) e brilho salvos em user:// | Pedido do time | Aceita |
 | ADR-027 | Carregamento web e splash com a marca Mann Systems no lugar do Godot; favicon do jogo (engrenagem com cristal) | Pedido do time | Aceita |
+| ADR-028 | Menus com chapa com rebite (NinePatch) e texto montado com letras recortadas do alfabeto dourado (maiúsculas e minúsculas); acentos, números e pontuação saem como texto comum até haver folha própria | Pedido do time | Aceita (acentos e números: pendentes) |

@@ -1,20 +1,26 @@
 extends Control
-## Menu frontal do login: Entrar e Opções. O fundo vem de scenes/ui/login_background.tscn.
-## Sem usuário e senha por enquanto. Entrar vai à seleção de perfil.
+## Menu frontal do login: chapa com rebite e dois botões de letras (Entrar e Opções).
+## O fundo vem de scenes/ui/login_background.tscn. Sem usuário e senha por enquanto.
 
 const PROFILE_SCENE := "res://scenes/profile_select.tscn"
 const OPTIONS_SCENE := "res://scenes/options.tscn"
-const HOVER_TINT := Color(1.25, 1.15, 0.9)
-
-@onready var _entrar: Button = $Menu/Entrar
-@onready var _opcoes: Button = $Menu/Opcoes
 
 
 func _ready() -> void:
-	_entrar.text = UiText.t("entrar")
-	_opcoes.text = UiText.t("opcoes")
-	_entrar.pressed.connect(func() -> void: get_tree().change_scene_to_file(PROFILE_SCENE))
-	_opcoes.pressed.connect(func() -> void: get_tree().change_scene_to_file(OPTIONS_SCENE))
-	for botao: Button in [_entrar, _opcoes]:
-		botao.mouse_entered.connect(func() -> void: botao.modulate = HOVER_TINT)
-		botao.mouse_exited.connect(func() -> void: botao.modulate = Color.WHITE)
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(centro)
+
+	var chapa := UiKit.chapa(Vector2(440, 320))
+	centro.add_child(chapa)
+	var caixa := UiKit.miolo(chapa)
+	caixa.add_theme_constant_override("separation", 22)
+
+	var entrar := UiKit.botao(UiText.t("entrar"), 48.0, Vector2(240, 64))
+	entrar.pressed.connect(func() -> void: get_tree().change_scene_to_file(PROFILE_SCENE))
+	caixa.add_child(entrar)
+
+	var opcoes := UiKit.botao(UiText.t("opcoes"), 48.0, Vector2(240, 64))
+	opcoes.pressed.connect(func() -> void: get_tree().change_scene_to_file(OPTIONS_SCENE))
+	caixa.add_child(opcoes)

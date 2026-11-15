@@ -14,25 +14,3 @@ script = ExtResource("1_login")
 
 [node name="Background" parent="." instance=ExtResource("2_bg")]
 layout_mode = 1
-
-[node name="Menu" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchor_left = 0.5
-anchor_top = 0.62
-anchor_right = 0.5
-anchor_bottom = 0.62
-offset_left = -140.0
-offset_right = 140.0
-offset_bottom = 130.0
-grow_horizontal = 2
-theme_override_constants/separation = 16
-
-[node name="Entrar" type="Button" parent="Menu"]
-custom_minimum_size = Vector2(280, 56)
-layout_mode = 2
-text = "Entrar"
-
-[node name="Opcoes" type="Button" parent="Menu"]
-custom_minimum_size = Vector2(280, 56)
-layout_mode = 2
-text = "Opções"
