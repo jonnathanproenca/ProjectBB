@@ -84,6 +84,12 @@ const ACENTOS := {
 	"ê": "minusculas/e_circunflexo", "Ê": "maiusculas/E_circunflexo",
 	"ô": "minusculas/o_circunflexo", "Ô": "maiusculas/O_circunflexo",
 	"à": "minusculas/a_grave", "À": "maiusculas/A_grave",
+	"ñ": "minusculas/n_til", "Ñ": "maiusculas/N_til",
+	"ü": "minusculas/u_trema", "Ü": "maiusculas/U_trema",
+	"¿": "minusculas/interrogacao_invertida", "¡": "minusculas/exclamacao_invertida",
+	"æ": "minusculas/ae", "Æ": "maiusculas/AE",
+	"œ": "minusculas/oe", "Œ": "maiusculas/OE",
+	"þ": "minusculas/thorn", "Þ": "maiusculas/THORN",
 }
 
 
