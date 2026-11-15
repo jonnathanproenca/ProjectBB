@@ -71,10 +71,36 @@ func _build_slot(index: int) -> Control:
 
 
 func _build_creator(caixa: VBoxContainer, index: int) -> void:
+	var area := Control.new()
+	area.custom_minimum_size = Vector2(300, 48)
+	area.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	caixa.add_child(area)
+
+	# Campo de digitação transparente; o nome aparece por cima com as letras recortadas.
 	var entrada := LineEdit.new()
+	entrada.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	entrada.max_length = ProfileRules.NAME_MAX_LENGTH
-	entrada.placeholder_text = UiText.t("nome_perfil")
-	caixa.add_child(entrada)
+	entrada.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	entrada.add_theme_color_override("font_color", Color(0, 0, 0, 0))
+	entrada.add_theme_color_override("font_placeholder_color", Color(0, 0, 0, 0))
+	entrada.add_theme_color_override("caret_color", Color("f2d28a"))
+	area.add_child(entrada)
+
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	area.add_child(centro)
+	var nome_letras := UiKit.letras(UiText.t("nome_perfil"), 30.0, 280.0)
+	nome_letras.modulate = Color(1, 1, 1, 0.45)
+	centro.add_child(nome_letras)
+	entrada.text_changed.connect(func(texto: String) -> void:
+		if texto == "":
+			nome_letras.set_text_letters(UiText.t("nome_perfil"), 30.0, 280.0)
+			nome_letras.modulate = Color(1, 1, 1, 0.45)
+		else:
+			nome_letras.set_text_letters(texto, 30.0, 280.0)
+			nome_letras.modulate = Color.WHITE
+	)
 
 	var erro := Label.new()
 	erro.add_theme_font_size_override("font_size", 14)
