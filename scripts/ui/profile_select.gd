@@ -5,8 +5,10 @@ extends Control
 const LOGIN_SCENE := "res://scenes/login.tscn"
 const SLOT_SIZE := Vector2(380, 440)
 const LARGURA_TEXTO: float = 228.0
-## Campo do nome e botões: 20 px da borda da chapa de cada lado (miolo começa em 86 px da borda).
-const LARGURA_CAMPO: float = 208.0
+## Campo do nome: 40 px de folga em cada lado (20 px antes + 20 px pedidos) a partir da borda da chapa.
+const LARGURA_CAMPO: float = 168.0
+## Botões Criar, Cancelar e Jogar: mesma largura da área útil da chapa.
+const LARGURA_BOTAO: float = 208.0
 
 var _slots: Array = []
 var _creating_slot: int = -1
@@ -65,7 +67,7 @@ func _build_slot(index: int) -> Control:
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("classe"), _valor(dados["class"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s %d  %s %d" % [UiText.t("nivel"), nivel, UiText.t("xp"), int(dados["xp"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("tempo_jogo"), _tempo(int(dados["play_time_s"]))], 22.0, LARGURA_TEXTO))
-	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	jogar.disabled = true
 	jogar.tooltip_text = UiText.t("em_breve")
@@ -117,13 +119,13 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	erro.add_theme_color_override("font_color", Color(1.0, 0.5, 0.4))
 	caixa.add_child(erro)
 
-	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	criar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	criar.pressed.connect(func() -> void: _try_create(index, entrada.text, erro))
 	entrada.text_submitted.connect(func(texto: String) -> void: _try_create(index, texto, erro))
 	caixa.add_child(criar)
 
-	var cancelar := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(LARGURA_CAMPO, 52))
+	var cancelar := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	cancelar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
