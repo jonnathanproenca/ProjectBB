@@ -5,6 +5,8 @@ extends Control
 const LOGIN_SCENE := "res://scenes/login.tscn"
 const SLOT_SIZE := Vector2(380, 440)
 const LARGURA_TEXTO: float = 228.0
+## Tela de exemplo de batalha (combate por turnos) aberta pelo botão Jogar.
+const COMBATE_SCENE := "res://scenes/combat.tscn"
 ## Campo do nome: 40 px de folga em cada lado (20 px antes + 20 px pedidos) a partir da borda da chapa.
 const LARGURA_CAMPO: float = 168.0
 ## Botões Criar, Cancelar e Jogar: mesma largura da área útil da chapa.
@@ -69,8 +71,7 @@ func _build_slot(index: int) -> Control:
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("tempo_jogo"), _tempo(int(dados["play_time_s"]))], 22.0, LARGURA_TEXTO))
 	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	jogar.disabled = true
-	jogar.tooltip_text = UiText.t("em_breve")
+	jogar.pressed.connect(func() -> void: get_tree().change_scene_to_file(COMBATE_SCENE))
 	caixa.add_child(jogar)
 	return chapa
 
