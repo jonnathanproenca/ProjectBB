@@ -36,5 +36,14 @@ static func save_slot(index: int, profile: Dictionary) -> Error:
 	return cfg.save(PATH)
 
 
+## Apaga o slot inteiro (remove a seção do arquivo).
+static func delete_slot(index: int) -> Error:
+	var cfg := ConfigFile.new()
+	if cfg.load(PATH) != OK:
+		return OK
+	cfg.erase_section(_section(index))
+	return cfg.save(PATH)
+
+
 static func _section(index: int) -> String:
 	return "perfil_%d" % index

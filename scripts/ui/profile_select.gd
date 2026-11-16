@@ -14,6 +14,7 @@ const LARGURA_BOTAO: float = 208.0
 
 var _slots: Array = []
 var _creating_slot: int = -1
+var _deleting_slot: int = -1
 var _centro: CenterContainer
 
 
@@ -21,6 +22,8 @@ func _ready() -> void:
 	_centro = CenterContainer.new()
 	_centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Desce a grade para deixar o título "Project BB" visível acima das chapas.
+	_centro.offset_top = 140.0
 	add_child(_centro)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
 	_montar()
@@ -69,10 +72,25 @@ func _build_slot(index: int) -> Control:
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("classe"), _valor(dados["class"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s %d  %s %d" % [UiText.t("nivel"), nivel, UiText.t("xp"), int(dados["xp"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("tempo_jogo"), _tempo(int(dados["play_time_s"]))], 22.0, LARGURA_TEXTO))
+	if index == _deleting_slot:
+		caixa.add_child(UiKit.letras(UiText.t("confirmar_exclusao"), 24.0, LARGURA_TEXTO))
+		var apagar := UiKit.botao(UiText.t("apagar"), 26.0, Vector2(LARGURA_BOTAO, 52))
+		apagar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		apagar.pressed.connect(func() -> void: _delete_profile(index))
+		caixa.add_child(apagar)
+		var manter := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(LARGURA_BOTAO, 52))
+		manter.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		manter.pressed.connect(_cancel_delete)
+		caixa.add_child(manter)
+		return chapa
 	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	jogar.pressed.connect(func() -> void: get_tree().change_scene_to_file(COMBATE_SCENE))
 	caixa.add_child(jogar)
+	var excluir := UiKit.botao(UiText.t("excluir"), 22.0, Vector2(LARGURA_BOTAO, 40))
+	excluir.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	excluir.pressed.connect(func() -> void: _ask_delete(index))
+	caixa.add_child(excluir)
 	return chapa
 
 
@@ -131,6 +149,23 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
 	entrada.grab_focus()
+
+
+func _ask_delete(index: int) -> void:
+	_deleting_slot = index
+	_montar()
+
+
+func _cancel_delete() -> void:
+	_deleting_slot = -1
+	_montar()
+
+
+func _delete_profile(index: int) -> void:
+	ProfileStore.delete_slot(index)
+	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
+	_deleting_slot = -1
+	_montar()
 
 
 func _start_creating(index: int) -> void:
