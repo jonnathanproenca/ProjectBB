@@ -32,7 +32,7 @@ static func level_for_xp(xp: int, max_level: int) -> int:
 ## Dano com redução por defesa em razão: dano * K / (K + defesa).
 ## K é a defesa que reduz o dano pela metade. Evita imunidade por acúmulo.
 ## Arredonda somente no fim.
-static func mitigated_damage(raw: float, defense: float, k: float = 100.0) -> int:
+static func mitigated_damage(raw: float, defense: float, k: float = 20.0) -> int:
 	if raw <= 0.0:
 		return 0
 	var dealt := raw * k / (k + maxf(defense, 0.0))

@@ -24,6 +24,7 @@ func _initialize() -> void:
 
 	_check(DndRules.mitigated_damage(100, 100, 100) == 50, "defesa = K reduz à metade")
 	_check(DndRules.mitigated_damage(100, 0, 100) == 100, "defesa 0 não reduz")
+	_check(DndRules.mitigated_damage(20, 20) == 10, "K padrão = 20: defesa 20 reduz à metade")
 	_check(DndRules.mitigated_damage(10, 1000000, 100) >= 0, "defesa enorme não gera dano negativo")
 	_check(DndRules.mitigated_damage(0, 50) == 0, "dano 0 = 0")
 
