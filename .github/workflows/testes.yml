@@ -1,0 +1,39 @@
+name: Testes de regras
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSAO: "4.7-stable"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Godot headless
+        run: |
+          curl -fsSL -o godot.zip "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSAO}/Godot_v${GODOT_VERSAO}_linux.x86_64.zip"
+          unzip -q godot.zip
+          chmod +x Godot_v${GODOT_VERSAO}_linux.x86_64
+          sudo mv Godot_v${GODOT_VERSAO}_linux.x86_64 /usr/local/bin/godot
+          godot --version
+
+      - name: Importar projeto
+        run: godot --headless --path . --import || true
+
+      - name: Rodar testes
+        run: |
+          falhou=0
+          for teste in test_dnd_rules test_combat_rules test_profile_rules; do
+            echo "== $teste =="
+            if ! godot --headless --path . -s res://scripts/tests/$teste.gd; then
+              echo "FALHOU: $teste"
+              falhou=1
+            fi
+          done
+          exit $falhou
