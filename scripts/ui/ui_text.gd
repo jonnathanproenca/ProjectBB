@@ -4,7 +4,7 @@ extends RefCounted
 
 const STRINGS = {
 	"pt": {
-		"entrar": "Entrar", "opcoes": "Opções", "voltar": "Voltar", "cancelar": "Cancelar",
+		"entrar": "Entrar", "opcoes": "Opções", "mapa": "Mapa", "voltar": "Voltar", "cancelar": "Cancelar",
 		"idioma": "Idioma", "brilho": "Brilho", "opcoes_titulo": "Opções",
 		"perfis_titulo": "Selecione um perfil", "novo_perfil": "Novo perfil", "criar": "Criar",
 		"raca": "Raça", "classe": "Classe", "nivel": "Nível", "xp": "XP",
@@ -14,7 +14,7 @@ const STRINGS = {
 		"h": "h", "min": "min",
 	},
 	"en": {
-		"entrar": "Enter", "opcoes": "Options", "voltar": "Back", "cancelar": "Cancel",
+		"entrar": "Enter", "opcoes": "Options", "mapa": "Map", "voltar": "Back", "cancelar": "Cancel",
 		"idioma": "Language", "brilho": "Brightness", "opcoes_titulo": "Options",
 		"perfis_titulo": "Select a profile", "novo_perfil": "New profile", "criar": "Create",
 		"raca": "Race", "classe": "Class", "nivel": "Level", "xp": "XP",
@@ -24,7 +24,7 @@ const STRINGS = {
 		"h": "h", "min": "min",
 	},
 	"es": {
-		"entrar": "Entrar", "opcoes": "Opciones", "voltar": "Volver", "cancelar": "Cancelar",
+		"entrar": "Entrar", "opcoes": "Opciones", "mapa": "Mapa", "voltar": "Volver", "cancelar": "Cancelar",
 		"idioma": "Idioma", "brilho": "Brillo", "opcoes_titulo": "Opciones",
 		"perfis_titulo": "Selecciona un perfil", "novo_perfil": "Nuevo perfil", "criar": "Crear",
 		"raca": "Raza", "classe": "Clase", "nivel": "Nivel", "xp": "XP",
