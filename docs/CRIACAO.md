@@ -15,7 +15,11 @@ Status: proposta v0.1. Decisões fechadas estão marcadas como **(decidido)**; v
 ## Decisões do MVP
 
 - **Espécies: 3 (decidido):** Humanos, Autômatos e Mestiços.
+- **Variantes: masculino e feminino por espécie (decidido).** Sem tipo de corpo como variante de espécie.
 - **Origens: 5 (decidido):** Soldado, Órfão, Nobre, Criminoso e Eremita.
+- **Tela em estilo BG3 (decidido):** abas no topo (Espécie, Classe, Origem, Aparência, Revisão), seletores com setas, retrato central e resumo à direita.
+- **Imagens de espécie (decidido):** corpo inteiro com fundo transparente, centralizado no retrato; ícones em busto com fundo ferrugem (#4a2416) dentro de moldura redonda steampunk.
+- **Nome no celular (decidido):** a detecção de plataforma fica em `scripts/ui/plataforma.gd`. No celular, o nome é pedido pelo diálogo nativo do navegador ao tocar no campo.
 - **Aparência: presets de rosto, corpo e cor (decidido).** Sem personalização completa estilo BG3 no MVP.
 - **Atributos: valores padrão por classe (decidido).** Sem compra de pontos nem rolagem no MVP.
 - **Classes do MVP: 5 (decidido):** Guerreiro, Clérigo, Ladino, Mago-Engenheiro e Atirador Arcano (ver `docs/CLASSES.md`).
@@ -39,6 +43,17 @@ Cada origem dá duas perícias.
 | Nobre | História, Persuasão |
 | Criminoso | Enganação, Prestidigitação |
 | Eremita | Sobrevivência, Medicina |
+
+## Arquivos de imagem (em `assets/ui/criacao/`)
+
+Ids usados nos nomes: `humano`, `automato`, `mestico`. Sexos: `masculino`, `feminino`.
+
+| Arquivo | Uso |
+|---|---|
+| `especie_<id>_<sexo>.png` | Corpo inteiro, fundo transparente, centralizado no retrato |
+| `busto_<id>_<sexo>.png` | Ícone em busto, sobre fundo ferrugem (#4a2416) |
+| `icone_<id>_<sexo>.png` | Ícone final: busto dentro da moldura redonda |
+| `moldura_steampunk.png` | Moldura redonda dos ícones |
 
 ## Atributos padrão por classe (padrão)
 
