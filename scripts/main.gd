@@ -44,6 +44,7 @@ func _ready() -> void:
 	combat_button.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/combat.tscn"))
 	box.add_child(combat_button)
 	_add_links(box)
+	_add_mapa(box)
 
 	_output = Label.new()
 	_output.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -111,6 +112,30 @@ func _add_links(box: VBoxContainer) -> void:
 		button.text = item[0]
 		button.pressed.connect(_open_link.bind(item[1], item[2]))
 		row.add_child(button)
+
+
+## Mapa-múndi de Aurel: fica escondido até o botão mostrar.
+const MAPA := "res://assets/ui/mapa/mapa_mundo_aurel.jpg"
+const LARGURA_MAPA: float = 600.0
+var _mapa_imagem: TextureRect
+
+
+func _add_mapa(box: VBoxContainer) -> void:
+	var botao := Button.new()
+	botao.text = "Mostrar mapa do mundo"
+	box.add_child(botao)
+
+	_mapa_imagem = TextureRect.new()
+	_mapa_imagem.texture = load(MAPA)
+	_mapa_imagem.custom_minimum_size = Vector2(LARGURA_MAPA, LARGURA_MAPA * 768.0 / 1376.0)
+	_mapa_imagem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_mapa_imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_mapa_imagem.visible = false
+	box.add_child(_mapa_imagem)
+
+	botao.pressed.connect(func() -> void:
+		_mapa_imagem.visible = not _mapa_imagem.visible
+		botao.text = "Ocultar mapa do mundo" if _mapa_imagem.visible else "Mostrar mapa do mundo")
 
 
 func _open_link(relative_path: String, url: String) -> void:
