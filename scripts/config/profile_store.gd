@@ -3,7 +3,7 @@ extends RefCounted
 ## Persistência local dos perfis em user://profiles.cfg. Um slot por seção.
 
 const PATH: String = "user://profiles.cfg"
-const KEYS = ["name", "race", "class", "play_time_s", "xp"]
+const KEYS = ["name", "race", "class", "origin", "appearance", "play_time_s", "xp"]
 
 
 ## Lê os slots. Slot vazio fica null. Arquivo ausente = todos vazios.
@@ -21,6 +21,8 @@ static func load_slots(slot_count: int) -> Array:
 			"name": str(cfg.get_value(section, "name", "")),
 			"race": str(cfg.get_value(section, "race", "")),
 			"class": str(cfg.get_value(section, "class", "")),
+			"origin": str(cfg.get_value(section, "origin", "")),
+			"appearance": int(cfg.get_value(section, "appearance", 0)),
 			"play_time_s": int(cfg.get_value(section, "play_time_s", 0)),
 			"xp": int(cfg.get_value(section, "xp", 0)),
 		}

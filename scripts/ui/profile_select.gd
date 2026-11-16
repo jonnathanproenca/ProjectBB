@@ -1,6 +1,6 @@
 extends Control
 ## Seleção de perfil após Entrar, em chapas com rebite. Até GameConfig.PROFILE_SLOTS_MAX perfis.
-## Nesta etapa a criação pede só o nome; raça e classe ficam "não definido".
+## A criação pede o nome aqui e depois abre CharacterCreator (espécie, classe, origem, aparência, revisão).
 
 const LOGIN_SCENE := "res://scenes/login.tscn"
 const SLOT_SIZE := Vector2(380, 440)
@@ -68,8 +68,8 @@ func _build_slot(index: int) -> Control:
 	var dados: Dictionary = perfil
 	var nivel := ProfileRules.level_for_profile(dados, GameConfig.MAX_LEVEL)
 	caixa.add_child(UiKit.letras(str(dados["name"]), 34.0, LARGURA_TEXTO))
-	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("raca"), _valor(dados["race"])], 22.0, LARGURA_TEXTO))
-	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("classe"), _valor(dados["class"])], 22.0, LARGURA_TEXTO))
+	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("raca"), _valor(_escolha_traduzida("especie", dados["race"]))], 22.0, LARGURA_TEXTO))
+	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("classe"), _valor(_escolha_traduzida("classe", dados["class"]))], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s %d  %s %d" % [UiText.t("nivel"), nivel, UiText.t("xp"), int(dados["xp"])], 22.0, LARGURA_TEXTO))
 	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("tempo_jogo"), _tempo(int(dados["play_time_s"]))], 22.0, LARGURA_TEXTO))
 	if index == _deleting_slot:
@@ -186,10 +186,33 @@ func _try_create(index: int, texto: String, erro: Label) -> void:
 	if codigo == ProfileRules.ERR_TOO_LONG:
 		erro.text = UiText.t("erro_nome_longo")
 		return
-	ProfileStore.save_slot(index, ProfileRules.make_profile(texto))
+	_abrir_criacao(index, ProfileRules.clean_name(texto))
+
+
+## Abre a criação em etapas sobre a tela. Cancelar volta ao campo de nome.
+func _abrir_criacao(index: int, nome: String) -> void:
+	var criador := CharacterCreator.new()
+	add_child(criador)
+	criador.configurar(nome)
+	criador.concluido.connect(func(escolhas: Dictionary) -> void: _finish_creation(index, nome, escolhas))
+
+
+func _finish_creation(index: int, nome: String, escolhas: Dictionary) -> void:
+	var perfil := ProfileRules.make_profile(nome)
+	perfil["race"] = str(escolhas["especie"])
+	perfil["class"] = str(escolhas["classe"])
+	perfil["origin"] = str(escolhas["origem"])
+	perfil["appearance"] = int(escolhas["aparencia"])
+	ProfileStore.save_slot(index, perfil)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
 	_creating_slot = -1
 	_montar()
+
+
+## Nome na língua da interface para uma escolha salva (ex.: "humano" → "Humanos"). Vazio segue vazio.
+func _escolha_traduzida(prefixo: String, chave: Variant) -> String:
+	var limpo := str(chave)
+	return UiText.t(prefixo + "_" + limpo) if not limpo.is_empty() else ""
 
 
 func _valor(texto: Variant) -> String:

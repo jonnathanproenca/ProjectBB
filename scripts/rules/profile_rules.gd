@@ -23,9 +23,9 @@ static func clean_name(raw: String) -> String:
 	return raw.strip_edges()
 
 
-## Perfil novo: raça e classe ficam vazias até a criação completa.
+## Perfil novo: raça, classe e origem ficam vazias, e aparência 0, até a criação completa.
 static func make_profile(name: String) -> Dictionary:
-	return {"name": clean_name(name), "race": "", "class": "", "play_time_s": 0, "xp": 0}
+	return {"name": clean_name(name), "race": "", "class": "", "origin": "", "appearance": 0, "play_time_s": 0, "xp": 0}
 
 
 ## Índice do primeiro slot vazio (null), ou -1 se todos estiverem em uso.

@@ -17,6 +17,7 @@ func _initialize() -> void:
 	var novo := ProfileRules.make_profile(" Aria ")
 	_check(novo["name"] == "Aria", "perfil novo guarda o nome limpo")
 	_check(novo["race"] == "" and novo["class"] == "", "raça e classe começam vazias")
+	_check(novo["origin"] == "" and novo["appearance"] == 0, "origem começa vazia e aparência em 0")
 	_check(novo["xp"] == 0 and novo["play_time_s"] == 0, "perfil novo começa zerado")
 
 	_check(ProfileRules.first_free_slot([null, {}, null]) == 0, "primeiro slot livre é o 0")
