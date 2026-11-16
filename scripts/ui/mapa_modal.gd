@@ -9,6 +9,8 @@ const PASTA_CIDADES := "res://assets/ui/mapa/cidades/"
 const TAMANHO_ORIGINAL := Vector2(1376, 768)
 const LARGURA_AREA: float = 800.0
 const TAM_PIN: float = 30.0
+## Área clicável ao redor da cidade (invisível). O pin visível fica dentro dela.
+const TAM_AREA_CLIQUE: float = 64.0
 const TAM_SETA: float = 40.0
 const DURACAO: float = 0.45
 const ZOOM: float = 0.08
@@ -112,14 +114,16 @@ func _criar_camada(caminho_imagem: String) -> Control:
 func _criar_pin(cidade: Dictionary) -> Button:
 	var pin := Button.new()
 	pin.flat = true
-	pin.custom_minimum_size = Vector2(TAM_PIN, TAM_PIN)
-	pin.size = Vector2(TAM_PIN, TAM_PIN)
-	# Ponta inferior do pin encostada no topo do ícone da cidade.
-	pin.position = (cidade["pos"] as Vector2) * _escala - Vector2(TAM_PIN * 0.5, TAM_PIN + 6.0)
+	pin.custom_minimum_size = Vector2(TAM_AREA_CLIQUE, TAM_AREA_CLIQUE)
+	pin.size = Vector2(TAM_AREA_CLIQUE, TAM_AREA_CLIQUE)
+	pin.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	# Área clicável centrada um pouco acima da cidade; a ponta do pin visível fica 6 px acima do ícone.
+	pin.position = (cidade["pos"] as Vector2) * _escala - Vector2(TAM_AREA_CLIQUE * 0.5, TAM_AREA_CLIQUE * 0.5 + 10.0)
 	pin.tooltip_text = cidade["nome"]
 
 	var desenho := Control.new()
-	desenho.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	desenho.position = Vector2((TAM_AREA_CLIQUE - TAM_PIN) * 0.5, 6.0)
+	desenho.size = Vector2(TAM_PIN, TAM_PIN)
 	desenho.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pin.add_child(desenho)
 	desenho.draw.connect(func() -> void:
