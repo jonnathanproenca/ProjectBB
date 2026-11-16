@@ -132,12 +132,21 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	entrada.focus_entered.connect(func() -> void: atualizar.call())
 	entrada.focus_exited.connect(func() -> void: atualizar.call())
 	atualizar.call()
-	# No celular o teclado virtual não abre a partir do foco automático (iOS exige o toque direto),
-	# então o toque no campo pede o nome por um diálogo nativo do navegador.
-	if Plataforma.e_mobile():
-		entrada.gui_input.connect(func(evento: InputEvent) -> void:
-			if evento is InputEventMouseButton and evento.pressed:
-				_pedir_nome_nativo(entrada, atualizar))
+	# No iPhone (Safari) o teclado só abre com toque direto num <input> do DOM. Então um campo HTML
+	# transparente fica por cima do campo do Godot e repassa o texto digitado.
+	var campo_web: CampoNomeWeb = null
+	if OS.has_feature("web") and Plataforma.e_mobile():
+		entrada.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		campo_web = CampoNomeWeb.new()
+		area.add_child(campo_web)
+		campo_web.texto_mudou.connect(func(texto: String) -> void:
+			entrada.text = texto
+			atualizar.call())
+		campo_web.foco_mudou.connect(func(com_foco: bool) -> void:
+			nome_letras.visible = com_foco or entrada.text != ""
+			if not com_foco:
+				atualizar.call())
+		campo_web.iniciar(area, entrada.text, ProfileRules.NAME_MAX_LENGTH, UiText.t("nome_perfil"))
 
 	var erro := Label.new()
 	erro.add_theme_font_size_override("font_size", 14)
@@ -146,26 +155,22 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 
 	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	criar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	criar.pressed.connect(func() -> void: _try_create(index, entrada.text, erro))
+	criar.pressed.connect(func() -> void:
+		if campo_web != null:
+			campo_web.fechar_teclado()
+		_try_create(index, entrada.text, erro))
 	entrada.text_submitted.connect(func(texto: String) -> void: _try_create(index, texto, erro))
+	if campo_web != null:
+		campo_web.confirmado.connect(func(texto: String) -> void: _try_create(index, texto, erro))
 	caixa.add_child(criar)
 
 	var cancelar := UiKit.botao(UiText.t("cancelar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	cancelar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
-	if not Plataforma.e_mobile():
+	# Foco automático no desktop e nos apps nativos; no navegador do celular o toque do usuário abre o teclado.
+	if campo_web == null:
 		entrada.grab_focus.call_deferred()
-
-
-## Diálogo nativo do navegador para digitar o nome (funciona no iOS, ao contrário do foco automático).
-func _pedir_nome_nativo(entrada: LineEdit, atualizar: Callable) -> void:
-	var texto = JavaScriptBridge.eval("window.prompt(%s, %s)" % [
-		JSON.stringify(UiText.t("nome_perfil")), JSON.stringify(entrada.text)], true)
-	if texto == null:
-		return
-	entrada.text = str(texto).left(ProfileRules.NAME_MAX_LENGTH)
-	atualizar.call()
 
 
 func _ask_delete(index: int) -> void:
