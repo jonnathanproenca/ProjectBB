@@ -17,7 +17,7 @@ const ZOOM: float = 0.08
 const CIDADES := [
 	{"nome": "Fundaferro", "arquivo": "fundaferro.jpg", "pos": Vector2(755, 255)},
 	{"nome": "Alto Nimbo", "arquivo": "alto_nimbo.jpg", "pos": Vector2(965, 160)},
-	{"nome": "Brumafunda", "arquivo": "brumafunda.jpg", "pos": Vector2(500, 390)},
+	{"nome": "Brumafunda", "arquivo": "brumafunda.jpg", "pos": Vector2(400, 330)},
 	{"nome": "Fontes Rubras", "arquivo": "fontes_rubras.jpg", "pos": Vector2(1075, 395)},
 	{"nome": "Carvamar", "arquivo": "carvamar.jpg", "pos": Vector2(235, 535)},
 	{"nome": "Cais das Correntes", "arquivo": "cais_das_correntes.jpg", "pos": Vector2(700, 650)},
