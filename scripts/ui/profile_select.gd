@@ -23,7 +23,7 @@ func _ready() -> void:
 	_centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Desce a grade para deixar o título "Project BB" visível acima das chapas.
-	_centro.offset_top = 140.0
+	_centro.offset_top = 220.0
 	add_child(_centro)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
 	_montar()
@@ -35,7 +35,7 @@ func _montar() -> void:
 		filho.queue_free()
 
 	var caixa := VBoxContainer.new()
-	caixa.add_theme_constant_override("separation", 24)
+	caixa.add_theme_constant_override("separation", 12)
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
 	_centro.add_child(caixa)
 	var grade := HBoxContainer.new()

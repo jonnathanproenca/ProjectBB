@@ -16,7 +16,7 @@ func _ready() -> void:
 	_centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Desce a chapa para deixar o título "Project BB" visível acima dela.
-	_centro.offset_top = 120.0
+	_centro.offset_top = 200.0
 	add_child(_centro)
 	_montar()
 

@@ -26,7 +26,7 @@ const CIDADES := [
 	{"nome": "Ponte Baixa", "arquivo": "ponte_baixa.jpg", "pos": Vector2(765, 355)},
 	{"nome": "Salmoura", "arquivo": "salmoura.jpg", "pos": Vector2(1220, 285)},
 	{"nome": "Roda Serena", "arquivo": "roda_serena.jpg", "pos": Vector2(500, 390)},
-	{"nome": "Vigia do Dente", "arquivo": "vigia_do_dente.jpg", "pos": Vector2(830, 210)},
+	{"nome": "Vigia do Dente", "arquivo": "vigia_do_dente.jpg", "pos": Vector2(640, 55)},
 ]
 
 var _escala: float
@@ -114,7 +114,8 @@ func _criar_pin(cidade: Dictionary) -> Button:
 	pin.flat = true
 	pin.custom_minimum_size = Vector2(TAM_PIN, TAM_PIN)
 	pin.size = Vector2(TAM_PIN, TAM_PIN)
-	pin.position = (cidade["pos"] as Vector2) * _escala - Vector2(TAM_PIN, TAM_PIN) * 0.5
+	# Ponta inferior do pin encostada no topo do ícone da cidade.
+	pin.position = (cidade["pos"] as Vector2) * _escala - Vector2(TAM_PIN * 0.5, TAM_PIN + 6.0)
 	pin.tooltip_text = cidade["nome"]
 
 	var desenho := Control.new()
