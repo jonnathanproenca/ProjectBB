@@ -114,28 +114,52 @@ func _add_links(box: VBoxContainer) -> void:
 		row.add_child(button)
 
 
-## Mapa-múndi de Aurel: fica escondido até o botão mostrar.
+## Mapa-múndi de Aurel: aberto numa modal a partir do botão da tela de teste.
 const MAPA := "res://assets/ui/mapa/mapa_mundo_aurel.jpg"
 const LARGURA_MAPA: float = 600.0
-var _mapa_imagem: TextureRect
 
 
 func _add_mapa(box: VBoxContainer) -> void:
 	var botao := Button.new()
-	botao.text = "Mostrar mapa do mundo"
+	botao.text = "Mapa do mundo"
+	botao.pressed.connect(_abrir_mapa)
 	box.add_child(botao)
 
-	_mapa_imagem = TextureRect.new()
-	_mapa_imagem.texture = load(MAPA)
-	_mapa_imagem.custom_minimum_size = Vector2(LARGURA_MAPA, LARGURA_MAPA * 768.0 / 1376.0)
-	_mapa_imagem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_mapa_imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_mapa_imagem.visible = false
-	box.add_child(_mapa_imagem)
 
-	botao.pressed.connect(func() -> void:
-		_mapa_imagem.visible = not _mapa_imagem.visible
-		botao.text = "Ocultar mapa do mundo" if _mapa_imagem.visible else "Mostrar mapa do mundo")
+func _abrir_mapa() -> void:
+	var modal := Control.new()
+	modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(modal)
+
+	var veu := ColorRect.new()
+	veu.color = Color(0.0, 0.0, 0.0, 0.7)
+	veu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	modal.add_child(veu)
+
+	var centro := CenterContainer.new()
+	centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	modal.add_child(centro)
+
+	var chapa := UiKit.chapa(Vector2(800, 640))
+	centro.add_child(chapa)
+	var caixa := UiKit.miolo(chapa)
+	caixa.add_theme_constant_override("separation", 14)
+	caixa.add_child(UiKit.letras(UiText.t("mapa"), 40.0, 600.0))
+
+	var imagem := TextureRect.new()
+	imagem.texture = load(MAPA)
+	imagem.custom_minimum_size = Vector2(LARGURA_MAPA, LARGURA_MAPA * 768.0 / 1376.0)
+	imagem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagem.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	caixa.add_child(imagem)
+
+	var fechar := UiKit.botao(UiText.t("voltar"), 40.0, Vector2(220, 52))
+	fechar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	fechar.pressed.connect(modal.queue_free)
+	caixa.add_child(fechar)
 
 
 func _open_link(relative_path: String, url: String) -> void:
