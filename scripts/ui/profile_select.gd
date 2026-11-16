@@ -132,6 +132,12 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	entrada.focus_entered.connect(func() -> void: atualizar.call())
 	entrada.focus_exited.connect(func() -> void: atualizar.call())
 	atualizar.call()
+	# No celular o teclado virtual não abre a partir do foco automático (iOS exige o toque direto),
+	# então o toque no campo pede o nome por um diálogo nativo do navegador.
+	if Plataforma.e_mobile():
+		entrada.gui_input.connect(func(evento: InputEvent) -> void:
+			if evento is InputEventMouseButton and evento.pressed:
+				_pedir_nome_nativo(entrada, atualizar))
 
 	var erro := Label.new()
 	erro.add_theme_font_size_override("font_size", 14)
@@ -148,7 +154,18 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	cancelar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
-	entrada.grab_focus.call_deferred()
+	if not Plataforma.e_mobile():
+		entrada.grab_focus.call_deferred()
+
+
+## Diálogo nativo do navegador para digitar o nome (funciona no iOS, ao contrário do foco automático).
+func _pedir_nome_nativo(entrada: LineEdit, atualizar: Callable) -> void:
+	var texto = JavaScriptBridge.eval("window.prompt(%s, %s)" % [
+		JSON.stringify(UiText.t("nome_perfil")), JSON.stringify(entrada.text)], true)
+	if texto == null:
+		return
+	entrada.text = str(texto).left(ProfileRules.NAME_MAX_LENGTH)
+	atualizar.call()
 
 
 func _ask_delete(index: int) -> void:
