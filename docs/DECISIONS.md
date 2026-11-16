@@ -35,3 +35,8 @@
 | ADR-031 | Lacuna LAC-04 (provas de ecos e ritos): custódia e consentimento; cópias não autorizadas não são autenticadas; ecos só corroboram | Decisão do time; protege contra coerção | Aceita |
 | ADR-032 | Lacuna LAC-05 (servidão e tráfico): regra comum proíbe propriedade de pessoas e dívida hereditária; mapeamento provisório: Carvamar permite, Pacto da Bacia e Juramento dos Poços sob submundo, demais proíbem | Decisão do time (resposta própria, não as opções propostas); mapeamento por potência é provisório | Aceita (mapeamento: provisório) |
 | ADR-033 | Propostas linguísticas LAC-08 a LAC-26 não canonizadas; descrições atuais permanecem, sem novas regras fonológicas, afixos ou nomes de língua | Decisão do time; as propostas do Manus não foram aceitas | Aceita |
+| ADR-034 | Grade com 1 casa = 1,5 m (5 pés do SRD) | Decisão do time sobre a grade do combate | Aceita |
+| ADR-035 | Ordem de iniciativa fixa definida no início do combate, pelos atributos de cada personagem | Decisão do time; sem rolagem por rodada | Aceita |
+| ADR-036 | K = 20 na redução de dano por defesa (defesa 20 reduz o dano pela metade); padrão do código atualizado | Decisão do time; escala parecida com a Classe de Armadura do SRD | Aceita |
+| ADR-037 | Vida dos inimigos pela tabela de monstros do SRD por nível; balanceamento de saúde depois | Decisão do time; alvo de golpes definido no GDD seção 5 | Aceita (valores finais: balanceamento) |
+| ADR-038 | Disparo comum do rifle (catalisador): 1d8 + modificador de atributo | Decisão do time; base para as armas-foco evoluírem | Aceita |

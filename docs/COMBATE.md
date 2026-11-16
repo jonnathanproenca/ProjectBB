@@ -1,17 +1,17 @@
 # Combate — regras do slice (M1–M5)
 
-Status: proposta v0.1. Valores marcados como **(padrão)** podem ser ajustados.
+Status: proposta v0.2. Decisões fechadas estão marcadas como **(decidido)**; valores **(padrão)** ainda podem ser ajustados.
 
 ## Grade e movimento
 
-- Grade quadrada. Cada casa representa **1,5 m** (padrão, 5 pés do SRD).
+- Grade quadrada. Cada casa representa **1,5 m** (decidido).
 - Movimento em metros, convertido em casas: 9 m = 6 casas (padrão).
 - O jogador gasta o movimento em casas ou em metros, indistintamente.
 - Diagonal conta como 1 casa (padrão, sem regra de 1,5 casa).
 
 ## Turno
 
-- Iniciativa por teste de Destreza, ordem fixa no combate.
+- Ordem de iniciativa fixa, definida no início do combate pelos atributos de cada personagem (decidido).
 - Ações por turno: **Ação**, **Ação bônus**, **Movimento**, **Reação**.
 - Reação volta a ficar disponível no início do turno do personagem.
 
@@ -23,10 +23,12 @@ Status: proposta v0.1. Valores marcados como **(padrão)** podem ser ajustados.
 ## Dano
 
 - Fórmula de defesa em razão: `dano × K / (K + defesa)` (GDD, seção 4; implementada em `scripts/rules/dnd_rules.gd`).
+- **K = 20 (decidido):** é a defesa que reduz o dano pela metade.
+- **Vida dos inimigos (decidido):** pontos de vida pela tabela de monstros do SRD por nível. Os valores finais serão ajustados no balanceamento de saúde, para atingir o alvo de golpes do GDD (seção 5).
 
 ## Armas-foco arcanas (rifle)
 
-- O rifle é um foco arcano. O disparo comum usa o **catalisador**: dado de dano + modificador de atributo (padrão: 1d8 no rifle básico).
+- O rifle é um foco arcano. O disparo comum usa o **catalisador**: dado de dano + modificador de atributo (decidido: 1d8 + mod. no rifle básico).
 - Armas melhores aumentam o dado do catalisador e adicionam propriedades (padrão: 1d10 e 2d6 nas próximas).
 - **Disparo comum** (truque): sem custo, qualquer classe com rifle.
 - **Disparo especial** (magia do rifle): consome carga por descanso curto ou longo, conforme a classe (ver `docs/CLASSES.md`).
