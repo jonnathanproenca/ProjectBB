@@ -33,6 +33,7 @@ MVP single player; co-op depois. Porte futuro para mobile.
 - Pós-guerra decadente, tom trágico e político (ADR-013 e ADR-015).
 - Tecnologia arcano-mecânica: armas de fogo convertidas em focos arcanos que disparam magia.
 - Detalhes visuais em `docs/ESTILO-VISUAL.md`. História e nome do mundo: adiados.
+- Bíblia de lore em `docs/lore/BIBLIA.md`. Lacunas de moeda, procedimentos, provas, servidão e propostas linguísticas decididas na seção 14 e nas ADR-029 a ADR-033.
 
 ## 4. Regras
 
