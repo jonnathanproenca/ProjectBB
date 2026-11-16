@@ -128,6 +128,8 @@ func _montar_retrato() -> Control:
 	var caminho := _caminho_classe() if PASSOS[_passo] == "classe" else _caminho_especie()
 	var imagem := _textura(caminho)
 	if imagem != null:
+		# Preenche o quadro alto e corta as laterais (as imagens do Flow vêm em 16:9).
+		imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		imagem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		quadro.add_child(imagem)
 	return quadro
