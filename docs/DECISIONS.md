@@ -43,3 +43,7 @@
 | ADR-039 | Movimento: 9 m = 6 casas por turno; diagonal conta como 1 casa | Decisão do time; regra simples de grade | Aceita |
 | ADR-040 | Armas-foco do rifle evoluem para 1d10 e 2d6 no catalisador | Decisão do time; valores propostos no documento de combate | Aceita |
 | ADR-041 | Ordem de marcos: personagem, mundo, diálogo e quests, UI de menu, combate por último; vertical slice depois | Pedido do time: combate só depois de definidos os demais sistemas | Aceita |
+| ADR-042 | Criação de personagem no MVP: 3 espécies (Humanos, Autômatos, Mestiços) e 5 origens (Soldado, Órfão, Nobre, Criminoso, Eremita) | Decisão do time; bônus e perícias das espécies e origens são padrão | Aceita (bônus e perícias: padrão) |
+| ADR-043 | Aparência no MVP: presets de rosto, corpo e cor; sem personalização completa | Decisão do time; reduz trabalho de arte | Aceita |
+| ADR-044 | Atributos no MVP: valores padrão por classe, sem compra de pontos nem rolagem | Decisão do time | Aceita |
+| ADR-045 | Regras de criação em `scripts/rules/character_rules.gd`, com teste em `scripts/tests/test_character_rules.gd` | Mesmo padrão das demais regras puras | Aceita |

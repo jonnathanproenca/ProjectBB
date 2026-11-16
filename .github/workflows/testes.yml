@@ -29,7 +29,7 @@ jobs:
       - name: Rodar testes
         run: |
           falhou=0
-          for teste in test_dnd_rules test_combat_rules test_profile_rules; do
+          for teste in test_dnd_rules test_combat_rules test_profile_rules test_character_rules; do
             echo "== $teste =="
             if ! godot --headless --path . -s res://scripts/tests/$teste.gd; then
               echo "FALHOU: $teste"
