@@ -42,3 +42,4 @@
 | ADR-038 | Disparo comum do rifle (catalisador): 1d8 + modificador de atributo | Decisão do time; base para as armas-foco evoluírem | Aceita |
 | ADR-039 | Movimento: 9 m = 6 casas por turno; diagonal conta como 1 casa | Decisão do time; regra simples de grade | Aceita |
 | ADR-040 | Armas-foco do rifle evoluem para 1d10 e 2d6 no catalisador | Decisão do time; valores propostos no documento de combate | Aceita |
+| ADR-041 | Ordem de marcos: personagem, mundo, diálogo e quests, UI de menu, combate por último; vertical slice depois | Pedido do time: combate só depois de definidos os demais sistemas | Aceita |
