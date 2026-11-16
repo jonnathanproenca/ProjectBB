@@ -21,6 +21,12 @@ const CIDADES := [
 	{"nome": "Fontes Rubras", "arquivo": "fontes_rubras.jpg", "pos": Vector2(1075, 395)},
 	{"nome": "Carvamar", "arquivo": "carvamar.jpg", "pos": Vector2(235, 535)},
 	{"nome": "Cais das Correntes", "arquivo": "cais_das_correntes.jpg", "pos": Vector2(700, 650)},
+	{"nome": "Vardélia", "arquivo": "vardelia.jpg", "pos": Vector2(775, 470)},
+	{"nome": "Lumeira", "arquivo": "lumeira.jpg", "pos": Vector2(250, 255)},
+	{"nome": "Ponte Baixa", "arquivo": "ponte_baixa.jpg", "pos": Vector2(690, 430)},
+	{"nome": "Salmoura", "arquivo": "salmoura.jpg", "pos": Vector2(1220, 285)},
+	{"nome": "Roda Serena", "arquivo": "roda_serena.jpg", "pos": Vector2(765, 355)},
+	{"nome": "Vigia do Dente", "arquivo": "vigia_do_dente.jpg", "pos": Vector2(830, 210)},
 ]
 
 var _escala: float
