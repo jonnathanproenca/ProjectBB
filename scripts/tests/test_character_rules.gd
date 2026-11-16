@@ -53,6 +53,8 @@ func _initialize() -> void:
 	_check(CharacterRules.pv_nivel_1("mago_engenheiro", 8) == 5, "mago com Con 8: 6 - 1 = 5 PV")
 	_check(CharacterRules.pv_nivel_1("mago_engenheiro", 1) == 1, "PV no nível 1 nunca fica abaixo de 1")
 
+	_testar_pericias()
+
 	if _failures == 0:
 		print("OK: todos os testes de criação de personagem passaram.")
 		quit(0)
@@ -65,3 +67,67 @@ func _check(condicao: bool, descricao: String) -> void:
 	if not condicao:
 		_failures += 1
 		print("FALHOU: ", descricao)
+
+
+func _testar_pericias() -> void:
+	_check(CharacterRules.PERICIAS.size() == 18, "são 18 perícias")
+	var atributo_ok := true
+	for id in CharacterRules.PERICIAS.keys():
+		if not CharacterRules.ATRIBUTOS.has((CharacterRules.PERICIAS[id] as Dictionary)["atributo"]):
+			atributo_ok = false
+	_check(atributo_ok, "toda perícia aponta para um atributo válido")
+	_check(_igual(CharacterRules.PERSONAGENS, ["personalizado"]), "aba Origem tem só o personagem personalizado")
+
+	var ids_ok := true
+	for classe in CharacterRules.CLASSES.keys():
+		for id in (CharacterRules.CLASSES[classe] as Dictionary)["pericias"]:
+			if not CharacterRules.PERICIAS.has(id):
+				ids_ok = false
+	for origem in CharacterRules.ORIGENS.keys():
+		for id in (CharacterRules.ORIGENS[origem] as Dictionary)["pericias"]:
+			if not CharacterRules.PERICIAS.has(id):
+				ids_ok = false
+	_check(ids_ok, "perícias de classes e origens existem em PERICIAS")
+
+	# Guerreiro (atletismo, percepcao) + soldado (atletismo, intimidacao): atletismo repete.
+	var soldado: Array[String] = CharacterRules.pericias_finais("guerreiro", "soldado")
+	_check(_igual(soldado, ["atletismo", "intimidacao", "percepcao"]), "guerreiro soldado: união sem repetir e em ordem")
+	# Mago (arcanismo, investigacao) + nobre (historia, persuasao): sem repetição, ordem alfabética.
+	var mago: Array[String] = CharacterRules.pericias_finais("mago_engenheiro", "nobre")
+	_check(_igual(mago, ["arcanismo", "historia", "investigacao", "persuasao"]), "mago nobre: quatro perícias em ordem alfabética")
+	# Ladino (4) + órfão: furtividade e percepcao já estão no ladino, então continuam 4.
+	var ladino: Array[String] = CharacterRules.pericias_finais("ladino", "orfao")
+	_check(_igual(ladino, ["enganacao", "furtividade", "percepcao", "prestidigitacao"]), "ladino órfão: sem repetição")
+
+	var todas_ordenadas := true
+	var todas_unicas := true
+	for classe in CharacterRules.CLASSES.keys():
+		for origem in CharacterRules.ORIGENS.keys():
+			var lista: Array[String] = CharacterRules.pericias_finais(classe, origem)
+			var ordenada: Array = Array(lista)
+			ordenada.sort()
+			if not _igual(lista, ordenada):
+				todas_ordenadas = false
+			for i in lista.size():
+				if lista.find(lista[i]) != i:
+					todas_unicas = false
+	_check(todas_ordenadas, "pericias_finais sempre em ordem alfabética")
+	_check(todas_unicas, "pericias_finais nunca repete")
+
+	# Id inexistente e repetido: ignorado e removido, resultado ordenado.
+	var filtrada: Array[String] = CharacterRules.unir_pericias(["percepcao", "inexistente", "atletismo", "percepcao", ""])
+	_check(_igual(filtrada, ["atletismo", "percepcao"]), "id de perícia inexistente é ignorado")
+
+	_check(_igual(CharacterRules.pericias_finais("bardo", "soldado"), ["atletismo", "intimidacao"]), "classe desconhecida só contribui com a origem")
+	_check(_igual(CharacterRules.pericias_finais("guerreiro", "desertor"), ["atletismo", "percepcao"]), "origem desconhecida só contribui com a classe")
+	_check(CharacterRules.pericias_finais("x", "y").is_empty(), "classe e origem desconhecidas dão lista vazia")
+
+
+## Compara duas listas pelo conteúdo, na mesma ordem, sem depender do tipo do Array.
+func _igual(a: Array, b: Array) -> bool:
+	if a.size() != b.size():
+		return false
+	for i in a.size():
+		if a[i] != b[i]:
+			return false
+	return true
