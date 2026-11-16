@@ -5,9 +5,9 @@ Status: proposta v0.2. Decisões fechadas estão marcadas como **(decidido)**; v
 ## Grade e movimento
 
 - Grade quadrada. Cada casa representa **1,5 m** (decidido).
-- Movimento em metros, convertido em casas: 9 m = 6 casas (padrão).
+- Movimento em metros, convertido em casas: 9 m = 6 casas (decidido).
 - O jogador gasta o movimento em casas ou em metros, indistintamente.
-- Diagonal conta como 1 casa (padrão, sem regra de 1,5 casa).
+- Diagonal conta como 1 casa (decidido, sem regra de 1,5 casa).
 
 ## Turno
 
@@ -29,7 +29,7 @@ Status: proposta v0.2. Decisões fechadas estão marcadas como **(decidido)**; v
 ## Armas-foco arcanas (rifle)
 
 - O rifle é um foco arcano. O disparo comum usa o **catalisador**: dado de dano + modificador de atributo (decidido: 1d8 + mod. no rifle básico).
-- Armas melhores aumentam o dado do catalisador e adicionam propriedades (padrão: 1d10 e 2d6 nas próximas).
+- Armas melhores aumentam o dado do catalisador e adicionam propriedades (decidido: 1d10 e 2d6 nas próximas).
 - **Disparo comum** (truque): sem custo, qualquer classe com rifle.
 - **Disparo especial** (magia do rifle): consome carga por descanso curto ou longo, conforme a classe (ver `docs/CLASSES.md`).
 - Padrão de referência: como truques e magias de nível no Baldur's Gate 3.

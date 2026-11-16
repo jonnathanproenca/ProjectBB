@@ -40,3 +40,5 @@
 | ADR-036 | K = 20 na redução de dano por defesa (defesa 20 reduz o dano pela metade); padrão do código atualizado | Decisão do time; escala parecida com a Classe de Armadura do SRD | Aceita |
 | ADR-037 | Vida dos inimigos pela tabela de monstros do SRD por nível; balanceamento de saúde depois | Decisão do time; alvo de golpes definido no GDD seção 5 | Aceita (valores finais: balanceamento) |
 | ADR-038 | Disparo comum do rifle (catalisador): 1d8 + modificador de atributo | Decisão do time; base para as armas-foco evoluírem | Aceita |
+| ADR-039 | Movimento: 9 m = 6 casas por turno; diagonal conta como 1 casa | Decisão do time; regra simples de grade | Aceita |
+| ADR-040 | Armas-foco do rifle evoluem para 1d10 e 2d6 no catalisador | Decisão do time; valores propostos no documento de combate | Aceita |
