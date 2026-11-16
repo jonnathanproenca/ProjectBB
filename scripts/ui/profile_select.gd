@@ -148,7 +148,7 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	cancelar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	cancelar.pressed.connect(_cancel_creating)
 	caixa.add_child(cancelar)
-	entrada.grab_focus()
+	entrada.grab_focus.call_deferred()
 
 
 func _ask_delete(index: int) -> void:
@@ -202,6 +202,7 @@ func _finish_creation(index: int, nome: String, escolhas: Dictionary) -> void:
 	perfil["race"] = str(escolhas["especie"])
 	perfil["class"] = str(escolhas["classe"])
 	perfil["origin"] = str(escolhas["origem"])
+	perfil["identity"] = str(escolhas["identidade"])
 	perfil["appearance"] = int(escolhas["aparencia"])
 	ProfileStore.save_slot(index, perfil)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)

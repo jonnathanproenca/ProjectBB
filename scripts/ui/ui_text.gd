@@ -23,6 +23,7 @@ const STRINGS = {
 		"origem_soldado": "Soldado", "origem_orfao": "Órfão", "origem_nobre": "Nobre",
 		"origem_criminoso": "Criminoso", "origem_eremita": "Eremita",
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
+		"identidade_masculino": "Masculino", "identidade_feminino": "Feminino",
 		"attr_for": "FOR", "attr_des": "DES", "attr_con": "CON", "attr_int": "INT", "attr_sab": "SAB", "attr_car": "CAR",
 	},
 	"en": {
@@ -45,6 +46,7 @@ const STRINGS = {
 		"origem_soldado": "Soldier", "origem_orfao": "Orphan", "origem_nobre": "Noble",
 		"origem_criminoso": "Criminal", "origem_eremita": "Hermit",
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
+		"identidade_masculino": "Male", "identidade_feminino": "Female",
 		"attr_for": "STR", "attr_des": "DEX", "attr_con": "CON", "attr_int": "INT", "attr_sab": "WIS", "attr_car": "CHA",
 	},
 	"es": {
@@ -67,6 +69,7 @@ const STRINGS = {
 		"origem_soldado": "Soldado", "origem_orfao": "Huérfano", "origem_nobre": "Noble",
 		"origem_criminoso": "Criminal", "origem_eremita": "Ermitaño",
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
+		"identidade_masculino": "Masculino", "identidade_feminino": "Femenino",
 		"attr_for": "FUE", "attr_des": "DES", "attr_con": "CON", "attr_int": "INT", "attr_sab": "SAB", "attr_car": "CAR",
 	},
 }
