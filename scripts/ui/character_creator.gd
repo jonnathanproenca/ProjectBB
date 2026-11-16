@@ -4,7 +4,8 @@ extends Control
 ## retrato no centro, resumo à direita. Overlay sobre a seleção de perfil.
 ## Emite concluido(escolhas) ou cancelado e se remove sozinho.
 ## Imagens opcionais em assets/ui/criacao/ (sem arquivo, mostra cor sólida e texto):
-##   fundo.png, especie_<id>_<masculino|feminino>.png, icone_<id>.png, classe_<id>.png
+##   fundo.png, especie_<id>_<masculino|feminino>.png (corpo inteiro, fundo transparente),
+##   icone_<id>_<masculino|feminino>.png (busto com moldura redonda), classe_<id>.png
 
 signal concluido(escolhas: Dictionary)
 signal cancelado
@@ -20,7 +21,7 @@ const IDENTIDADES: Array[String] = ["masculino", "feminino"]
 const APARENCIAS: int = 3
 const LARGURA_PAINEL: float = 340.0
 const TAMANHO_RETRATO := Vector2(260, 360)
-const TAMANHO_ICONE := Vector2(64, 64)
+const TAMANHO_ICONE := Vector2(84, 84)
 const LARGURA_RESUMO: float = 260.0
 const TAMANHO_BOTAO_NAV := Vector2(200, 52)
 const TAMANHO_ABA := Vector2(170, 44)
@@ -128,8 +129,9 @@ func _montar_retrato() -> Control:
 	var caminho := _caminho_classe() if PASSOS[_passo] == "classe" else _caminho_especie()
 	var imagem := _textura(caminho)
 	if imagem != null:
-		# Preenche o quadro alto e corta as laterais (as imagens do Flow vêm em 16:9).
-		imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		# Classe: preenche o quadro e corta as laterais. Espécie: corpo inteiro, sem cortar.
+		if PASSOS[_passo] == "classe":
+			imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		imagem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		quadro.add_child(imagem)
 	return quadro
@@ -201,7 +203,7 @@ func _linha_icones() -> Control:
 		icone.flat = true
 		icone.custom_minimum_size = TAMANHO_ICONE
 		icone.tooltip_text = UiText.t("especie_" + str(especie))
-		var textura := _carregar("%sicone_%s.png" % [PASTA_IMAGENS, especie])
+		var textura := _carregar("%sicone_%s_%s.png" % [PASTA_IMAGENS, especie, _escolhas["identidade"]])
 		if textura != null:
 			icone.icon = textura
 			icone.expand_icon = true
