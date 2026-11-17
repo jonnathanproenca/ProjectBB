@@ -3,7 +3,7 @@ extends Control
 ## A criação pede o nome aqui e depois abre CharacterCreator (espécie, classe, origem, aparência, revisão).
 
 const LOGIN_SCENE := "res://scenes/login.tscn"
-const SLOT_SIZE := Vector2(380, 440)
+const SLOT_SIZE := Vector2(380, 490)
 const LARGURA_TEXTO: float = 228.0
 ## Tela de exemplo aberta pelo botão Jogar (demo de teste no navegador).
 const COMBATE_SCENE := "res://scenes/main.tscn"
@@ -44,9 +44,16 @@ func _montar() -> void:
 	for i in range(_slots.size()):
 		grade.add_child(_build_slot(i))
 
+	var rodape := HBoxContainer.new()
+	rodape.alignment = BoxContainer.ALIGNMENT_CENTER
+	rodape.add_theme_constant_override("separation", 40)
+	caixa.add_child(rodape)
 	var voltar := UiKit.botao(UiText.t("voltar"), 40.0, Vector2(220, 56))
 	voltar.pressed.connect(func() -> void: get_tree().change_scene_to_file(LOGIN_SCENE))
-	caixa.add_child(voltar)
+	rodape.add_child(voltar)
+	var grupo := UiKit.botao(UiText.t("grupo"), 40.0, Vector2(220, 56))
+	grupo.pressed.connect(_abrir_grupo)
+	rodape.add_child(grupo)
 
 
 func _build_slot(index: int) -> Control:
@@ -87,6 +94,11 @@ func _build_slot(index: int) -> Control:
 	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	jogar.pressed.connect(func() -> void: get_tree().change_scene_to_file(COMBATE_SCENE))
 	caixa.add_child(jogar)
+	if FichaPersonagem.perfil_completo(dados):
+		var ficha := UiKit.botao(UiText.t("ficha"), 22.0, Vector2(LARGURA_BOTAO, 40))
+		ficha.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		ficha.pressed.connect(func() -> void: _abrir_ficha(dados))
+		caixa.add_child(ficha)
 	var excluir := UiKit.botao(UiText.t("excluir"), 22.0, Vector2(LARGURA_BOTAO, 40))
 	excluir.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	excluir.pressed.connect(func() -> void: _ask_delete(index))
@@ -217,6 +229,20 @@ func _abrir_criacao(index: int, nome: String) -> void:
 	add_child(criador)
 	criador.configurar(nome)
 	criador.concluido.connect(func(escolhas: Dictionary) -> void: _finish_creation(index, nome, escolhas))
+
+
+## Abre a ficha do perfil sobre a tela. Voltar fecha a ficha.
+func _abrir_ficha(perfil: Dictionary) -> void:
+	var ficha := FichaPersonagem.new()
+	ficha.configurar(perfil)
+	add_child(ficha)
+
+
+## Abre a lista do grupo (perfis com criação completa) sobre a tela.
+func _abrir_grupo() -> void:
+	var grupo := GrupoLista.new()
+	grupo.configurar(_slots)
+	add_child(grupo)
 
 
 func _finish_creation(index: int, nome: String, escolhas: Dictionary) -> void:
