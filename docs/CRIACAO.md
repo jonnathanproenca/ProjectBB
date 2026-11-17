@@ -5,19 +5,20 @@ Status: proposta v0.1. Decisões fechadas estão marcadas como **(decidido)**; v
 ## Fluxo (como no Baldur's Gate 3)
 
 1. Nome (já existe na tela de perfil).
-2. Espécie.
-3. Classe.
-4. Origem.
-5. Atributos: valores padrão da classe, somados ao bônus da espécie.
-6. Aparência: presets de rosto, corpo e cor.
-7. Revisão e confirmação.
+2. Origem: personagem personalizado (única opção por ora, só de exibição).
+3. Raça (espécie e identidade).
+4. Classe.
+5. Background (as origens abaixo; no salvamento a chave continua `origem`).
+6. Habilidades: valores padrão da classe somados ao bônus da espécie (sem escolhas).
+7. Perícias: da classe e do background (sem escolhas).
+8. Aparência: presets de rosto, corpo e cor. Aqui fica o botão Concluir.
 
 ## Decisões do MVP
 
 - **Espécies: 3 (decidido):** Humanos, Autômatos e Mestiços.
 - **Variantes: masculino e feminino por espécie (decidido).** Sem tipo de corpo como variante de espécie.
 - **Origens: 5 (decidido):** Soldado, Órfão, Nobre, Criminoso e Eremita.
-- **Tela em estilo BG3 (decidido):** abas no topo (Espécie, Classe, Origem, Aparência, Revisão), seletores com setas, retrato central e resumo à direita.
+- **Tela em estilo BG3 (decidido):** abas no topo (Origem, Raça, Classe, Background, Habilidades, Perícias, Aparência), seletores com setas, retrato central sempre da espécie e ficha à direita, com os textos sobre painel escuro. O botão Concluir fica na última etapa.
 - **Imagens de espécie (decidido):** corpo inteiro com fundo transparente, centralizado no retrato; ícones em busto com fundo ferrugem (#4a2416) dentro de moldura redonda steampunk.
 - **Nome no celular (decidido):** a detecção de plataforma fica em `scripts/ui/plataforma.gd`. No celular, o nome é pedido pelo diálogo nativo do navegador ao tocar no campo.
 - **Aparência: presets de rosto, corpo e cor (decidido).** Sem personalização completa estilo BG3 no MVP.

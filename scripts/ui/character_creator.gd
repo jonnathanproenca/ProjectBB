@@ -1,11 +1,13 @@
 class_name CharacterCreator
 extends Control
 ## Criação de personagem em etapas, no estilo do Baldur's Gate 3: abas no topo, seletores com setas,
-## retrato no centro, resumo à direita. Overlay sobre a seleção de perfil.
+## retrato da espécie no centro e ficha à direita, com blocos de texto sobre painel escuro.
+## Overlay sobre a seleção de perfil.
 ## Emite concluido(escolhas) ou cancelado e se remove sozinho.
 ## Imagens opcionais em assets/ui/criacao/ (sem arquivo, mostra cor sólida e texto):
 ##   fundo.png, especie_<id>_<masculino|feminino>.png (corpo inteiro, fundo transparente),
-##   icone_<id>_<masculino|feminino>.png (busto com moldura redonda), classe_<id>.png
+##   icone_<id>_<masculino|feminino>.png (busto com moldura redonda).
+## As imagens classe_<id>.png continuam nos assets, mas o retrato não as usa mais.
 
 signal concluido(escolhas: Dictionary)
 signal cancelado
@@ -16,19 +18,26 @@ const COR_FUNDO := Color("16181f")
 const COR_SELECIONADO := Color("f2d28a")
 const COR_NORMAL := Color.WHITE
 const COR_APAGADO := Color(1, 1, 1, 0.45)
-const PASSOS: Array[String] = ["especie", "classe", "origem", "aparencia", "revisao"]
+const COR_PAINEL := Color(0, 0, 0, 0.72)
+const COR_BORDA_PAINEL := Color(0.95, 0.82, 0.54, 0.35)
+const COR_TEXTO_CORRIDO := Color("f0e6d2")
+const PASSOS: Array[String] = ["origem", "especie", "classe", "background", "habilidades", "pericias", "aparencia"]
 const IDENTIDADES: Array[String] = ["masculino", "feminino"]
 const APARENCIAS: int = 3
 const LARGURA_PAINEL: float = 340.0
+const MARGEM_PAINEL: float = 16.0
 const TAMANHO_RETRATO := Vector2(260, 360)
 const TAMANHO_ICONE := Vector2(84, 84)
 const LARGURA_RESUMO: float = 260.0
 const TAMANHO_BOTAO_NAV := Vector2(200, 52)
-const TAMANHO_ABA := Vector2(170, 44)
+## 7 abas: 7 x 132 + 6 x 8 = 972 px, cabe com folga na largura de 1280 (e em 1210 da captura).
+const TAMANHO_ABA := Vector2(132, 44)
+const ALTURA_LETRA_ABA: float = 22.0
 
 ## Escolhas iniciais: o personagem já é válido, como no BG3 (o jogador só troca o que quiser).
+## "origem" guarda o Background (nome mantido para não quebrar o salvamento); "personagem" é só de exibição.
 var _passo: int = 0
-var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "aparencia": 0}
+var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "aparencia": 0, "personagem": "personalizado"}
 var _nome: String = ""
 var _raiz: VBoxContainer
 
@@ -71,14 +80,14 @@ func _montar() -> void:
 	for filho in _raiz.get_children():
 		_raiz.remove_child(filho)
 		filho.queue_free()
-	_raiz.add_child(_montar_abas())
+	_raiz.add_child(_painel_escuro(_montar_abas(), 8.0))
 
 	var meio := HBoxContainer.new()
 	meio.alignment = BoxContainer.ALIGNMENT_CENTER
 	meio.add_theme_constant_override("separation", 40)
-	meio.add_child(_montar_painel())
+	meio.add_child(_painel_escuro(_montar_painel(), MARGEM_PAINEL))
 	meio.add_child(_montar_retrato())
-	meio.add_child(_montar_resumo())
+	meio.add_child(_painel_escuro(_montar_resumo(), MARGEM_PAINEL))
 	_raiz.add_child(meio)
 
 	_raiz.add_child(_montar_navegacao())
@@ -88,22 +97,28 @@ func _montar() -> void:
 func _montar_abas() -> Control:
 	var linha := HBoxContainer.new()
 	linha.alignment = BoxContainer.ALIGNMENT_CENTER
-	linha.add_theme_constant_override("separation", 24)
+	linha.add_theme_constant_override("separation", 8)
 	for i in range(PASSOS.size()):
-		var aba := UiKit.botao(UiText.t("passo_" + PASSOS[i]), 26.0, TAMANHO_ABA)
+		var aba := UiKit.botao(UiText.t("passo_" + PASSOS[i]), ALTURA_LETRA_ABA, TAMANHO_ABA)
 		aba.modulate = COR_SELECIONADO if i == _passo else COR_NORMAL
 		aba.pressed.connect(_ir_para.bind(i))
 		linha.add_child(aba)
 	return linha
 
 
-## Painel da esquerda: seletores da etapa atual.
+## Painel da esquerda: seletores e textos da etapa atual.
 func _montar_painel() -> Control:
 	var caixa := VBoxContainer.new()
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
-	caixa.add_theme_constant_override("separation", 18)
+	caixa.add_theme_constant_override("separation", 14)
 	caixa.custom_minimum_size = Vector2(LARGURA_PAINEL, 0)
+	caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var classe: String = str(_escolhas["classe"])
+	var origem: String = str(_escolhas["origem"])
 	match PASSOS[_passo]:
+		"origem":
+			caixa.add_child(_seletor("personagem"))
+			caixa.add_child(_paragrafo(UiText.t("personagem_desc_" + str(_escolhas["personagem"]))))
 		"especie":
 			caixa.add_child(_linha_icones())
 			caixa.add_child(_seletor("especie"))
@@ -111,54 +126,67 @@ func _montar_painel() -> Control:
 			caixa.add_child(UiKit.letras(_resumo_especie(), 20.0, LARGURA_PAINEL))
 		"classe":
 			caixa.add_child(_seletor("classe"))
-			caixa.add_child(UiKit.letras(_resumo_classe(), 22.0, LARGURA_PAINEL))
-		"origem":
+			caixa.add_child(UiKit.letras(_resumo_classe(), 20.0, LARGURA_PAINEL))
+			caixa.add_child(_paragrafo(UiText.t("classe_desc_" + classe)))
+			caixa.add_child(UiKit.letras(UiText.t("pericias"), 22.0, LARGURA_PAINEL))
+			caixa.add_child(_paragrafo(_lista_pericias(classe, origem, false)))
+		"background":
 			caixa.add_child(_seletor("origem"))
-		"aparencia":
-			caixa.add_child(_seletor("aparencia"))
+			caixa.add_child(_paragrafo(UiText.t("background_desc_" + origem)))
+		"habilidades":
+			caixa.add_child(_paragrafo(UiText.t("habilidades_desc")))
+			var finais := CharacterRules.atributos_finais(str(_escolhas["especie"]), classe)
+			for atributo in CharacterRules.ATRIBUTOS:
+				caixa.add_child(_linha_atributo(str(atributo), int(finais[atributo]), 22.0, LARGURA_PAINEL))
+		"pericias":
+			caixa.add_child(_paragrafo(UiText.t("pericias_desc")))
+			caixa.add_child(_paragrafo(_lista_pericias(classe, origem, true)))
 		_:
-			caixa.add_child(UiKit.letras(_nome, 36.0, LARGURA_PAINEL))
+			caixa.add_child(_seletor("aparencia"))
 	return caixa
 
 
-## Retrato do centro: sempre a espécie (masculino ou feminino); na etapa de classe, a classe.
+## Retrato do centro: sempre a imagem da espécie (corpo inteiro, fundo transparente), em todas as etapas.
 func _montar_retrato() -> Control:
 	var quadro := Control.new()
 	quadro.custom_minimum_size = TAMANHO_RETRATO
 	quadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var caminho := _caminho_classe() if PASSOS[_passo] == "classe" else _caminho_especie()
-	var imagem := _textura(caminho)
+	var imagem := _textura(_caminho_especie())
 	if imagem != null:
-		# Classe: preenche o quadro e corta as laterais. Espécie: corpo inteiro, sem cortar.
-		if PASSOS[_passo] == "classe":
-			imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		imagem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		quadro.add_child(imagem)
 	return quadro
 
 
-## Resumo à direita: atributos finais e PV, atualizados a cada escolha.
+## Ficha à direita, no estilo do BG3: nome, espécie, classe, background, atributos, PV e perícias.
+## Reconstruída a cada escolha.
 func _montar_resumo() -> Control:
 	var caixa := VBoxContainer.new()
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
-	caixa.add_theme_constant_override("separation", 6)
+	caixa.add_theme_constant_override("separation", 4)
 	caixa.custom_minimum_size = Vector2(LARGURA_RESUMO, 0)
+	caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var especie: String = str(_escolhas["especie"])
 	var classe: String = str(_escolhas["classe"])
+	var origem: String = str(_escolhas["origem"])
 	var finais := CharacterRules.atributos_finais(especie, classe)
 
-	caixa.add_child(UiKit.letras(UiText.t("especie_" + especie), 28.0, LARGURA_RESUMO))
-	caixa.add_child(UiKit.letras(UiText.t("classe_" + classe), 24.0, LARGURA_RESUMO))
-	caixa.add_child(UiKit.letras(UiText.t("origem_" + str(_escolhas["origem"])), 24.0, LARGURA_RESUMO))
-	caixa.add_child(_espaco(12.0))
+	if not _nome.is_empty():
+		caixa.add_child(UiKit.letras(_nome, 28.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.letras(UiText.t("especie_" + especie), 22.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.letras(UiText.t("classe_" + classe), 22.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 22.0, LARGURA_RESUMO))
+	caixa.add_child(_espaco(6.0))
 	for atributo in CharacterRules.ATRIBUTOS:
-		var linha := HBoxContainer.new()
-		linha.add_child(UiKit.letras(UiText.t("attr_" + atributo), 22.0, 90.0))
-		linha.add_child(UiKit.letras(str(int(finais[atributo])), 22.0, 60.0))
-		caixa.add_child(linha)
-	caixa.add_child(_espaco(12.0))
+		caixa.add_child(_linha_atributo(str(atributo), int(finais[atributo]), 20.0, LARGURA_RESUMO))
+	caixa.add_child(_espaco(6.0))
 	var pv := CharacterRules.pv_nivel_1(classe, int(finais["con"]))
-	caixa.add_child(UiKit.letras("%s: %d" % [UiText.t("pv"), pv], 24.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.letras("%s: %d" % [UiText.t("pv"), pv], 22.0, LARGURA_RESUMO))
+	caixa.add_child(_espaco(6.0))
+	caixa.add_child(UiKit.letras(UiText.t("pericias"), 20.0, LARGURA_RESUMO))
+	for pericia in CharacterRules.pericias_finais(classe, origem):
+		caixa.add_child(UiKit.letras(_nome_pericia(str(pericia)), 18.0, LARGURA_RESUMO))
 	return caixa
 
 
@@ -262,6 +290,8 @@ func _opcoes(chave: String) -> Array:
 			return CharacterRules.CLASSES.keys()
 		"origem":
 			return CharacterRules.ORIGENS.keys()
+		"personagem":
+			return _chaves(CharacterRules.PERSONAGENS)
 		_:
 			var presets: Array = []
 			for i in range(APARENCIAS):
@@ -285,9 +315,80 @@ func _resumo_especie() -> String:
 	return "  ".join(partes)
 
 
+## Dado de vida e PV no nível 1 da classe escolhida (muda ao trocar de classe).
 func _resumo_classe() -> String:
-	var dado: int = int((CharacterRules.CLASSES[str(_escolhas["classe"])] as Dictionary)["dado_vida"])
-	return "%s: d%d" % [UiText.t("dado_vida"), dado]
+	var classe: String = str(_escolhas["classe"])
+	var dado: int = int((CharacterRules.CLASSES[classe] as Dictionary)["dado_vida"])
+	var finais := CharacterRules.atributos_finais(str(_escolhas["especie"]), classe)
+	var pv := CharacterRules.pv_nivel_1(classe, int(finais["con"]))
+	return "%s: d%d   %s: %d" % [UiText.t("dado_vida"), dado, UiText.t("pv_nivel_1"), pv]
+
+
+## Aceita Dictionary (usa as chaves) ou Array.
+func _chaves(fonte: Variant) -> Array:
+	if fonte is Dictionary:
+		return (fonte as Dictionary).keys()
+	return (fonte as Array).duplicate()
+
+
+## Nome da perícia na interface; sem tradução, cai no id com a primeira letra maiúscula.
+func _nome_pericia(id: String) -> String:
+	var chave := "pericia_" + id
+	var texto := UiText.t(chave)
+	return id.capitalize() if texto == chave else texto
+
+
+## Perícias finais, uma por linha. Com atributo, no formato "Atletismo (FOR)".
+func _lista_pericias(classe: String, origem: String, com_atributo: bool) -> String:
+	var linhas := PackedStringArray()
+	for pericia in CharacterRules.pericias_finais(classe, origem):
+		var linha := _nome_pericia(str(pericia))
+		if com_atributo:
+			var atributo: String = str((CharacterRules.PERICIAS[pericia] as Dictionary)["atributo"])
+			linha += " (%s)" % UiText.t("attr_" + atributo)
+		linhas.append(linha)
+	return "\n".join(linhas)
+
+
+## Valor do atributo e modificador, ex.: "FOR  15  +2".
+func _linha_atributo(atributo: String, valor: int, altura: float, largura: float) -> Control:
+	var linha := HBoxContainer.new()
+	linha.add_theme_constant_override("separation", 8)
+	linha.custom_minimum_size = Vector2(largura, 0)
+	linha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var modificador := DndRules.ability_modifier(valor)
+	var textos: Array[String] = [UiText.t("attr_" + atributo), str(valor), "%+d" % modificador]
+	var larguras: Array[float] = [largura * 0.35, largura * 0.25, largura * 0.25]
+	for i in range(textos.size()):
+		linha.add_child(UiKit.letras(textos[i], altura, larguras[i]))
+	return linha
+
+
+## Painel escuro estilo BG3 (preto com alfa, cantos redondos e borda dourada discreta) atrás do conteúdo.
+func _painel_escuro(conteudo: Control, margem: float) -> PanelContainer:
+	var painel := PanelContainer.new()
+	painel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var estilo := StyleBoxFlat.new()
+	estilo.bg_color = COR_PAINEL
+	estilo.set_corner_radius_all(10)
+	estilo.set_border_width_all(2)
+	estilo.border_color = COR_BORDA_PAINEL
+	estilo.set_content_margin_all(margem)
+	painel.add_theme_stylebox_override("panel", estilo)
+	painel.add_child(conteudo)
+	return painel
+
+
+## Texto corrido com quebra de linha (as letras recortadas não quebram), claro sobre o painel escuro.
+func _paragrafo(texto: String) -> Label:
+	var rotulo := Label.new()
+	rotulo.text = texto
+	rotulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	rotulo.custom_minimum_size = Vector2(LARGURA_PAINEL, 0)
+	rotulo.add_theme_font_size_override("font_size", 18)
+	rotulo.add_theme_color_override("font_color", COR_TEXTO_CORRIDO)
+	rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return rotulo
 
 
 func _espaco(altura: float) -> Control:
@@ -298,10 +399,6 @@ func _espaco(altura: float) -> Control:
 
 func _caminho_especie() -> String:
 	return "%sespecie_%s_%s.png" % [PASTA_IMAGENS, _escolhas["especie"], _escolhas["identidade"]]
-
-
-func _caminho_classe() -> String:
-	return "%sclasse_%s.png" % [PASTA_IMAGENS, _escolhas["classe"]]
 
 
 func _carregar(caminho: String) -> Texture2D:
