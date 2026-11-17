@@ -30,6 +30,9 @@ const STRINGS = {
 		"aparencia": "Aparência", "atributos": "Atributos", "grupo_vazio": "Nenhum personagem criado", "pericia_acrobacia": "Acrobacia",
 		"pericia_adestrar_animais": "Adestrar animais", "pericia_arcanismo": "Arcanismo", "pericia_atuacao": "Atuação", "pericia_intuicao": "Intuição",
 		"pericia_investigacao": "Investigação", "pericia_natureza": "Natureza", "pericia_religiao": "Religião",
+		# menu de pausa
+		"menu_titulo": "Pausa", "menu_continuar": "Continuar", "menu_inventario": "Inventário", "menu_ficha": "Ficha", "menu_opcoes": "Opções", "menu_sair": "Sair para o menu",
+		"menu_sem_personagem": "Nenhum personagem ativo", "inventario_titulo": "Inventário", "inventario_vazio": "Inventário vazio", "inventario_qtd": "Qtd",
 	},
 	"en": {
 		"entrar": "Enter", "opcoes": "Options", "mapa": "Map", "voltar": "Back",
@@ -58,6 +61,9 @@ const STRINGS = {
 		"aparencia": "Appearance", "atributos": "Attributes", "grupo_vazio": "No characters created", "pericia_acrobacia": "Acrobatics",
 		"pericia_adestrar_animais": "Animal Handling", "pericia_arcanismo": "Arcana", "pericia_atuacao": "Performance", "pericia_intuicao": "Insight",
 		"pericia_investigacao": "Investigation", "pericia_natureza": "Nature", "pericia_religiao": "Religion",
+		# menu de pausa
+		"menu_titulo": "Paused", "menu_continuar": "Resume", "menu_inventario": "Inventory", "menu_ficha": "Sheet", "menu_opcoes": "Options", "menu_sair": "Quit to menu",
+		"menu_sem_personagem": "No active character", "inventario_titulo": "Inventory", "inventario_vazio": "Inventory empty", "inventario_qtd": "Qty",
 	},
 	"es": {
 		"entrar": "Entrar", "opcoes": "Opciones", "mapa": "Mapa", "voltar": "Volver",
@@ -86,6 +92,9 @@ const STRINGS = {
 		"aparencia": "Apariencia", "atributos": "Atributos", "grupo_vazio": "Ningún personaje creado", "pericia_acrobacia": "Acrobacias",
 		"pericia_adestrar_animais": "Trato con animales", "pericia_arcanismo": "Arcanos", "pericia_atuacao": "Interpretación", "pericia_intuicao": "Perspicacia",
 		"pericia_investigacao": "Investigación", "pericia_natureza": "Naturaleza", "pericia_religiao": "Religión",
+		# menu de pausa
+		"menu_titulo": "Pausa", "menu_continuar": "Continuar", "menu_inventario": "Inventario", "menu_ficha": "Ficha", "menu_opcoes": "Opciones", "menu_sair": "Salir al menú",
+		"menu_sem_personagem": "Ningún personaje activo", "inventario_titulo": "Inventario", "inventario_vazio": "Inventario vacío", "inventario_qtd": "Cant.",
 	},
 }
 
