@@ -26,9 +26,14 @@ const IDENTIDADES: Array[String] = ["masculino", "feminino"]
 const APARENCIAS: int = 3
 const LARGURA_PAINEL: float = 340.0
 const MARGEM_PAINEL: float = 16.0
-const TAMANHO_RETRATO := Vector2(260, 360)
+## Layout fixo (coordenadas de 1280x720): nada cresce nem encolhe ao trocar de classe.
+## Altura: abas 60 + 22 + meio 492 + 22 + navegação 52 = 648 px, cabe em 720.
+const ALTURA_CONTEUDO: float = 460.0
+const LARGURA_ROLAGEM: float = 14.0
+const TAMANHO_RETRATO := Vector2(260, 492)
 const TAMANHO_ICONE := Vector2(84, 84)
 const LARGURA_RESUMO: float = 260.0
+const LARGURA_ABAS: float = 972.0
 const TAMANHO_BOTAO_NAV := Vector2(200, 52)
 ## 7 abas: 7 x 132 + 6 x 8 = 972 px, cabe com folga na largura de 1280 (e em 1210 da captura).
 const TAMANHO_ABA := Vector2(132, 44)
@@ -80,14 +85,18 @@ func _montar() -> void:
 	for filho in _raiz.get_children():
 		_raiz.remove_child(filho)
 		filho.queue_free()
-	_raiz.add_child(_painel_escuro(_montar_abas(), 8.0))
+	var painel_abas := _painel_escuro(_montar_abas(), 8.0)
+	painel_abas.custom_minimum_size = Vector2(LARGURA_ABAS + 16.0, TAMANHO_ABA.y + 16.0)
+	painel_abas.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	painel_abas.clip_contents = true
+	_raiz.add_child(painel_abas)
 
 	var meio := HBoxContainer.new()
 	meio.alignment = BoxContainer.ALIGNMENT_CENTER
 	meio.add_theme_constant_override("separation", 40)
-	meio.add_child(_painel_escuro(_montar_painel(), MARGEM_PAINEL))
+	meio.add_child(_painel_fixo(_montar_painel(), LARGURA_PAINEL))
 	meio.add_child(_montar_retrato())
-	meio.add_child(_painel_escuro(_montar_resumo(), MARGEM_PAINEL))
+	meio.add_child(_painel_fixo(_montar_resumo(), LARGURA_RESUMO))
 	_raiz.add_child(meio)
 
 	_raiz.add_child(_montar_navegacao())
@@ -111,10 +120,11 @@ func _montar_painel() -> Control:
 	var caixa := VBoxContainer.new()
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
 	caixa.add_theme_constant_override("separation", 14)
-	caixa.custom_minimum_size = Vector2(LARGURA_PAINEL, 0)
+	caixa.custom_minimum_size = Vector2(LARGURA_PAINEL - LARGURA_ROLAGEM, 0)
 	caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var classe: String = str(_escolhas["classe"])
 	var origem: String = str(_escolhas["origem"])
+	var largura: float = LARGURA_PAINEL - LARGURA_ROLAGEM
 	match PASSOS[_passo]:
 		"origem":
 			caixa.add_child(_seletor("personagem"))
@@ -123,12 +133,12 @@ func _montar_painel() -> Control:
 			caixa.add_child(_linha_icones())
 			caixa.add_child(_seletor("especie"))
 			caixa.add_child(_seletor("identidade"))
-			caixa.add_child(UiKit.letras(_resumo_especie(), 20.0, LARGURA_PAINEL))
+			caixa.add_child(UiKit.texto(_resumo_especie(), 18, UiKit.COR_TEXTO_DESTAQUE, largura))
 		"classe":
 			caixa.add_child(_seletor("classe"))
-			caixa.add_child(UiKit.letras(_resumo_classe(), 20.0, LARGURA_PAINEL))
+			caixa.add_child(UiKit.texto(_resumo_classe(), 18, UiKit.COR_TEXTO_DESTAQUE, largura))
 			caixa.add_child(_paragrafo(UiText.t("classe_desc_" + classe)))
-			caixa.add_child(UiKit.letras(UiText.t("pericias"), 22.0, LARGURA_PAINEL))
+			caixa.add_child(UiKit.texto(UiText.t("pericias"), 19, UiKit.COR_TEXTO_DESTAQUE, largura))
 			caixa.add_child(_paragrafo(_lista_pericias(classe, origem, false)))
 		"background":
 			caixa.add_child(_seletor("origem"))
@@ -137,7 +147,8 @@ func _montar_painel() -> Control:
 			caixa.add_child(_paragrafo(UiText.t("habilidades_desc")))
 			var finais := CharacterRules.atributos_finais(str(_escolhas["especie"]), classe)
 			for atributo in CharacterRules.ATRIBUTOS:
-				caixa.add_child(_linha_atributo(str(atributo), int(finais[atributo]), 22.0, LARGURA_PAINEL))
+				var valor: int = int(finais[atributo])
+				caixa.add_child(UiKit.linha_atributo(UiText.t("attr_" + str(atributo)), valor, DndRules.ability_modifier(valor), 19))
 		"pericias":
 			caixa.add_child(_paragrafo(UiText.t("pericias_desc")))
 			caixa.add_child(_paragrafo(_lista_pericias(classe, origem, true)))
@@ -150,6 +161,9 @@ func _montar_painel() -> Control:
 func _montar_retrato() -> Control:
 	var quadro := Control.new()
 	quadro.custom_minimum_size = TAMANHO_RETRATO
+	quadro.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	quadro.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	quadro.clip_contents = true
 	quadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var imagem := _textura(_caminho_especie())
 	if imagem != null:
@@ -165,28 +179,31 @@ func _montar_resumo() -> Control:
 	var caixa := VBoxContainer.new()
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
 	caixa.add_theme_constant_override("separation", 4)
-	caixa.custom_minimum_size = Vector2(LARGURA_RESUMO, 0)
+	caixa.custom_minimum_size = Vector2(LARGURA_RESUMO - LARGURA_ROLAGEM, 0)
 	caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var largura: float = LARGURA_RESUMO - LARGURA_ROLAGEM
 	var especie: String = str(_escolhas["especie"])
 	var classe: String = str(_escolhas["classe"])
 	var origem: String = str(_escolhas["origem"])
 	var finais := CharacterRules.atributos_finais(especie, classe)
 
+	# Título em letras pixel; detalhes em texto corrido (fonte padrão do Godot).
 	if not _nome.is_empty():
-		caixa.add_child(UiKit.letras(_nome, 28.0, LARGURA_RESUMO))
-	caixa.add_child(UiKit.letras(UiText.t("especie_" + especie), 22.0, LARGURA_RESUMO))
-	caixa.add_child(UiKit.letras(UiText.t("classe_" + classe), 22.0, LARGURA_RESUMO))
-	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 22.0, LARGURA_RESUMO))
+		caixa.add_child(UiKit.letras(_nome, 28.0, largura))
+	caixa.add_child(UiKit.letras(UiText.t("especie_" + especie), 22.0, largura))
+	caixa.add_child(UiKit.letras(UiText.t("classe_" + classe), 22.0, largura))
+	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 22.0, largura))
 	caixa.add_child(_espaco(6.0))
 	for atributo in CharacterRules.ATRIBUTOS:
-		caixa.add_child(_linha_atributo(str(atributo), int(finais[atributo]), 20.0, LARGURA_RESUMO))
+		var valor: int = int(finais[atributo])
+		caixa.add_child(UiKit.linha_atributo(UiText.t("attr_" + str(atributo)), valor, DndRules.ability_modifier(valor), 17))
 	caixa.add_child(_espaco(6.0))
 	var pv := CharacterRules.pv_nivel_1(classe, int(finais["con"]))
-	caixa.add_child(UiKit.letras("%s: %d" % [UiText.t("pv"), pv], 22.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.texto("%s: %d" % [UiText.t("pv"), pv], 18, UiKit.COR_TEXTO, largura))
 	caixa.add_child(_espaco(6.0))
-	caixa.add_child(UiKit.letras(UiText.t("pericias"), 20.0, LARGURA_RESUMO))
+	caixa.add_child(UiKit.texto(UiText.t("pericias"), 18, UiKit.COR_TEXTO_DESTAQUE, largura))
 	for pericia in CharacterRules.pericias_finais(classe, origem):
-		caixa.add_child(UiKit.letras(_nome_pericia(str(pericia)), 18.0, LARGURA_RESUMO))
+		caixa.add_child(UiKit.texto(_nome_pericia(str(pericia)), 16, UiKit.COR_TEXTO, largura))
 	return caixa
 
 
@@ -214,7 +231,7 @@ func _seletor(chave: String) -> Control:
 	var esquerda := UiKit.seta(true, 34.0)
 	esquerda.pressed.connect(_girar.bind(chave, -1))
 	linha.add_child(esquerda)
-	linha.add_child(UiKit.letras(_rotulo(chave, opcoes[atual]), 30.0, LARGURA_PAINEL - 110.0))
+	linha.add_child(UiKit.letras(_rotulo(chave, opcoes[atual]), 30.0, LARGURA_PAINEL - LARGURA_ROLAGEM - 110.0))
 	var direita := UiKit.seta(false, 34.0)
 	direita.pressed.connect(_girar.bind(chave, 1))
 	linha.add_child(direita)
@@ -350,18 +367,23 @@ func _lista_pericias(classe: String, origem: String, com_atributo: bool) -> Stri
 	return "\n".join(linhas)
 
 
-## Valor do atributo e modificador, ex.: "FOR  15  +2".
-func _linha_atributo(atributo: String, valor: int, altura: float, largura: float) -> Control:
-	var linha := HBoxContainer.new()
-	linha.add_theme_constant_override("separation", 8)
-	linha.custom_minimum_size = Vector2(largura, 0)
-	linha.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var modificador := DndRules.ability_modifier(valor)
-	var textos: Array[String] = [UiText.t("attr_" + atributo), str(valor), "%+d" % modificador]
-	var larguras: Array[float] = [largura * 0.35, largura * 0.25, largura * 0.25]
-	for i in range(textos.size()):
-		linha.add_child(UiKit.letras(textos[i], altura, larguras[i]))
-	return linha
+## Painel escuro de tamanho fixo (largura x ALTURA_CONTEUDO) com rolagem vertical: se o texto passar da altura,
+## rola dentro do painel e nunca empurra os outros elementos.
+func _painel_fixo(conteudo: Control, largura: float) -> PanelContainer:
+	conteudo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var rolagem := ScrollContainer.new()
+	rolagem.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	rolagem.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	rolagem.custom_minimum_size = Vector2(largura, ALTURA_CONTEUDO)
+	rolagem.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	rolagem.mouse_filter = Control.MOUSE_FILTER_PASS
+	rolagem.add_child(conteudo)
+	var painel := _painel_escuro(rolagem, MARGEM_PAINEL)
+	painel.custom_minimum_size = Vector2(largura + 2.0 * MARGEM_PAINEL, ALTURA_CONTEUDO + 2.0 * MARGEM_PAINEL)
+	painel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	painel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	painel.clip_contents = true
+	return painel
 
 
 ## Painel escuro estilo BG3 (preto com alfa, cantos redondos e borda dourada discreta) atrás do conteúdo.
@@ -384,9 +406,11 @@ func _paragrafo(texto: String) -> Label:
 	var rotulo := Label.new()
 	rotulo.text = texto
 	rotulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	rotulo.custom_minimum_size = Vector2(LARGURA_PAINEL, 0)
+	rotulo.custom_minimum_size = Vector2(LARGURA_PAINEL - LARGURA_ROLAGEM, 0)
 	rotulo.add_theme_font_size_override("font_size", 18)
 	rotulo.add_theme_color_override("font_color", COR_TEXTO_CORRIDO)
+	rotulo.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.6))
+	rotulo.add_theme_constant_override("outline_size", 2)
 	rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return rotulo
 
