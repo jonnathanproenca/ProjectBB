@@ -4,20 +4,24 @@ Status: proposta v0.1. Decisões fechadas estão marcadas como **(decidido)**; v
 
 ## Fluxo (como no Baldur's Gate 3)
 
-1. Nome (já existe na tela de perfil).
-2. Espécie.
+Nome: já existe na tela de perfil. Abas da criação, nesta ordem (ADR-050):
+
+1. Origem: escolhe o personagem. No MVP só "personalizado" (ADR-051).
+2. Raça (a espécie do código, `especie`).
 3. Classe.
-4. Origem.
-5. Atributos: valores padrão da classe, somados ao bônus da espécie.
-6. Aparência: presets de rosto, corpo e cor.
-7. Revisão e confirmação.
+4. Background: as antigas origens (Soldado, Órfão, Nobre, Criminoso, Eremita).
+5. Habilidades: valores padrão da classe, somados ao bônus da raça, só leitura (ADR-052).
+6. Perícias: união das perícias da classe e do background, sem escolha (ADR-053).
+7. Aparência: presets de rosto, corpo e cor.
+
+Sem aba de Revisão: a confirmação fica na própria tela.
 
 ## Decisões do MVP
 
 - **Espécies: 3 (decidido):** Humanos, Autômatos e Mestiços.
 - **Variantes: masculino e feminino por espécie (decidido).** Sem tipo de corpo como variante de espécie.
 - **Origens: 5 (decidido):** Soldado, Órfão, Nobre, Criminoso e Eremita.
-- **Tela em estilo BG3 (decidido):** abas no topo (Espécie, Classe, Origem, Aparência, Revisão), seletores com setas, retrato central e resumo à direita.
+- **Tela em estilo BG3 (decidido):** abas no topo (Origem, Raça, Classe, Background, Habilidades, Perícias, Aparência), seletores com setas, retrato central e resumo à direita.
 - **Imagens de espécie (decidido):** corpo inteiro com fundo transparente, centralizado no retrato; ícones em busto com fundo ferrugem (#4a2416) dentro de moldura redonda steampunk.
 - **Nome no celular (decidido):** a detecção de plataforma fica em `scripts/ui/plataforma.gd`. No celular, o nome é pedido pelo diálogo nativo do navegador ao tocar no campo.
 - **Aparência: presets de rosto, corpo e cor (decidido).** Sem personalização completa estilo BG3 no MVP.
@@ -32,9 +36,9 @@ Status: proposta v0.1. Decisões fechadas estão marcadas como **(decidido)**; v
 | Autômatos | +2 Constituição, +1 Inteligência |
 | Mestiços | +2 Carisma, +1 Destreza |
 
-## Origens (padrão)
+## Origens / Background (padrão)
 
-Cada origem dá duas perícias.
+Na tela, as origens são o Background (ADR-051). Cada uma dá duas perícias.
 
 | Origem | Perícias |
 |---|---|
@@ -43,6 +47,18 @@ Cada origem dá duas perícias.
 | Nobre | História, Persuasão |
 | Criminoso | Enganação, Prestidigitação |
 | Eremita | Sobrevivência, Medicina |
+
+## Perícias
+
+As 18 perícias do SRD 5.2 ficam em `CharacterRules.PERICIAS`, cada uma com seu atributo. Perícias finais = classe + background, sem repetir, em ordem alfabética (`CharacterRules.pericias_finais`). Perícias das classes (ADR-054, provisório):
+
+| Classe | Perícias |
+|---|---|
+| Guerreiro | Atletismo, Percepção |
+| Clérigo | Medicina, Religião |
+| Ladino | Enganação, Furtividade, Percepção, Prestidigitação |
+| Mago-Engenheiro | Arcanismo, Investigação |
+| Atirador Arcano | Furtividade, Percepção |
 
 ## Arquivos de imagem (em `assets/ui/criacao/`)
 
@@ -77,6 +93,5 @@ Pontos de vida no nível 1: maior valor do dado de vida + modificador de Constit
 
 ## Pendente
 
-- Tela de criação em etapas, com a identidade visual do jogo.
 - Ficha do personagem (M1, depois da criação).
 - Lista de personagens jogáveis do grupo.
