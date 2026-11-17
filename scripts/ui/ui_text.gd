@@ -25,6 +25,15 @@ const STRINGS = {
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
 		"identidade_masculino": "Masculino", "identidade_feminino": "Feminino",
 		"attr_for": "FOR", "attr_des": "DES", "attr_con": "CON", "attr_int": "INT", "attr_sab": "SAB", "attr_car": "CAR",
+		# ficha e grupo
+		"ficha": "Ficha", "grupo": "Grupo", "aparencia": "Aparência", "atributos": "Atributos", "pericias": "Perícias",
+		"grupo_vazio": "Nenhum personagem criado",
+		"pericia_acrobacia": "Acrobacia", "pericia_adestrar_animais": "Adestrar animais", "pericia_arcanismo": "Arcanismo",
+		"pericia_atletismo": "Atletismo", "pericia_atuacao": "Atuação", "pericia_enganacao": "Enganação",
+		"pericia_furtividade": "Furtividade", "pericia_historia": "História", "pericia_intimidacao": "Intimidação",
+		"pericia_intuicao": "Intuição", "pericia_investigacao": "Investigação", "pericia_medicina": "Medicina",
+		"pericia_natureza": "Natureza", "pericia_percepcao": "Percepção", "pericia_persuasao": "Persuasão",
+		"pericia_prestidigitacao": "Prestidigitação", "pericia_religiao": "Religião", "pericia_sobrevivencia": "Sobrevivência",
 	},
 	"en": {
 		"entrar": "Enter", "opcoes": "Options", "mapa": "Map", "voltar": "Back", "cancelar": "Cancel",
@@ -48,6 +57,15 @@ const STRINGS = {
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
 		"identidade_masculino": "Male", "identidade_feminino": "Female",
 		"attr_for": "STR", "attr_des": "DEX", "attr_con": "CON", "attr_int": "INT", "attr_sab": "WIS", "attr_car": "CHA",
+		# ficha e grupo
+		"ficha": "Sheet", "grupo": "Party", "aparencia": "Appearance", "atributos": "Attributes", "pericias": "Skills",
+		"grupo_vazio": "No characters created",
+		"pericia_acrobacia": "Acrobatics", "pericia_adestrar_animais": "Animal Handling", "pericia_arcanismo": "Arcana",
+		"pericia_atletismo": "Athletics", "pericia_atuacao": "Performance", "pericia_enganacao": "Deception",
+		"pericia_furtividade": "Stealth", "pericia_historia": "History", "pericia_intimidacao": "Intimidation",
+		"pericia_intuicao": "Insight", "pericia_investigacao": "Investigation", "pericia_medicina": "Medicine",
+		"pericia_natureza": "Nature", "pericia_percepcao": "Perception", "pericia_persuasao": "Persuasion",
+		"pericia_prestidigitacao": "Sleight of Hand", "pericia_religiao": "Religion", "pericia_sobrevivencia": "Survival",
 	},
 	"es": {
 		"entrar": "Entrar", "opcoes": "Opciones", "mapa": "Mapa", "voltar": "Volver", "cancelar": "Cancelar",
@@ -71,6 +89,15 @@ const STRINGS = {
 		"aparencia_0": "Preset I", "aparencia_1": "Preset II", "aparencia_2": "Preset III",
 		"identidade_masculino": "Masculino", "identidade_feminino": "Femenino",
 		"attr_for": "FUE", "attr_des": "DES", "attr_con": "CON", "attr_int": "INT", "attr_sab": "SAB", "attr_car": "CAR",
+		# ficha e grupo
+		"ficha": "Ficha", "grupo": "Grupo", "aparencia": "Apariencia", "atributos": "Atributos", "pericias": "Habilidades",
+		"grupo_vazio": "Ningún personaje creado",
+		"pericia_acrobacia": "Acrobacias", "pericia_adestrar_animais": "Trato con animales", "pericia_arcanismo": "Arcanos",
+		"pericia_atletismo": "Atletismo", "pericia_atuacao": "Interpretación", "pericia_enganacao": "Engaño",
+		"pericia_furtividade": "Sigilo", "pericia_historia": "Historia", "pericia_intimidacao": "Intimidación",
+		"pericia_intuicao": "Perspicacia", "pericia_investigacao": "Investigación", "pericia_medicina": "Medicina",
+		"pericia_natureza": "Naturaleza", "pericia_percepcao": "Percepción", "pericia_persuasao": "Persuasión",
+		"pericia_prestidigitacao": "Juego de manos", "pericia_religiao": "Religión", "pericia_sobrevivencia": "Supervivencia",
 	},
 }
 
