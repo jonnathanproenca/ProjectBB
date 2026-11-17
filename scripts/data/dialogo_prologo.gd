@@ -14,6 +14,7 @@ static func arvore_inicial() -> Dictionary:
 					{
 						"texto": "Eu levo a carta.",
 						"proximo": "n_ajudou",
+						"condicao": {"flag": "quest_entregar_carta", "valor": "nao_iniciada"},
 						"efeito": {"flag": "quest_entregar_carta", "valor": "ativa"},
 					},
 					{

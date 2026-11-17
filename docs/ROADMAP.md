@@ -13,3 +13,12 @@ Prazo indeterminado, sem orçamento. Marcos por entrega jogável, não por data.
 | M6 — Vertical slice (MVP) | Fluxo completo: mundo, diálogo, combate, save | Jogável do início ao fim do ato 1 |
 | M7 — Co-op | Sessão de rede para o grupo | Dois jogadores completam o ato 1 |
 | M8 — Mobile | Porte e ajuste de controles | Build mobile rodando o ato 1 |
+
+## Status (última atualização: noite de 16/11/2026)
+
+- M0: feito.
+- M1: implementado (criação em etapas, ficha e grupo). Falta o teste no navegador listado em docs/CRIACAO.md.
+- M2: implementado (mundo em grade, NPC, menu de pausa). Sem arte de cenário e sem som (sem arquivos de áudio no projeto).
+- M3: implementado (diálogo com flags e quest de exemplo). Falta o teste no navegador.
+- M4: implementado (menu de pausa, inventário, ficha). Inventário ainda sem itens reais no perfil.
+- M5 a M8: não iniciados.

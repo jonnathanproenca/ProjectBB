@@ -96,7 +96,9 @@ func _build_slot(index: int) -> Control:
 		return chapa
 	var jogar := UiKit.botao(UiText.t("jogar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	jogar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	jogar.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/mundo.tscn"))
+	jogar.pressed.connect(func() -> void:
+		MenuPausa.perfil_ativo = dados
+		get_tree().change_scene_to_file("res://scenes/mundo.tscn"))
 	caixa.add_child(jogar)
 	if FichaPersonagem.perfil_completo(dados):
 		var ficha := UiKit.botao(UiText.t("ficha"), 22.0, Vector2(LARGURA_BOTAO, 40))

@@ -84,6 +84,7 @@ func _mostrar_no() -> void:
 		var sair: Button = UiKit.botao("Continuar", 22.0, Vector2(LARGURA_BOTAO, ALTURA_BOTAO))
 		sair.pressed.connect(_encerrar)
 		_conteudo.add_child(sair)
+		sair.call_deferred("grab_focus")
 		return
 
 	for i in range(opcoes.size()):
@@ -91,6 +92,8 @@ func _mostrar_no() -> void:
 		var botao: Button = UiKit.botao(str(opcao.get("texto", "...")), 22.0, Vector2(LARGURA_BOTAO, ALTURA_BOTAO))
 		botao.pressed.connect(_ao_escolher.bind(i))
 		_conteudo.add_child(botao)
+		if i == 0:
+			botao.call_deferred("grab_focus")
 
 
 func _ao_escolher(indice: int) -> void:
