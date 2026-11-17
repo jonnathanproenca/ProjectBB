@@ -2,6 +2,8 @@ class_name LetterText
 extends HBoxContainer
 ## Texto montado com as letras recortadas do alfabeto (assets/ui/alfabeto).
 ## Caracteres sem letra (ex.: : . , / ( ) ) saem como texto comum.
+## O hífen/sinal de menos "-" também sai como texto comum: o PNG traco.png (79x39) é largo demais
+## e, escalado à altura da letra, virava uma barra enorme. O PNG continua na pasta, só não é usado.
 
 const DIR_MAIUSCULAS := "res://assets/ui/alfabeto/maiusculas/"
 const DIR_MINUSCULAS := "res://assets/ui/alfabeto/minusculas/"
@@ -98,7 +100,7 @@ const DIR_SIMBOLOS := "res://assets/ui/alfabeto/simbolos/"
 const SIMBOLOS := {
 	"!": "exclamacao", "?": "interrogacao", "@": "arroba", "#": "cerquilha",
 	"$": "cifrao", "%": "porcento", "&": "ecomercial", "*": "asterisco",
-	"+": "mais", "-": "traco", "=": "igual",
+	"+": "mais", "=": "igual",
 }
 
 

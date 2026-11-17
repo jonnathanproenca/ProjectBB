@@ -123,28 +123,23 @@ func _montar_painel() -> Control:
 
 	caixa.add_child(UiKit.letras(str(_perfil.get("name", "")), 38.0, LARGURA_PAINEL))
 	caixa.add_child(UiKit.letras("%s  %s" % [UiText.t("especie_" + especie), UiText.t("classe_" + classe)], 26.0, LARGURA_PAINEL))
-	caixa.add_child(UiKit.letras("%s: %s" % [UiText.t("origem"), UiText.t("origem_" + origem)], 24.0, LARGURA_PAINEL))
-	caixa.add_child(UiKit.letras("%s %d" % [UiText.t("aparencia"), int(_perfil.get("appearance", 0)) + 1], 22.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 24.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.texto("%s %d" % [UiText.t("aparencia"), int(_perfil.get("appearance", 0)) + 1], 17, UiKit.COR_TEXTO, LARGURA_PAINEL))
 	caixa.add_child(_espaco(8.0))
 
-	caixa.add_child(UiKit.letras(UiText.t("atributos"), 26.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.texto(UiText.t("atributos"), 19, UiKit.COR_TEXTO_DESTAQUE, LARGURA_PAINEL))
 	for atributo in CharacterRules.ATRIBUTOS:
 		var valor: int = int(finais[atributo])
-		var linha := HBoxContainer.new()
-		linha.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		linha.add_child(UiKit.letras(UiText.t("attr_" + atributo), 22.0, 100.0))
-		linha.add_child(UiKit.letras(str(valor), 22.0, 70.0))
-		linha.add_child(UiKit.letras("%+d" % DndRules.ability_modifier(valor), 22.0, 70.0))
-		caixa.add_child(linha)
+		caixa.add_child(UiKit.linha_atributo(UiText.t("attr_" + atributo), valor, DndRules.ability_modifier(valor), 18))
 	caixa.add_child(_espaco(8.0))
 
 	var pv := CharacterRules.pv_nivel_1(classe, int(finais["con"]))
-	caixa.add_child(UiKit.letras("%s (%s 1): %d" % [UiText.t("pv"), UiText.t("nivel"), pv], 24.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.texto("%s (%s 1): %d" % [UiText.t("pv"), UiText.t("nivel"), pv], 18, UiKit.COR_TEXTO, LARGURA_PAINEL))
 	caixa.add_child(_espaco(8.0))
 
-	caixa.add_child(UiKit.letras(UiText.t("pericias"), 26.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.texto(UiText.t("pericias"), 19, UiKit.COR_TEXTO_DESTAQUE, LARGURA_PAINEL))
 	for pericia in CharacterRules.pericias_finais(classe, origem):
-		caixa.add_child(UiKit.letras(_texto_pericia(str(pericia)), 22.0, LARGURA_PAINEL))
+		caixa.add_child(UiKit.texto(_texto_pericia(str(pericia)), 17, UiKit.COR_TEXTO, LARGURA_PAINEL))
 	return painel
 
 
