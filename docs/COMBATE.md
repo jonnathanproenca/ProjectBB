@@ -4,10 +4,11 @@ Status: proposta v0.2. Decisões fechadas estão marcadas como **(decidido)**; v
 
 ## Grade e movimento
 
-- Grade quadrada. Cada casa representa **1,5 m** (decidido).
-- Movimento em metros, convertido em casas: 9 m = 6 casas (decidido).
+- Grade hexagonal flat-top (topo e base retos, colunas verticais), no lugar da grade quadrada (ADR-059). Cada hex representa **1,5 m** (decidido).
+- Movimento em metros, convertido em casas: 9 m = 6 hexes (decidido).
 - O jogador gasta o movimento em casas ou em metros, indistintamente.
-- Diagonal conta como 1 casa (decidido, sem regra de 1,5 casa).
+- Não há diagonal: a distância é o número de passos entre hexes (ADR-059). A regra de 1,5 casa deixa de existir.
+- Linha de visão e alcance são calculados pela linha de hexes entre atacante e alvo (ADR-062). Detalhes da arte e das arenas: `docs/ARENAS.md`.
 
 ## Turno
 
