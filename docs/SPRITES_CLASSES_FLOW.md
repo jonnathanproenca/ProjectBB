@@ -4,7 +4,7 @@ Público: agente que gera as imagens no Google Flow (navegador embutido). Este a
 
 ## 1. O que estamos fazendo
 
-Cada espécie de início (Humanos, Autômatos, Mestiços) já tem uma imagem de referência masculina e uma feminina, em `assets/ui/criacao/especie_<espécie>_<sexo>.png`. Agora precisamos de uma variação da mesma espécie para cada classe, com a mesma roupa e o mesmo estilo, mudando só o equipamento e os acessórios.
+Cada espécie de início (Humanos, Autômatos, Mestiços) já tem uma imagem de referência masculina e uma feminina. Use sempre as versões com fundo verde chroma key `referencia_<espécie>_<sexo>_verde.png` (a versão original de `assets/ui/criacao/` tem fundo transparente e não deve ser usada no Flow). Agora precisamos de uma variação da mesma espécie para cada classe, com a mesma roupa e o mesmo estilo, mudando só o equipamento e os acessórios.
 
 Resultado final: 12 folhas por espécie (uma por classe), cada folha com um homem e uma mulher lado a lado, ambos da mesma espécie e da mesma classe.
 
@@ -45,7 +45,7 @@ Ao terminar **uma espécie inteira** (12 folhas), pare e entregue. Espere o usu�
 ## 4. Como fazer cada solicitação
 
 1. Abra um novo projeto ou gere na tela de geração de imagens com o modelo Nano Banana Lite.
-2. Anexe as duas referências da espécie: `especie_<espécie>_masculino.png` e `especie_<espécie>_feminino.png`.
+2. Anexe as duas referências verdes da espécie: `referencia_<espécie>_masculino_verde.png` e `referencia_<espécie>_feminino_verde.png`.
 3. Cole o prompt da espécie com o equipamento da classe (seção 5 e 6, no lugar de `[EQUIPAMENTO]`).
 4. Gere. Você recebe 3 variações.
 5. Escolha a variação em que: (a) os dois personagens olham para a direita; (b) a roupa é igual à da referência; (c) o fundo é verde puro; (d) o corpo inteiro aparece, da cabeça aos pés, sem corte; (e) o equipamento da classe aparece claramente.
