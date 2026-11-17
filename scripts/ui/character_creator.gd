@@ -189,10 +189,10 @@ func _montar_resumo() -> Control:
 
 	# Título em letras pixel; detalhes em texto corrido (fonte padrão do Godot).
 	if not _nome.is_empty():
-		caixa.add_child(UiKit.letras(_nome, 28.0, largura))
-	caixa.add_child(UiKit.letras(UiText.t("especie_" + especie), 22.0, largura))
-	caixa.add_child(UiKit.letras(UiText.t("classe_" + classe), 22.0, largura))
-	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 22.0, largura))
+		caixa.add_child(UiKit.titulo(_nome, 28, largura))
+	caixa.add_child(UiKit.titulo(UiText.t("especie_" + especie), 22, largura))
+	caixa.add_child(UiKit.titulo(UiText.t("classe_" + classe), 22, largura))
+	caixa.add_child(UiKit.titulo(UiText.t("origem_" + origem), 22, largura))
 	caixa.add_child(_espaco(6.0))
 	for atributo in CharacterRules.ATRIBUTOS:
 		var valor: int = int(finais[atributo])

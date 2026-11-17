@@ -121,9 +121,9 @@ func _montar_painel() -> Control:
 	caixa.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	painel.add_child(caixa)
 
-	caixa.add_child(UiKit.letras(str(_perfil.get("name", "")), 38.0, LARGURA_PAINEL))
-	caixa.add_child(UiKit.letras("%s  %s" % [UiText.t("especie_" + especie), UiText.t("classe_" + classe)], 26.0, LARGURA_PAINEL))
-	caixa.add_child(UiKit.letras(UiText.t("origem_" + origem), 24.0, LARGURA_PAINEL))
+	caixa.add_child(UiKit.titulo(str(_perfil.get("name", "")), 34, LARGURA_PAINEL))
+	caixa.add_child(UiKit.titulo("%s  %s" % [UiText.t("especie_" + especie), UiText.t("classe_" + classe)], 24, LARGURA_PAINEL))
+	caixa.add_child(UiKit.titulo(UiText.t("origem_" + origem), 22, LARGURA_PAINEL))
 	caixa.add_child(UiKit.texto("%s %d" % [UiText.t("aparencia"), int(_perfil.get("appearance", 0)) + 1], 17, UiKit.COR_TEXTO, LARGURA_PAINEL))
 	caixa.add_child(_espaco(8.0))
 

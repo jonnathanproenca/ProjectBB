@@ -3,6 +3,8 @@ extends RefCounted
 ## Peças do menu: chapa com rebite, texto com letras recortadas e botão de letras.
 
 const CHAPA := "res://assets/ui/chapa/chapa_menu.png"
+const FONTE_TEXTO := "res://assets/fonts/EBGaramond-Variable.ttf"
+const FONTE_TITULO := "res://assets/fonts/Cinzel-Variable.ttf"
 ## Texto de detalhe (fichas e descrições): fonte padrão embutida do Godot, que funciona na web.
 ## O pixel (LetterText) fica só para títulos.
 const COR_TEXTO := Color("f0e6d2")
@@ -85,6 +87,7 @@ static func botao(texto: String, altura: float, tamanho: Vector2) -> Button:
 static func texto(conteudo: String, tamanho: int = TAMANHO_TEXTO, cor: Color = COR_TEXTO, largura: float = 0.0) -> Label:
 	var rotulo := Label.new()
 	rotulo.text = conteudo
+	_aplicar_fonte(rotulo, FONTE_TEXTO)
 	rotulo.add_theme_font_size_override("font_size", tamanho)
 	rotulo.add_theme_color_override("font_color", cor)
 	rotulo.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.6))
@@ -94,6 +97,28 @@ static func texto(conteudo: String, tamanho: int = TAMANHO_TEXTO, cor: Color = C
 		rotulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		rotulo.custom_minimum_size = Vector2(largura, 0)
 	return rotulo
+
+
+## Título em fonte serifada (Cinzel), para nome, espécie, classe e background na ficha.
+static func titulo(conteudo: String, tamanho: int = 30, largura: float = 0.0) -> Label:
+	var rotulo := Label.new()
+	rotulo.text = conteudo
+	rotulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_aplicar_fonte(rotulo, FONTE_TITULO)
+	rotulo.add_theme_font_size_override("font_size", tamanho)
+	rotulo.add_theme_color_override("font_color", COR_TEXTO_DESTAQUE)
+	rotulo.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.6))
+	rotulo.add_theme_constant_override("outline_size", 2)
+	rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if largura > 0.0:
+		rotulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		rotulo.custom_minimum_size = Vector2(largura, 0)
+	return rotulo
+
+
+static func _aplicar_fonte(rotulo: Label, caminho: String) -> void:
+	if ResourceLoader.exists(caminho):
+		rotulo.add_theme_font_override("font", load(caminho) as Font)
 
 
 ## Linha de atributo em texto corrido: nome, valor e modificador (ex.: "CON   9   -1") em colunas fixas.
