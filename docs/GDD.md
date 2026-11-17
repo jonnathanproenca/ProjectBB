@@ -65,7 +65,7 @@ Detalhes em `docs/COMBATE.md`. Classes em `docs/CLASSES.md`.
 - Classes, origens e espécies predefinidas.
 - Multiclasse permitida, respeitando pré-requisitos de atributo e a regra de espaço de nível.
 - Atributos por valores padrão no MVP (point buy ou rolagem ficam para depois).
-- MVP: 3 espécies, 5 origens e aparência por presets. Detalhes em `docs/CRIACAO.md`.
+- MVP: 3 espécies (Raça na tela), 5 origens (Background na tela), personagem personalizado na aba Origem e aparência por presets; perícias vêm da classe e do background. Detalhes em `docs/CRIACAO.md`.
 
 ## 8. Progressão
 
