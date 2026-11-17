@@ -3,7 +3,11 @@ extends Control
 ## A criação pede o nome aqui e depois abre CharacterCreator (espécie, classe, origem, aparência, revisão).
 
 const LOGIN_SCENE := "res://scenes/login.tscn"
-const SLOT_SIZE := Vector2(380, 490)
+## Altura da chapa limitada para o rodapé (Voltar e Grupo) caber na tela de 1280x720 (viewport do projeto).
+## Conta: topo 196 + chapa 450 + espaço 8 + rodapé 48 = 702, abaixo de 720.
+const SLOT_SIZE := Vector2(380, 450)
+## Botões do rodapé (Voltar e Grupo).
+const TAMANHO_BOTAO_RODAPE := Vector2(220, 48)
 const LARGURA_TEXTO: float = 228.0
 ## Tela de exemplo aberta pelo botão Jogar (demo de teste no navegador).
 const COMBATE_SCENE := "res://scenes/main.tscn"
@@ -23,7 +27,7 @@ func _ready() -> void:
 	_centro.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_centro.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Desce a grade para deixar o título "Project BB" visível acima das chapas.
-	_centro.offset_top = 220.0
+	_centro.offset_top = 196.0
 	add_child(_centro)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
 	_montar()
@@ -35,7 +39,7 @@ func _montar() -> void:
 		filho.queue_free()
 
 	var caixa := VBoxContainer.new()
-	caixa.add_theme_constant_override("separation", 12)
+	caixa.add_theme_constant_override("separation", 8)
 	caixa.alignment = BoxContainer.ALIGNMENT_CENTER
 	_centro.add_child(caixa)
 	var grade := HBoxContainer.new()
@@ -48,10 +52,10 @@ func _montar() -> void:
 	rodape.alignment = BoxContainer.ALIGNMENT_CENTER
 	rodape.add_theme_constant_override("separation", 40)
 	caixa.add_child(rodape)
-	var voltar := UiKit.botao(UiText.t("voltar"), 40.0, Vector2(220, 56))
+	var voltar := UiKit.botao(UiText.t("voltar"), 32.0, TAMANHO_BOTAO_RODAPE)
 	voltar.pressed.connect(func() -> void: get_tree().change_scene_to_file(LOGIN_SCENE))
 	rodape.add_child(voltar)
-	var grupo := UiKit.botao(UiText.t("grupo"), 40.0, Vector2(220, 56))
+	var grupo := UiKit.botao(UiText.t("grupo"), 32.0, TAMANHO_BOTAO_RODAPE)
 	grupo.pressed.connect(_abrir_grupo)
 	rodape.add_child(grupo)
 
@@ -59,7 +63,7 @@ func _montar() -> void:
 func _build_slot(index: int) -> Control:
 	var chapa := UiKit.chapa(SLOT_SIZE)
 	var caixa := UiKit.miolo(chapa)
-	caixa.add_theme_constant_override("separation", 10)
+	caixa.add_theme_constant_override("separation", 8)
 
 	var perfil: Variant = _slots[index]
 	if perfil == null:
