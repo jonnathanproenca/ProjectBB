@@ -12,7 +12,7 @@ Nome: já existe na tela de perfil. Abas da criação, nesta ordem (ADR-050):
 4. Background: as antigas origens (Soldado, Órfão, Nobre, Criminoso, Eremita).
 5. Habilidades: valores padrão da classe, somados ao bônus da raça, só leitura (ADR-052).
 6. Perícias: união das perícias da classe e do background, sem escolha (ADR-053).
-7. Aparência: presets de rosto, corpo e cor.
+O botão Concluir fica na aba Perícias (nas demais, o botão é Avançar). A aparência (presets de rosto, corpo e cor) está fora do MVP e fica para a versão 3.0 (ADR-055).
 
 Sem aba de Revisão: a confirmação fica na própria tela.
 
@@ -21,10 +21,10 @@ Sem aba de Revisão: a confirmação fica na própria tela.
 - **Espécies: 3 (decidido):** Humanos, Autômatos e Mestiços.
 - **Variantes: masculino e feminino por espécie (decidido).** Sem tipo de corpo como variante de espécie.
 - **Origens: 5 (decidido):** Soldado, Órfão, Nobre, Criminoso e Eremita.
-- **Tela em estilo BG3 (decidido):** abas no topo (Origem, Raça, Classe, Background, Habilidades, Perícias, Aparência), seletores com setas, retrato central e resumo à direita.
+- **Tela em estilo BG3 (decidido):** abas no topo (Origem, Raça, Classe, Background, Habilidades, Perícias), seletores com setas, retrato central e resumo à direita.
 - **Imagens de espécie (decidido):** corpo inteiro com fundo transparente, centralizado no retrato; ícones em busto com fundo ferrugem (#4a2416) dentro de moldura redonda steampunk.
 - **Nome no celular (decidido):** a detecção de plataforma fica em `scripts/ui/plataforma.gd`. No celular, o nome é pedido pelo diálogo nativo do navegador ao tocar no campo.
-- **Aparência: presets de rosto, corpo e cor (decidido).** Sem personalização completa estilo BG3 no MVP.
+- **Aparência: fora do MVP (decidido, ADR-055).** Sem presets de rosto, corpo e cor agora; fica para a versão 3.0. Substitui a ADR-043 nessa parte.
 - **Atributos: valores padrão por classe (decidido).** Sem compra de pontos nem rolagem no MVP.
 - **Classes do MVP: 5 (decidido):** Guerreiro, Clérigo, Ladino, Mago-Engenheiro e Atirador Arcano (ver `docs/CLASSES.md`).
 

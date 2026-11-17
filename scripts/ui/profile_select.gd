@@ -1,6 +1,6 @@
 extends Control
 ## Seleção de perfil após Entrar, em chapas com rebite. Até GameConfig.PROFILE_SLOTS_MAX perfis.
-## A criação pede o nome aqui e depois abre CharacterCreator (espécie, classe, origem, aparência, revisão).
+## A criação pede o nome aqui e depois abre CharacterCreator (espécie, classe, origem, background, habilidades, perícias).
 
 const LOGIN_SCENE := "res://scenes/login.tscn"
 ## Altura da chapa limitada para o rodapé (Voltar e Grupo) caber na tela de 1280x720 (viewport do projeto).
@@ -255,7 +255,7 @@ func _finish_creation(index: int, nome: String, escolhas: Dictionary) -> void:
 	perfil["class"] = str(escolhas["classe"])
 	perfil["origin"] = str(escolhas["origem"])
 	perfil["identity"] = str(escolhas["identidade"])
-	perfil["appearance"] = int(escolhas["aparencia"])
+	perfil["appearance"] = 0  # aparência fora do MVP (ADR-055); o campo fica no formato do perfil
 	ProfileStore.save_slot(index, perfil)
 	_slots = ProfileStore.load_slots(GameConfig.PROFILE_SLOTS_MAX)
 	_creating_slot = -1

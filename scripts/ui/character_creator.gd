@@ -21,9 +21,8 @@ const COR_APAGADO := Color(1, 1, 1, 0.45)
 const COR_PAINEL := Color(0, 0, 0, 0.72)
 const COR_BORDA_PAINEL := Color(0.95, 0.82, 0.54, 0.35)
 const COR_TEXTO_CORRIDO := Color("f0e6d2")
-const PASSOS: Array[String] = ["origem", "especie", "classe", "background", "habilidades", "pericias", "aparencia"]
+const PASSOS: Array[String] = ["origem", "especie", "classe", "background", "habilidades", "pericias"]
 const IDENTIDADES: Array[String] = ["masculino", "feminino"]
-const APARENCIAS: int = 3
 const LARGURA_PAINEL: float = 340.0
 const MARGEM_PAINEL: float = 16.0
 ## Layout fixo (coordenadas de 1280x720): nada cresce nem encolhe ao trocar de classe.
@@ -42,7 +41,7 @@ const ALTURA_LETRA_ABA: float = 22.0
 ## Escolhas iniciais: o personagem já é válido, como no BG3 (o jogador só troca o que quiser).
 ## "origem" guarda o Background (nome mantido para não quebrar o salvamento); "personagem" é só de exibição.
 var _passo: int = 0
-var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "aparencia": 0, "personagem": "personalizado"}
+var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "personagem": "personalizado"}
 var _nome: String = ""
 var _raiz: VBoxContainer
 
@@ -152,8 +151,6 @@ func _montar_painel() -> Control:
 		"pericias":
 			caixa.add_child(_paragrafo(UiText.t("pericias_desc")))
 			caixa.add_child(_paragrafo(_lista_pericias(classe, origem, true)))
-		_:
-			caixa.add_child(_seletor("aparencia"))
 	return caixa
 
 
@@ -310,10 +307,7 @@ func _opcoes(chave: String) -> Array:
 		"personagem":
 			return _chaves(CharacterRules.PERSONAGENS)
 		_:
-			var presets: Array = []
-			for i in range(APARENCIAS):
-				presets.append(i)
-			return presets
+			return []
 
 
 ## Texto do seletor: "<prefixo>_<valor>" nos textos da interface.

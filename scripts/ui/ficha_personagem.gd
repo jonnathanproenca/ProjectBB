@@ -2,7 +2,7 @@ class_name FichaPersonagem
 extends Control
 ## Ficha do personagem, no estilo da tela de resumo do Baldur's Gate 3: espécie em corpo inteiro
 ## à esquerda e, à direita, um painel escuro com nome, espécie, classe, origem, atributos, PV e perícias.
-## Overlay sobre a tela atual; lê só o perfil salvo (race, class, origin, identity, appearance, name)
+## Overlay sobre a tela atual; lê só o perfil salvo (race, class, origin, identity, name)
 ## e se remove sozinho ao voltar. Imagem opcional (sem arquivo, mostra cor sólida):
 ##   assets/ui/criacao/especie_<especie>_<identidade>.png
 
@@ -124,7 +124,6 @@ func _montar_painel() -> Control:
 	caixa.add_child(UiKit.titulo(str(_perfil.get("name", "")), 34, LARGURA_PAINEL))
 	caixa.add_child(UiKit.titulo("%s  %s" % [UiText.t("especie_" + especie), UiText.t("classe_" + classe)], 24, LARGURA_PAINEL))
 	caixa.add_child(UiKit.titulo(UiText.t("origem_" + origem), 22, LARGURA_PAINEL))
-	caixa.add_child(UiKit.texto("%s %d" % [UiText.t("aparencia"), int(_perfil.get("appearance", 0)) + 1], 17, UiKit.COR_TEXTO, LARGURA_PAINEL))
 	caixa.add_child(_espaco(8.0))
 
 	caixa.add_child(UiKit.texto(UiText.t("atributos"), 19, UiKit.COR_TEXTO_DESTAQUE, LARGURA_PAINEL))

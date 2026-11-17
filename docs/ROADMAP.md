@@ -5,7 +5,7 @@ Prazo indeterminado, sem orçamento. Marcos por entrega jogável, não por data.
 | Marco | Entrega | Critério de pronto |
 |---|---|---|
 | M0 — Fundação | Projeto, regras puras, testes, skills, GDD | Testes de regra passam headless (feito, via GitHub Actions) |
-| M1 — Personagem | Criação inicial como no Baldur's Gate 3: classe, raça, origem, espécie, aparência; personagens jogáveis; UI de personagem | Criar personagem completo e ver a ficha |
+| M1 — Personagem | Criação inicial como no Baldur's Gate 3: classe, raça, origem, espécie; personagens jogáveis; UI de personagem | Criar personagem completo e ver a ficha |
 | M2 — Mundo | Movimento no mapa, ambiente, sons e aparência de cenário | Andar pelo mapa de um ato com ambiente e sons |
 | M3 — Diálogo e quests | Árvore de diálogo com flags, quests com estado | Uma quest completa com escolha que muda estado |
 | M4 — UI de menu | Menus de pausa, inventário e ficha, com a identidade visual do jogo | Navegar em todos os menus sem tela quebrada |
