@@ -18,6 +18,7 @@ var _jogador: Vector2i = Vector2i.ZERO
 var _npc: Vector2i = Vector2i.ZERO
 var _flags: Dictionary = {}
 var _dialogo_aberto: bool = false
+var _menu: MenuPausa = null
 var _ambiente: AudioStreamPlayer = null
 var _dica: Label = null
 
@@ -101,12 +102,12 @@ func _notification(what: int) -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if _dialogo_aberto:
+	if _dialogo_aberto or is_instance_valid(_menu):
 		return
 	if not event.is_pressed() or event.is_echo():
 		return
 	if event.is_action("ui_cancel"):
-		MenuPausa.abrir(self)
+		_menu = MenuPausa.abrir(self)
 		get_viewport().set_input_as_handled()
 		return
 	var direcao: Vector2i = _direcao_da_tecla(event)
