@@ -3,6 +3,11 @@ extends RefCounted
 ## Peças do menu: chapa com rebite, texto com letras recortadas e botão de letras.
 
 const CHAPA := "res://assets/ui/chapa/chapa_menu.png"
+## Texto de detalhe (fichas e descrições): fonte padrão embutida do Godot, que funciona na web.
+## O pixel (LetterText) fica só para títulos.
+const COR_TEXTO := Color("f0e6d2")
+const COR_TEXTO_DESTAQUE := Color("f2d28a")
+const TAMANHO_TEXTO: int = 17
 
 
 ## Painel com a chapa com rebite. Os cantos e bordas ficam fixos; o miolo estica.
@@ -74,3 +79,32 @@ static func botao(texto: String, altura: float, tamanho: Vector2) -> Button:
 	b.mouse_entered.connect(func() -> void: txt.modulate = Color(1.25, 1.15, 0.9))
 	b.mouse_exited.connect(func() -> void: txt.modulate = Color.WHITE)
 	return b
+
+
+## Texto de detalhe com a fonte padrão do Godot. Com "largura" > 0, quebra a linha dentro dessa largura.
+static func texto(conteudo: String, tamanho: int = TAMANHO_TEXTO, cor: Color = COR_TEXTO, largura: float = 0.0) -> Label:
+	var rotulo := Label.new()
+	rotulo.text = conteudo
+	rotulo.add_theme_font_size_override("font_size", tamanho)
+	rotulo.add_theme_color_override("font_color", cor)
+	rotulo.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.6))
+	rotulo.add_theme_constant_override("outline_size", 2)
+	rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if largura > 0.0:
+		rotulo.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		rotulo.custom_minimum_size = Vector2(largura, 0)
+	return rotulo
+
+
+## Linha de atributo em texto corrido: nome, valor e modificador (ex.: "CON   9   -1") em colunas fixas.
+static func linha_atributo(nome: String, valor: int, modificador: int, tamanho: int = TAMANHO_TEXTO) -> HBoxContainer:
+	var linha := HBoxContainer.new()
+	linha.add_theme_constant_override("separation", 8)
+	linha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var colunas: Array[String] = [nome, str(valor), "%+d" % modificador]
+	var larguras: Array[float] = [70.0, 50.0, 50.0]
+	for i in range(colunas.size()):
+		var rotulo := texto(colunas[i], tamanho, COR_TEXTO_DESTAQUE if i == 0 else COR_TEXTO)
+		rotulo.custom_minimum_size = Vector2(larguras[i], 0)
+		linha.add_child(rotulo)
+	return linha
