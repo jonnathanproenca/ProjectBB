@@ -188,7 +188,7 @@
   ],
   "props": [
     {
-      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_47_banco.png",
+      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_45_marco_pedra.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
@@ -196,11 +196,6 @@
       "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_42_cerca_quebrada.png",
       "tipo_arena": "estrada",
       "papel": "cerca"
-    },
-    {
-      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_43_barris.png",
-      "tipo_arena": "estrada",
-      "papel": "cobertura"
     },
     {
       "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_44_lampiao_apagado.png",
@@ -213,7 +208,12 @@
       "papel": "cobertura"
     },
     {
-      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_45_marco_pedra.png",
+      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_47_banco.png",
+      "tipo_arena": "estrada",
+      "papel": "cobertura"
+    },
+    {
+      "arquivo": "res://assets/arenas/props_geral/estrada_antiga/prop_43_barris.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
@@ -233,14 +233,14 @@
       "papel": "cobertura"
     },
     {
-      "arquivo": "res://assets/arenas/props_geral/patio_poco/prop_79_grade_ferro.png",
-      "tipo_arena": "estrada",
-      "papel": "cerca"
-    },
-    {
       "arquivo": "res://assets/arenas/props_geral/patio_poco/prop_80_lampiao_rua.png",
       "tipo_arena": "estrada",
       "papel": "lampiao"
+    },
+    {
+      "arquivo": "res://assets/arenas/props_geral/patio_poco/prop_79_grade_ferro.png",
+      "tipo_arena": "estrada",
+      "papel": "cerca"
     },
     {
       "arquivo": "res://assets/arenas/props_geral/patio_poco/prop_73_poco.png",
@@ -253,7 +253,7 @@
       "papel": "cobertura"
     },
     {
-      "arquivo": "res://assets/arenas/props_geral/ruina_pedra/prop_69_bacia_pedra.png",
+      "arquivo": "res://assets/arenas/props_geral/ruina_pedra/prop_70_urna.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
@@ -263,17 +263,7 @@
       "papel": "cobertura"
     },
     {
-      "arquivo": "res://assets/arenas/props_geral/ruina_pedra/prop_70_urna.png",
-      "tipo_arena": "estrada",
-      "papel": "cobertura"
-    },
-    {
-      "arquivo": "res://assets/arenas/props_geral/floresta_caverna/prop_84_pedra_musgo.png",
-      "tipo_arena": "estrada",
-      "papel": "cobertura"
-    },
-    {
-      "arquivo": "res://assets/arenas/props_geral/floresta_caverna/prop_81_tronco_caido.png",
+      "arquivo": "res://assets/arenas/props_geral/ruina_pedra/prop_69_bacia_pedra.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
@@ -288,12 +278,22 @@
       "papel": "cobertura"
     },
     {
-      "arquivo": "res://assets/arenas/props_geral/beco_urbano/prop_104_sacos_lixo.png",
+      "arquivo": "res://assets/arenas/props_geral/floresta_caverna/prop_84_pedra_musgo.png",
+      "tipo_arena": "estrada",
+      "papel": "cobertura"
+    },
+    {
+      "arquivo": "res://assets/arenas/props_geral/floresta_caverna/prop_81_tronco_caido.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
     {
       "arquivo": "res://assets/arenas/props_geral/beco_urbano/prop_98_caixotes_lixo.png",
+      "tipo_arena": "estrada",
+      "papel": "cobertura"
+    },
+    {
+      "arquivo": "res://assets/arenas/props_geral/beco_urbano/prop_104_sacos_lixo.png",
       "tipo_arena": "estrada",
       "papel": "cobertura"
     },
