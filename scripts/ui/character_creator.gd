@@ -10,7 +10,7 @@ extends Control
 ## Humanos usam o sprite base (sem classe) nas etapas de origem e espécie, e a partir da etapa de
 ## classe o sprite em assets/ui/classes/humano_<classe>_<sexo>.png. Ao trocar o retrato, a figura antiga
 ## some de cima para baixo e só então a nova aparece de baixo para cima, com borda de latão e vapor (ADR-064).
-## A figura é centralizada pelo conteúdo do PNG (pixels não transparentes), não pela área do arquivo.
+## A figura é centralizada pelo centro de massa do corpo (média ponderada do alpha), não pela área do arquivo.
 ## Autômatos e mestiços seguem com o sprite da espécie até existirem as versões de classe.
 
 signal concluido(escolhas: Dictionary)
@@ -37,6 +37,7 @@ const MARGEM_PAINEL: float = 16.0
 ## Altura: abas 60 + 22 + meio 492 + 22 + navegação 52 = 648 px, cabe em 720.
 const ALTURA_CONTEUDO: float = 460.0
 const LARGURA_ROLAGEM: float = 14.0
+const LARGURA_NOME_SELETOR: float = 216.0
 const TAMANHO_RETRATO := Vector2(260, 492)
 const TAMANHO_ICONE := Vector2(84, 84)
 const LARGURA_RESUMO: float = 260.0
@@ -62,7 +63,7 @@ var _vapor_troca: CPUParticles2D
 var _tween_retrato: Tween
 var _shader_troca: Shader
 var _area_troca: Rect2 = Rect2()
-var _areas_usadas: Dictionary = {}
+var _centros_massa: Dictionary = {}
 
 
 func _ready() -> void:
@@ -322,22 +323,29 @@ func _centralizar(imagem: TextureRect, tex: Texture2D) -> void:
 
 
 func _deslocamento_centro(tex: Texture2D) -> float:
-	var usada := _area_usada(tex)
-	if usada.size.x <= 0:
-		return 0.0
-	var centro_figura := usada.position.x + usada.size.x * 0.5
-	return (tex.get_width() * 0.5 - centro_figura) * _escala_para(tex)
+	return (tex.get_width() * 0.5 - _centro_massa_x(tex)) * _escala_para(tex)
 
 
-## Retângulo de pixels não transparentes do sprite, com cache por arquivo.
-func _area_usada(tex: Texture2D) -> Rect2i:
+## Centro de massa horizontal do sprite, em pixels: média do alpha pelas colunas. Amostra a cada 4 pixels
+## e guarda em cache por arquivo. Bounding box não serve: espada, escudo e cajado puxam a conta para um lado.
+func _centro_massa_x(tex: Texture2D) -> float:
 	var chave := tex.resource_path
-	if chave != "" and _areas_usadas.has(chave):
-		return _areas_usadas[chave]
-	var usada := tex.get_image().get_used_rect()
+	if chave != "" and _centros_massa.has(chave):
+		return _centros_massa[chave]
+	var img := tex.get_image()
+	var soma := 0.0
+	var peso := 0.0
+	for x in range(0, img.get_width(), 4):
+		for y in range(0, img.get_height(), 4):
+			var alfa: float = img.get_pixel(x, y).a
+			soma += alfa * x
+			peso += alfa
+	var centro := img.get_width() * 0.5
+	if peso > 0.0:
+		centro = soma / peso
 	if chave != "":
-		_areas_usadas[chave] = usada
-	return usada
+		_centros_massa[chave] = centro
+	return centro
 
 
 func _escala_para(tex: Texture2D) -> float:
@@ -459,7 +467,12 @@ func _seletor(chave: String) -> Control:
 	var esquerda := UiKit.seta(true, 34.0)
 	esquerda.pressed.connect(_girar.bind(chave, -1))
 	linha.add_child(esquerda)
-	linha.add_child(UiKit.letras(_rotulo(chave, opcoes[atual]), 30.0, LARGURA_PAINEL - LARGURA_ROLAGEM - 110.0))
+	# Caixa de largura fixa: as setas não andam quando o nome muda de tamanho.
+	var caixa_nome := CenterContainer.new()
+	caixa_nome.custom_minimum_size = Vector2(LARGURA_NOME_SELETOR, 40.0)
+	caixa_nome.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caixa_nome.add_child(UiKit.letras(_rotulo(chave, opcoes[atual]), 30.0, LARGURA_NOME_SELETOR))
+	linha.add_child(caixa_nome)
 	var direita := UiKit.seta(false, 34.0)
 	direita.pressed.connect(_girar.bind(chave, 1))
 	linha.add_child(direita)
@@ -486,6 +499,42 @@ func _linha_icones() -> Control:
 		icone.pressed.connect(_escolher.bind("especie", especie))
 		linha.add_child(icone)
 	return linha
+
+
+## Setas esquerda e direita trocam o seletor principal da etapa atual (no desktop).
+## Tratado em _input para o foco dos botões não roubar a seta.
+func _input(evento: InputEvent) -> void:
+	if not (evento is InputEventKey):
+		return
+	var tecla := evento as InputEventKey
+	if not tecla.pressed or tecla.echo:
+		return
+	var passo := 0
+	if tecla.keycode == KEY_LEFT:
+		passo = -1
+	elif tecla.keycode == KEY_RIGHT:
+		passo = 1
+	else:
+		return
+	var chave := _chave_principal()
+	if chave.is_empty():
+		return
+	get_viewport().set_input_as_handled()
+	_girar(chave, passo)
+
+
+## Seletor principal de cada etapa; etapas sem seletor (habilidades, perícias) devolvem vazio.
+func _chave_principal() -> String:
+	match PASSOS[_passo]:
+		"origem":
+			return "personagem"
+		"especie":
+			return "especie"
+		"classe":
+			return "classe"
+		"background":
+			return "origem"
+	return ""
 
 
 func _girar(chave: String, passo: int) -> void:
