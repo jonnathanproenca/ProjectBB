@@ -7,14 +7,15 @@ var _failures: int = 0
 
 
 func _initialize() -> void:
-	_check(CharacterRules.validar("humano", "soldado", "guerreiro") == CharacterRules.ERR_NONE, "combinação válida passa")
+	_check(CharacterRules.validar("humano", "soldado", "paladino") == CharacterRules.ERR_NONE, "combinação válida passa")
 	_check(CharacterRules.validar("anao", "soldado", "guerreiro") == CharacterRules.ERR_ESPECIE, "espécie fora do MVP é recusada")
-	_check(CharacterRules.validar("humano", "desertor", "guerreiro") == CharacterRules.ERR_ORIGEM, "origem fora do MVP é recusada")
+	_check(CharacterRules.validar("humano", "desertor", "paladino") == CharacterRules.ERR_ORIGEM, "origem fora do MVP é recusada")
 	_check(CharacterRules.validar("humano", "soldado", "bardo") == CharacterRules.ERR_CLASSE, "classe fora do MVP é recusada")
+	_check(CharacterRules.validar("humano", "soldado", "guerreiro") == CharacterRules.ERR_CLASSE, "guerreiro fica fora do MVP por enquanto")
 
-	var final_humano: Dictionary = CharacterRules.atributos_finais("humano", "guerreiro")
-	_check(final_humano["car"] == 9, "humano dá +1 em Carisma (8 vira 9)")
-	_check(final_humano["con"] == 15, "humano dá +1 em Constituição (14 vira 15)")
+	var final_humano: Dictionary = CharacterRules.atributos_finais("humano", "paladino")
+	_check(final_humano["car"] == 15, "humano dá +1 em Carisma (14 vira 15)")
+	_check(final_humano["con"] == 14, "humano dá +1 em Constituição (13 vira 14)")
 	_check(final_humano["for"] == 15, "atributo sem bônus de espécie não muda")
 
 	var final_automato: Dictionary = CharacterRules.atributos_finais("automato", "clerigo")
@@ -49,7 +50,7 @@ func _initialize() -> void:
 			duas_pericias = false
 	_check(duas_pericias, "cada origem dá duas perícias")
 
-	_check(CharacterRules.pv_nivel_1("guerreiro", 14) == 12, "guerreiro com Con 14: 10 + 2 = 12 PV")
+	_check(CharacterRules.pv_nivel_1("paladino", 14) == 12, "paladino com Con 14: 10 + 2 = 12 PV")
 	_check(CharacterRules.pv_nivel_1("mago_engenheiro", 8) == 5, "mago com Con 8: 6 - 1 = 5 PV")
 	_check(CharacterRules.pv_nivel_1("mago_engenheiro", 1) == 1, "PV no nível 1 nunca fica abaixo de 1")
 
@@ -89,9 +90,9 @@ func _testar_pericias() -> void:
 				ids_ok = false
 	_check(ids_ok, "perícias de classes e origens existem em PERICIAS")
 
-	# Guerreiro (atletismo, percepcao) + soldado (atletismo, intimidacao): atletismo repete.
-	var soldado: Array[String] = CharacterRules.pericias_finais("guerreiro", "soldado")
-	_check(_igual(soldado, ["atletismo", "intimidacao", "percepcao"]), "guerreiro soldado: união sem repetir e em ordem")
+	# Paladino (atletismo, religiao) + soldado (atletismo, intimidacao): atletismo repete.
+	var soldado: Array[String] = CharacterRules.pericias_finais("paladino", "soldado")
+	_check(_igual(soldado, ["atletismo", "intimidacao", "religiao"]), "paladino soldado: união sem repetir e em ordem")
 	# Mago (arcanismo, investigacao) + nobre (historia, persuasao): sem repetição, ordem alfabética.
 	var mago: Array[String] = CharacterRules.pericias_finais("mago_engenheiro", "nobre")
 	_check(_igual(mago, ["arcanismo", "historia", "investigacao", "persuasao"]), "mago nobre: quatro perícias em ordem alfabética")
@@ -119,7 +120,7 @@ func _testar_pericias() -> void:
 	_check(_igual(filtrada, ["atletismo", "percepcao"]), "id de perícia inexistente é ignorado")
 
 	_check(_igual(CharacterRules.pericias_finais("bardo", "soldado"), ["atletismo", "intimidacao"]), "classe desconhecida só contribui com a origem")
-	_check(_igual(CharacterRules.pericias_finais("guerreiro", "desertor"), ["atletismo", "percepcao"]), "origem desconhecida só contribui com a classe")
+	_check(_igual(CharacterRules.pericias_finais("paladino", "desertor"), ["atletismo", "religiao"]), "origem desconhecida só contribui com a classe")
 	_check(CharacterRules.pericias_finais("x", "y").is_empty(), "classe e origem desconhecidas dão lista vazia")
 
 

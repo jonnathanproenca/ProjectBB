@@ -25,7 +25,7 @@ Primeiro as 5 classes do MVP, depois as demais. Dentro de cada espécie, sempre 
 
 | # | Classe (id) | Prioridade |
 |---|---|---|
-| 1 | Guerreiro (`guerreiro`) | MVP |
+| 1 | Paladino (`paladino`) | MVP (ADR-068; Guerreiro fica para depois) |
 | 2 | Clérigo (`clerigo`) | MVP |
 | 3 | Ladino (`ladino`) | MVP |
 | 4 | Mago-Engenheiro (`mago_engenheiro`) | MVP |

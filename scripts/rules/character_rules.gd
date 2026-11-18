@@ -54,7 +54,7 @@ const ORIGENS: Dictionary = {
 ## Classes do MVP. Atributos padrão seguem o conjunto 15, 14, 13, 12, 10, 8 (padrão).
 ## "pericias": perícias fixas da classe, sem escolha no MVP (ADR-053 e ADR-054).
 const CLASSES: Dictionary = {
-	"guerreiro": {"dado_vida": 10, "pericias": ["atletismo", "percepcao"], "atributos": {"for": 15, "con": 14, "des": 13, "sab": 12, "int": 10, "car": 8}},
+	"paladino": {"dado_vida": 10, "pericias": ["atletismo", "religiao"], "atributos": {"for": 15, "car": 14, "con": 13, "sab": 12, "des": 10, "int": 8}},
 	"clerigo": {"dado_vida": 8, "pericias": ["medicina", "religiao"], "atributos": {"sab": 15, "con": 14, "for": 13, "car": 12, "des": 10, "int": 8}},
 	"ladino": {"dado_vida": 8, "pericias": ["enganacao", "furtividade", "percepcao", "prestidigitacao"], "atributos": {"des": 15, "int": 14, "con": 13, "car": 12, "sab": 10, "for": 8}},
 	"mago_engenheiro": {"dado_vida": 6, "pericias": ["arcanismo", "investigacao"], "atributos": {"int": 15, "con": 14, "des": 13, "sab": 12, "for": 10, "car": 8}},

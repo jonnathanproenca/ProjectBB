@@ -8,7 +8,7 @@ Status: proposta v0.2. Base: classes do SRD 5.2 reimaginadas no pós-guerra, mai
 **Descanso:** C = descanso curto, L = descanso longo, — = sem disparos especiais.
 
 **Corte final (12):** Guerreiro, Clérigo, Ladino, Mago-Engenheiro, Atirador Arcano, Piromante, Bardo, Paladino, Bárbaro, Mecânico de Campo, Monge, Bruxo.
-**MVP (5):** Guerreiro, Clérigo, Ladino, Mago-Engenheiro, Atirador Arcano.
+**MVP (5):** Paladino (no lugar do Guerreiro, ADR-068; Guerreiro fica para depois), Clérigo, Ladino, Mago-Engenheiro, Atirador Arcano.
 
 Tabela de armas e dados de dano: a montar depois, com base na tabela de classes.
 

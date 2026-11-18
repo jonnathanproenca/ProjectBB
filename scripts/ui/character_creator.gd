@@ -50,7 +50,7 @@ const ALTURA_LETRA_ABA: float = 22.0
 ## Escolhas iniciais: o personagem já é válido, como no BG3 (o jogador só troca o que quiser).
 ## "origem" guarda o Background (nome mantido para não quebrar o salvamento); "personagem" é só de exibição.
 var _passo: int = 0
-var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "personagem": "personalizado"}
+var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "paladino", "origem": "soldado", "personagem": "personalizado"}
 var _nome: String = ""
 var _raiz: VBoxContainer
 ## Retrato persistente: sobrevive às reconstruções de _montar() para a animação de troca não ser cortada.

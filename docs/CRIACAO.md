@@ -26,7 +26,7 @@ Sem aba de Revisão: a confirmação fica na própria tela.
 - **Nome no celular (decidido):** a detecção de plataforma fica em `scripts/ui/plataforma.gd`. No celular, o nome é pedido pelo diálogo nativo do navegador ao tocar no campo.
 - **Aparência: fora do MVP (decidido, ADR-055).** Sem presets de rosto, corpo e cor agora; fica para a versão 3.0. Substitui a ADR-043 nessa parte.
 - **Atributos: valores padrão por classe (decidido).** Sem compra de pontos nem rolagem no MVP.
-- **Classes do MVP: 5 (decidido):** Guerreiro, Clérigo, Ladino, Mago-Engenheiro e Atirador Arcano (ver `docs/CLASSES.md`).
+- **Classes do MVP: 5 (decidido, ADR-068):** Paladino (no lugar do Guerreiro, que fica para depois), Clérigo, Ladino, Mago-Engenheiro e Atirador Arcano (ver `docs/CLASSES.md`).
 
 ## Espécies (padrão)
 
@@ -54,7 +54,7 @@ As 18 perícias do SRD 5.2 ficam em `CharacterRules.PERICIAS`, cada uma com seu 
 
 | Classe | Perícias |
 |---|---|
-| Guerreiro | Atletismo, Percepção |
+| Paladino | Atletismo, Religião |
 | Clérigo | Medicina, Religião |
 | Ladino | Enganação, Furtividade, Percepção, Prestidigitação |
 | Mago-Engenheiro | Arcanismo, Investigação |
@@ -77,7 +77,7 @@ Conjunto 15, 14, 13, 12, 10, 8 distribuído por classe. Dado de vida no nível 1
 
 | Classe | For | Des | Con | Int | Sab | Car | Dado de vida |
 |---|---|---|---|---|---|---|---|
-| Guerreiro | 15 | 13 | 14 | 10 | 12 | 8 | d10 |
+| Paladino | 15 | 10 | 13 | 8 | 12 | 14 | d10 |
 | Clérigo | 13 | 10 | 14 | 8 | 15 | 12 | d8 |
 | Ladino | 8 | 15 | 13 | 14 | 10 | 12 | d8 |
 | Mago-Engenheiro | 10 | 13 | 14 | 15 | 12 | 8 | d6 |
