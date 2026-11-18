@@ -1,7 +1,7 @@
 class_name ArenaTeste
 extends Control
-## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; + e - mudam o agrupamento de campo; Esc volta ao mundo.
-## Regra: scripts/rules/arena_generator.gd. Assets: manifesto gerado por tools/gerar_manifesto_arenas.py.
+## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; + e - mudam o agrupamento de campo; M troca o estilo (V1 ou V2); Esc volta ao mundo.
+## Regra: scripts/rules/arena_generator.gd. Assets: manifestos gerados por tools/gerar_manifesto_arenas.py e tools/gerar_manifesto_arenas_v2.py.
 
 const MUNDO_SCENE: String = "res://scenes/mundo.tscn"
 const TIPO: String = "estrada"
@@ -15,7 +15,10 @@ const COR_FUNDO: Color = Color(0.07, 0.07, 0.09)
 const COR_FALTA: Color = Color(1.0, 0.0, 1.0, 0.5)
 const HISTORICO_LIMITE: int = 20
 const TENTATIVAS_SEMENTE: int = 10
+const MANIFESTOS: Array[String] = [ArenaCatalogo.CAMINHO_PADRAO, "res://assets/arenas/manifesto_v2.json"]
+const NOMES_ESTILOS: Array[String] = ["V1 (Flow)", "V2 (Blender)"]
 
+var _estilo: int = 0
 var _catalogo: Dictionary = {}
 var _layout: Dictionary = {}
 var _historico: Array = []
@@ -30,7 +33,7 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	focus_mode = Control.FOCUS_ALL
 	_rng.randomize()
-	_catalogo = ArenaCatalogo.carregar(_caminho_manifesto())
+	_recarregar_catalogo()
 	_rotulo = Label.new()
 	_rotulo.position = Vector2(12, 8)
 	_rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -39,9 +42,8 @@ func _ready() -> void:
 	_nova_arena()
 
 
-## Manifesto lido pela tela. A V2 (arena_teste_v2) sobrescreve para usar os assets do Blender.
-func _caminho_manifesto() -> String:
-	return ArenaCatalogo.CAMINHO_PADRAO
+func _recarregar_catalogo() -> void:
+	_catalogo = ArenaCatalogo.carregar(MANIFESTOS[_estilo])
 
 
 func _nova_arena() -> void:
@@ -61,7 +63,7 @@ func _nova_arena() -> void:
 		return
 	_layout = layout
 	_historico = ArenaGenerator.registrar(_historico, layout, HISTORICO_LIMITE)
-	_rotulo.text = "Semente %d  |  Agrupamento %d (+/-)  |  N ou Espaço: outra arena  |  Esc: voltar" % [_semente, _agrupamento]
+	_rotulo.text = "%s  |  Semente %d  |  Agrupamento %d (+/-)  |  N ou Espaço: outra arena  |  M: trocar estilo  |  Esc: voltar" % [NOMES_ESTILOS[_estilo], _semente, _agrupamento]
 	queue_redraw()
 
 
@@ -78,6 +80,12 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif tecla.keycode == KEY_MINUS or tecla.keycode == KEY_KP_SUBTRACT:
 		_agrupamento = maxi(_agrupamento - 1, 1)
+		_nova_arena()
+		get_viewport().set_input_as_handled()
+	elif tecla.keycode == KEY_M:
+		_estilo = (_estilo + 1) % MANIFESTOS.size()
+		_recarregar_catalogo()
+		_historico.clear()
 		_nova_arena()
 		get_viewport().set_input_as_handled()
 	elif tecla.keycode == KEY_ESCAPE:
