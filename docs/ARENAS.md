@@ -63,3 +63,11 @@ Cada tipo tem 3 variantes, com layout diferente (posição de coberturas e obst�
 
 - Confirmar a ordem da primeira leva.
 - Confirmar o estilo de arte (pintura ou pixel art) antes de gerar a primeira leva.
+
+## Geração procedural (ADR-065)
+
+- Regra: `scripts/rules/arena_generator.gd`. Sem nós de cena; `ArenaGenerator.gerar(catalogo, tipo, semente, historico)`.
+- Catálogo: `assets/arenas/manifesto.json`, gerado por `python tools/gerar_manifesto_arenas.py`. Rode de novo sempre que entrarem imagens novas.
+- Chroma residual: `python tools/refinar_chroma.py <pasta>` (originais vão para `_originais/`).
+- Teste: `godot --headless --path . -s res://scripts/tests/test_arena_generator.gd`.
+- Histórico: guardar as últimas assinaturas (`ArenaGenerator.registrar`) e passar ao gerar, para não repetir layout.
