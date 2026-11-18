@@ -5,6 +5,7 @@ extends Control
 ## Regras: scripts/rules/exploracao_rules.gd. Dados: scripts/data/mapa_prologo.gd.
 
 const COMBATE_SCENE: String = "res://scenes/combat.tscn"
+const ARENA_SCENE: String = "res://scenes/arena_teste.tscn"
 const AMBIENTE_PATH: String = "res://assets/music/ambiente.ogg"
 const CELULA: int = 48
 const COR_CHAO: Color = Color(0.20, 0.27, 0.18)
@@ -46,6 +47,12 @@ func _montar_interface() -> void:
 	combate.focus_mode = Control.FOCUS_NONE
 	combate.pressed.connect(_ir_para_combate)
 	add_child(combate)
+	var arena := Button.new()
+	arena.text = "Arena (teste)"
+	arena.position = Vector2(12, 72)
+	arena.focus_mode = Control.FOCUS_NONE
+	arena.pressed.connect(_ir_para_arena)
+	add_child(arena)
 
 
 ## Gancho de ambiente sonoro: só toca se o arquivo existir (ainda não há áudio).
@@ -65,6 +72,10 @@ func _iniciar_ambiente() -> void:
 
 func _ir_para_combate() -> void:
 	get_tree().change_scene_to_file(COMBATE_SCENE)
+
+
+func _ir_para_arena() -> void:
+	get_tree().change_scene_to_file(ARENA_SCENE)
 
 
 func _origem() -> Vector2:
