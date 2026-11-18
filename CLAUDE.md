@@ -26,12 +26,6 @@
 - Rodar testes: `godot --headless --path . -s res://scripts/tests/test_dnd_rules.gd`.
 - GDScript 4 com tipagem explícita.
 
-## Gemini
-
-- Pedidos ao Gemini passam pela ferramenta `pedir_prompt` do MCP `gemini` (`.mcp.json`, `mcp_servers/gemini/`).
-- A chave vem da variável de ambiente `GEMINI_API_KEY` configurada no ambiente da sessão. Nunca escreva a chave em arquivos, documentos ou memória.
-- Dependência: `pip install -r mcp_servers/gemini/requirements.txt`.
-
 ## Documentação
 
 - `docs/GDD.md`: escopo e regras. Atualizar quando uma decisão mudar.

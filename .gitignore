@@ -7,9 +7,6 @@
 data_*/
 builds/
 
-# Segredos locais (chave da API, nunca versionar)
-gemini.env
-
 # Sistema
 .DS_Store
 Thumbs.db
