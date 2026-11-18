@@ -30,13 +30,18 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	focus_mode = Control.FOCUS_ALL
 	_rng.randomize()
-	_catalogo = ArenaCatalogo.carregar()
+	_catalogo = ArenaCatalogo.carregar(_caminho_manifesto())
 	_rotulo = Label.new()
 	_rotulo.position = Vector2(12, 8)
 	_rotulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_rotulo)
 	grab_focus()
 	_nova_arena()
+
+
+## Manifesto lido pela tela. A V2 (arena_teste_v2) sobrescreve para usar os assets do Blender.
+func _caminho_manifesto() -> String:
+	return ArenaCatalogo.CAMINHO_PADRAO
 
 
 func _nova_arena() -> void:
