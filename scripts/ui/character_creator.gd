@@ -7,8 +7,10 @@ extends Control
 ## Imagens opcionais em assets/ui/criacao/ (sem arquivo, mostra cor sólida e texto):
 ##   fundo.png, especie_<id>_<masculino|feminino>.png (corpo inteiro, fundo transparente),
 ##   icone_<id>_<masculino|feminino>.png (busto com moldura redonda).
-## Humanos usam o sprite da classe em assets/ui/classes/humano_<classe>_<sexo>.png; ao trocar a
-## classe, a figura some de cima para baixo com uma borda de latão e vapor (ADR-064).
+## Humanos usam o sprite base (sem classe) nas etapas de origem e espécie, e a partir da etapa de
+## classe o sprite em assets/ui/classes/humano_<classe>_<sexo>.png. Ao trocar o retrato, a figura antiga
+## some de cima para baixo e só então a nova aparece de baixo para cima, com borda de latão e vapor (ADR-064).
+## A figura é centralizada pelo conteúdo do PNG (pixels não transparentes), não pela área do arquivo.
 ## Autômatos e mestiços seguem com o sprite da espécie até existirem as versões de classe.
 
 signal concluido(escolhas: Dictionary)
@@ -59,6 +61,8 @@ var _material_troca: ShaderMaterial
 var _vapor_troca: CPUParticles2D
 var _tween_retrato: Tween
 var _shader_troca: Shader
+var _area_troca: Rect2 = Rect2()
+var _areas_usadas: Dictionary = {}
 
 
 func _ready() -> void:
@@ -201,16 +205,17 @@ func _imagem_cheia() -> TextureRect:
 	return imagem
 
 
-## Caminho do sprite do retrato: humano com classe usa o sprite da classe; os demais, o da espécie.
+## Caminho do sprite do retrato. Humano usa o sprite base (sem classe) até a etapa de classe;
+## a partir dela, o sprite da classe. Os demais seguem com o sprite da espécie.
 func _caminho_retrato_atual() -> String:
-	if str(_escolhas["especie"]) == "humano":
+	if str(_escolhas["especie"]) == "humano" and _passo >= PASSOS.find("classe"):
 		var caminho_classe := "%shumano_%s_%s.png" % [PASTA_CLASSES, _escolhas["classe"], _escolhas["identidade"]]
 		if ResourceLoader.exists(caminho_classe):
 			return caminho_classe
 	return _caminho_especie()
 
 
-## Troca a imagem do retrato; se já havia uma, a antiga some de cima para baixo.
+## Troca o retrato. Sem imagem anterior, mostra a nova direto; com imagem, faz a animação em duas fases.
 func _trocar_retrato(caminho: String) -> void:
 	if caminho == _caminho_retrato or _imagem_retrato == null:
 		return
@@ -219,41 +224,71 @@ func _trocar_retrato(caminho: String) -> void:
 	var nova := _carregar(caminho)
 	if nova == null:
 		return
-	_imagem_retrato.texture = nova
 	var antiga: Texture2D = _carregar(anterior) if anterior != "" else null
-	if antiga != null:
-		_animar_troca(antiga)
+	if antiga == null:
+		_imagem_retrato.texture = nova
+		_centralizar(_imagem_retrato, nova)
+		return
+	_animar_troca(antiga, nova)
 
 
-func _animar_troca(antiga: Texture2D) -> void:
+## Fase 1: a figura antiga some de cima para baixo. Fase 2: a nova aparece de baixo para cima.
+func _animar_troca(antiga: Texture2D, nova: Texture2D) -> void:
 	if _tween_retrato != null and _tween_retrato.is_valid():
 		_tween_retrato.kill()
 	_limpar_efeitos_troca()
 	if _shader_troca == null:
 		_shader_troca = _criar_shader_troca()
 
+	_imagem_retrato.texture = null
+	_imagem_retrato.material = null
+	_area_troca = _area_para(antiga)
 	_sobreposicao_retrato = _imagem_cheia()
 	_sobreposicao_retrato.texture = antiga
-	_material_troca = ShaderMaterial.new()
-	_material_troca.shader = _shader_troca
-	_material_troca.set_shader_parameter("progress", 0.0)
+	_centralizar(_sobreposicao_retrato, antiga)
+	_material_troca = _novo_material(false)
 	_sobreposicao_retrato.material = _material_troca
 	_quadro_retrato.add_child(_sobreposicao_retrato)
 
 	_vapor_troca = _criar_vapor()
 	_quadro_retrato.add_child(_vapor_troca)
 
+	var metade := DURACAO_TROCA * 0.5
 	_tween_retrato = create_tween()
-	_tween_retrato.tween_method(_passo_troca, 0.0, 1.0, DURACAO_TROCA)
-	_tween_retrato.finished.connect(_fim_troca)
+	_tween_retrato.tween_method(_passo_troca.bind(false), 0.0, 1.0, metade)
+	_tween_retrato.tween_callback(_entrar_nova.bind(nova))
+	_tween_retrato.tween_method(_passo_troca.bind(true), 0.0, 1.0, metade)
+	_tween_retrato.tween_callback(_fim_troca)
 
 
-func _passo_troca(progresso: float) -> void:
-	if _material_troca == null or _vapor_troca == null:
+func _entrar_nova(nova: Texture2D) -> void:
+	if _sobreposicao_retrato != null and is_instance_valid(_sobreposicao_retrato):
+		_sobreposicao_retrato.queue_free()
+	_sobreposicao_retrato = null
+	_area_troca = _area_para(nova)
+	_imagem_retrato.texture = nova
+	_centralizar(_imagem_retrato, nova)
+	_material_troca = _novo_material(true)
+	_imagem_retrato.material = _material_troca
+
+
+func _novo_material(entra: bool) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = _shader_troca
+	material.set_shader_parameter("progress", 0.0)
+	material.set_shader_parameter("entra", entra)
+	return material
+
+
+func _passo_troca(progresso: float, entra: bool) -> void:
+	if _material_troca == null:
 		return
 	_material_troca.set_shader_parameter("progress", progresso)
-	var area := _area_imagem()
-	_vapor_troca.position = Vector2(area.position.x + area.size.x * 0.5, area.position.y + area.size.y * progresso)
+	if _vapor_troca == null:
+		return
+	# Linha de corte: desce na saída, sobe na entrada.
+	var corte := 1.0 - progresso if entra else progresso
+	_vapor_troca.position = Vector2(_area_troca.position.x + _area_troca.size.x * 0.5, _area_troca.position.y + _area_troca.size.y * corte)
 
 
 func _fim_troca() -> void:
@@ -264,6 +299,8 @@ func _fim_troca() -> void:
 	if _sobreposicao_retrato != null and is_instance_valid(_sobreposicao_retrato):
 		_sobreposicao_retrato.queue_free()
 	_sobreposicao_retrato = null
+	if _imagem_retrato != null:
+		_imagem_retrato.material = null
 	_material_troca = null
 
 
@@ -277,19 +314,49 @@ func _limpar_efeitos_troca() -> void:
 	_material_troca = null
 
 
-## Área do quadro onde a imagem aparece de fato (STRETCH_KEEP_ASPECT_CENTERED).
-func _area_imagem() -> Rect2:
-	var quadro := Rect2(Vector2.ZERO, TAMANHO_RETRATO)
-	var tex: Texture2D = _imagem_retrato.texture if _imagem_retrato != null else null
+## Centraliza a imagem pela figura: desloca o quadro pela diferença entre o centro do conteúdo e o centro do PNG.
+func _centralizar(imagem: TextureRect, tex: Texture2D) -> void:
+	var deslocamento := _deslocamento_centro(tex)
+	imagem.offset_left = deslocamento
+	imagem.offset_right = deslocamento
+
+
+func _deslocamento_centro(tex: Texture2D) -> float:
+	var usada := _area_usada(tex)
+	if usada.size.x <= 0:
+		return 0.0
+	var centro_figura := usada.position.x + usada.size.x * 0.5
+	return (tex.get_width() * 0.5 - centro_figura) * _escala_para(tex)
+
+
+## Retângulo de pixels não transparentes do sprite, com cache por arquivo.
+func _area_usada(tex: Texture2D) -> Rect2i:
+	var chave := tex.resource_path
+	if chave != "" and _areas_usadas.has(chave):
+		return _areas_usadas[chave]
+	var usada := tex.get_image().get_used_rect()
+	if chave != "":
+		_areas_usadas[chave] = usada
+	return usada
+
+
+func _escala_para(tex: Texture2D) -> float:
+	return minf(TAMANHO_RETRATO.x / tex.get_width(), TAMANHO_RETRATO.y / tex.get_height())
+
+
+## Área do quadro onde a imagem aparece de fato, já com o deslocamento de centralização.
+func _area_para(tex: Texture2D) -> Rect2:
+	var quadro := Vector2(TAMANHO_RETRATO)
 	if tex == null:
-		return quadro
-	var escala := minf(quadro.size.x / tex.get_width(), quadro.size.y / tex.get_height())
-	var tamanho := Vector2(tex.get_width(), tex.get_height()) * escala
-	return Rect2((quadro.size - tamanho) * 0.5, tamanho)
+		return Rect2(Vector2.ZERO, quadro)
+	var tamanho := Vector2(tex.get_width(), tex.get_height()) * _escala_para(tex)
+	var origem := (quadro - tamanho) * 0.5
+	origem.x += _deslocamento_centro(tex)
+	return Rect2(origem, tamanho)
 
 
 func _criar_vapor() -> CPUParticles2D:
-	var area := _area_imagem()
+	var area := _area_troca
 	var vapor := CPUParticles2D.new()
 	vapor.emitting = true
 	vapor.amount = 30
@@ -317,15 +384,17 @@ func _criar_shader_troca() -> Shader:
 	shader.code = """
 shader_type canvas_item;
 uniform float progress : hint_range(0.0, 1.0) = 0.0;
+uniform bool entra = false;
 uniform vec4 brass_color : source_color = vec4(0.79, 0.64, 0.29, 1.0);
 uniform float edge_width : hint_range(0.0, 0.2) = 0.04;
 
 void fragment() {
 	vec4 tex = texture(TEXTURE, UV);
-	if (UV.y < progress) {
+	float corte = entra ? 1.0 - progress : progress;
+	if (UV.y < corte) {
 		discard;
 	}
-	float edge = (1.0 - smoothstep(0.0, edge_width, UV.y - progress)) * step(0.01, tex.a);
+	float edge = (1.0 - smoothstep(0.0, edge_width, UV.y - corte)) * step(0.01, tex.a);
 	COLOR = vec4(mix(tex.rgb, brass_color.rgb, edge * 0.9), tex.a);
 }
 """
