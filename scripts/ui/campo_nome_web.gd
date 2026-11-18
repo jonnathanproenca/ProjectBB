@@ -24,10 +24,14 @@ const JS_CRIAR := """
 	el.setAttribute('spellcheck', 'false');
 	el.setAttribute('enterkeyhint', 'done');
 	el.setAttribute('aria-label', dica);
-	// font-size 16px evita o zoom automático do iOS ao focar. Opacidade baixa (não zero) mantém o campo tocável.
+	// font-size 16px evita o zoom automático do iOS ao focar. Campo visível (transparente, não opacity 0) para o
+	// iOS tratar como alvo de toque real; o toque também foca o campo dentro do próprio evento, para abrir o teclado.
 	el.style.cssText = 'position:fixed;left:0;top:0;width:10px;height:10px;margin:0;padding:0;border:0;'
 		+ 'outline:none;background:transparent;color:transparent;caret-color:transparent;'
-		+ 'font-size:16px;opacity:0.02;z-index:30;touch-action:manipulation;-webkit-appearance:none;border-radius:0;';
+		+ 'font-size:16px;opacity:1;z-index:30;touch-action:manipulation;-webkit-appearance:none;border-radius:0;';
+	var focar = function () { el.focus(); };
+	el.addEventListener('touchend', focar);
+	el.addEventListener('click', focar);
 	el.addEventListener('input', function () { window[id + '_input'](el.value); });
 	el.addEventListener('focus', function () { window[id + '_foco'](true); });
 	el.addEventListener('blur', function () { window[id + '_foco'](false); });
