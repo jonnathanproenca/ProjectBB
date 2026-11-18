@@ -1,0 +1,56 @@
+{
+  "tiles": [
+    {
+      "arquivo": "res://assets/arenas/tiles/01_estrada_terra_batida_flat.png",
+      "tipo_arena": "estrada",
+      "papel": "campo"
+    },
+    {
+      "arquivo": "res://assets/arenas/tiles/tile_01_grama_seca_ferrugem.png",
+      "tipo_arena": "estrada",
+      "papel": "campo"
+    },
+    {
+      "arquivo": "res://assets/arenas/tiles/tile_03_trilha_carroca_sulcos.png",
+      "tipo_arena": "estrada",
+      "papel": "pista"
+    },
+    {
+      "arquivo": "res://assets/arenas/tiles/03_lama_com_pocas_flat.png",
+      "tipo_arena": "estrada",
+      "papel": "centro"
+    },
+    {
+      "arquivo": "res://assets/arenas/tiles/04_piso_rachado_pedra_flat.png",
+      "tipo_arena": "estrada",
+      "papel": "borda"
+    },
+    {
+      "arquivo": "res://assets/arenas/tiles/07_entulho_tijolo_pedra_flat.png",
+      "tipo_arena": "estrada",
+      "papel": "borda"
+    }
+  ],
+  "props": [
+    {
+      "arquivo": "res://assets/arenas/estrada/props/prop_18_carroca_tombada.png",
+      "tipo_arena": "estrada",
+      "papel": "cobertura"
+    },
+    {
+      "arquivo": "res://assets/arenas/estrada/props/prop_19_cerca_madeira_quebrada.png",
+      "tipo_arena": "estrada",
+      "papel": "cerca"
+    },
+    {
+      "arquivo": "res://assets/arenas/estrada/props/prop_20_pilha_barris.png",
+      "tipo_arena": "estrada",
+      "papel": "cobertura"
+    },
+    {
+      "arquivo": "res://assets/arenas/estrada/props/prop_21_poste_lampiao_apagado.png",
+      "tipo_arena": "estrada",
+      "papel": "lampiao"
+    }
+  ]
+}
