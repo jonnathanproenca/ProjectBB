@@ -60,6 +60,10 @@ func _initialize() -> void:
 	_check(simetria_ok, "vizinhança é simétrica e de distância 1")
 	_check(ArenaGenerator.vizinhos(Vector2i(1, 1)).has(Vector2i(2, 2)), "coluna ímpar desce meio hex para o vizinho")
 
+	_check(ArenaGenerator._perto_da_pista(4, 5), "coluna vizinha à pista conta como perto")
+	_check(not ArenaGenerator._perto_da_pista(2, 5), "coluna longe da pista não conta")
+	_check(not ArenaGenerator._perto_da_pista(5, 5), "dentro da pista não conta")
+
 	var historico: Array = []
 	for i in range(5):
 		historico = ArenaGenerator.registrar(historico, {"assinatura": "s%d" % i}, 3)

@@ -6,7 +6,8 @@ extends RefCounted
 ##
 ## Grade: 12 x 9 hexes flat-top. Colunas ímpares ficam meio hex abaixo das pares.
 ## Zonas: borda (muro externo), pista (duas colunas N-S), centro (dois hexes no meio
-## da pista), campo (resto). Coberturas ficam no campo, alternadas entre os dois lados.
+## da pista), campo (resto). Coberturas ficam no campo, perto da pista (até
+## DISTANCIA_PISTA_MAX colunas), alternadas entre os dois lados. Assim a pista lê como eixo.
 
 const LARGURA: int = 12
 const ALTURA: int = 9
@@ -16,6 +17,7 @@ const COBERTURAS_MIN: int = 4
 const COBERTURAS_MAX: int = 6
 const COBERTURAS_POR_LADO_MIN: int = 2
 const DISTANCIA_MIN_BLOQUEIO: int = 2
+const DISTANCIA_PISTA_MAX: int = 2
 const CHANCE_CERCA: float = 0.55
 const CHANCE_LAMPIAO: float = 0.7
 const PAPEIS_OBRIGATORIOS := ["campo", "pista", "centro", "borda", "cerca", "cobertura"]
@@ -171,7 +173,7 @@ static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator)
 	var candidatos: Array[Vector2i] = []
 	for y in range(1, ALTURA - 1):
 		for x in range(1, LARGURA - 1):
-			if papeis[_indice(x, y)] == "campo":
+			if papeis[_indice(x, y)] == "campo" and _perto_da_pista(x, x0):
 				candidatos.append(Vector2i(x, y))
 	_embaralhar(candidatos, rng)
 
@@ -228,6 +230,12 @@ static func _prop(x: int, y: int, tipo: String, pools: Dictionary, rng: RandomNu
 		"cobertura": cobertura,
 		"bloqueia": bloqueia,
 	}
+
+
+static func _perto_da_pista(x: int, x0: int) -> bool:
+	var a_oeste := x >= x0 - DISTANCIA_PISTA_MAX and x < x0
+	var a_leste := x >= x0 + LARGURA_PISTA and x < x0 + LARGURA_PISTA + DISTANCIA_PISTA_MAX
+	return a_oeste or a_leste
 
 
 static func _livre_para_bloqueio(c: Vector2i, props: Array, centros: Array[Vector2i]) -> bool:
