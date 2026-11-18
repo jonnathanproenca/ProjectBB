@@ -171,6 +171,16 @@ func _build_creator(caixa: VBoxContainer, index: int) -> void:
 	erro.add_theme_color_override("font_color", Color(1.0, 0.5, 0.4))
 	caixa.add_child(erro)
 
+	var aleatorio := UiKit.botao(UiText.t("aleatorio"), 22.0, Vector2(LARGURA_BOTAO, 44))
+	aleatorio.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	aleatorio.pressed.connect(func() -> void:
+		var nome := ProfileRules.nome_aleatorio(randi())
+		entrada.text = nome
+		if campo_web != null:
+			campo_web.definir_texto(nome)
+		atualizar.call()
+		erro.text = "")
+	caixa.add_child(aleatorio)
 	var criar := UiKit.botao(UiText.t("criar"), 26.0, Vector2(LARGURA_BOTAO, 52))
 	criar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	criar.pressed.connect(func() -> void:

@@ -23,6 +23,18 @@ static func clean_name(raw: String) -> String:
 	return raw.strip_edges()
 
 
+## Nomes sugeridos pelo botão "Aleatório" (útil para testar sem digitar, sobretudo no celular).
+const NOMES_ALEATORIOS: Array[String] = [
+	"Aria Vantor", "Brannok Cinza", "Lyra Ferrugem", "Teodor Vapor", "Mira Engrenagem", "Corvo Latão",
+	"Ilsa Rubra", "Dorian Fuligem", "Nyx Relojoeiro", "Hector Brasa", "Selene Cobre", "Caspar Lamparina",
+]
+
+
+## Nome sugerido para o índice dado (módulo da lista; índice negativo também vale).
+static func nome_aleatorio(indice: int) -> String:
+	return NOMES_ALEATORIOS[posmod(indice, NOMES_ALEATORIOS.size())]
+
+
 ## Perfil novo: raça, classe e origem ficam vazias, e aparência 0, até a criação completa.
 static func make_profile(name: String) -> Dictionary:
 	return {"name": clean_name(name), "race": "", "class": "", "origin": "", "identity": "", "appearance": 0, "play_time_s": 0, "xp": 0}

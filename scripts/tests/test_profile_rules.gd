@@ -34,6 +34,12 @@ func _initialize() -> void:
 	_check(ProfileRules.level_for_profile({"xp": 999999}, 5) == 5, "nível limitado ao máximo do MVP")
 	_check(ProfileRules.level_for_profile({}, 5) == 1, "perfil sem XP = nível 1")
 
+	for i in range(ProfileRules.NOMES_ALEATORIOS.size()):
+		var sugerido := ProfileRules.nome_aleatorio(i)
+		_check(ProfileRules.validate_name(sugerido) == ProfileRules.ERR_NONE, "nome aleatório %d é válido" % i)
+	_check(ProfileRules.nome_aleatorio(0) == ProfileRules.nome_aleatorio(ProfileRules.NOMES_ALEATORIOS.size()), "índice dá a volta na lista")
+	_check(ProfileRules.nome_aleatorio(-1) == ProfileRules.NOMES_ALEATORIOS[ProfileRules.NOMES_ALEATORIOS.size() - 1], "índice negativo não quebra")
+
 	_check(SettingsRules.sanitize_locale("en") == "en", "idioma válido é mantido")
 	_check(SettingsRules.sanitize_locale("xx") == SettingsRules.DEFAULT_LOCALE, "idioma inválido cai no padrão")
 	_check(SettingsRules.clamp_brightness(0.1) == SettingsRules.BRIGHTNESS_MIN, "brilho mínimo")

@@ -102,6 +102,13 @@ func fechar_teclado() -> void:
 	JavaScriptBridge.eval("(function(){var e=document.getElementById(%s);if(e){e.blur();}})()" % JSON.stringify(_id), true)
 
 
+## Troca o texto do <input> (usado pelo botão Aleatório, que não passa pelo teclado).
+func definir_texto(texto: String) -> void:
+	if _id.is_empty():
+		return
+	JavaScriptBridge.eval("(function(){var e=document.getElementById(%s);if(e){e.value=%s;}})()" % [JSON.stringify(_id), JSON.stringify(texto)], true)
+
+
 func _exit_tree() -> void:
 	if _id.is_empty():
 		return
