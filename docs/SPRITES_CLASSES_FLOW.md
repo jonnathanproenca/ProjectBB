@@ -79,7 +79,7 @@ Cole no lugar de `[EQUIPAMENTO]`. A roupa não muda; só se acrescenta o que est
 | Atirador Arcano (`atirador_arcano`) | a long crystal-core rifle slung across the back, a bandolier with brass cartridges, and a small optical scope on the rifle |
 | Piromante (`piromante`) | a small fuel flask on the belt, a short fire-lance held at the side, fire-scorched leather gloves, and a cloth over the mouth and nose |
 | Bardo (`bardo`) | a wooden lute strapped to the back, a wide-brimmed hat with a feather, and a bright colored scarf |
-| Paladino (`paladino`) | a round shield with an oath symbol, a cross-hilt sword at the hip, and a breastplate with gold ornaments |
+| Paladino (`paladino`) | a heavy war hammer with a gold-trimmed head resting on the shoulder, a gold oath symbol medallion on the chest, and a breastplate with gold ornaments; no shield and no sword |
 | Bárbaro (`barbaro`) | a large two-handed axe over the shoulder, a studded leather chest strap, and cloth wraps on both forearms |
 | Mecânico de Campo (`mecanico_de_campo`) | a large wrench in the belt, a backpack with metal tubes, an apron full of tool pockets, and a magnifying lens strapped to the forehead |
 | Monge (`monge`) | cloth wraps on both hands, a short staff on the back, and no weapons on the belt |
