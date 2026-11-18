@@ -7,13 +7,19 @@ extends Control
 ## Imagens opcionais em assets/ui/criacao/ (sem arquivo, mostra cor sólida e texto):
 ##   fundo.png, especie_<id>_<masculino|feminino>.png (corpo inteiro, fundo transparente),
 ##   icone_<id>_<masculino|feminino>.png (busto com moldura redonda).
-## As imagens classe_<id>.png continuam nos assets, mas o retrato não as usa mais.
+## Humanos usam o sprite da classe em assets/ui/classes/humano_<classe>_<sexo>.png; ao trocar a
+## classe, a figura some de cima para baixo com uma borda de latão e vapor (ADR-064).
+## Autômatos e mestiços seguem com o sprite da espécie até existirem as versões de classe.
 
 signal concluido(escolhas: Dictionary)
 signal cancelado
 
 const PASTA_IMAGENS := "res://assets/ui/criacao/"
+const PASTA_CLASSES := "res://assets/ui/classes/"
 const IMAGEM_FUNDO := "res://assets/ui/criacao/fundo.png"
+const DURACAO_TROCA: float = 0.7
+const COR_LATAO := Color("c9a24a")
+const COR_VAPOR := Color(0.92, 0.9, 0.85, 0.6)
 const COR_FUNDO := Color("16181f")
 const COR_SELECIONADO := Color("f2d28a")
 const COR_NORMAL := Color.WHITE
@@ -44,6 +50,15 @@ var _passo: int = 0
 var _escolhas: Dictionary = {"especie": "humano", "identidade": "masculino", "classe": "guerreiro", "origem": "soldado", "personagem": "personalizado"}
 var _nome: String = ""
 var _raiz: VBoxContainer
+## Retrato persistente: sobrevive às reconstruções de _montar() para a animação de troca não ser cortada.
+var _quadro_retrato: Control
+var _imagem_retrato: TextureRect
+var _caminho_retrato: String = ""
+var _sobreposicao_retrato: TextureRect
+var _material_troca: ShaderMaterial
+var _vapor_troca: CPUParticles2D
+var _tween_retrato: Tween
+var _shader_troca: Shader
 
 
 func _ready() -> void:
@@ -81,6 +96,9 @@ func configurar(nome: String) -> void:
 
 
 func _montar() -> void:
+	# Tira o retrato da árvore antes de liberar os filhos, para ele não ser apagado junto.
+	if _quadro_retrato != null and _quadro_retrato.get_parent() != null:
+		_quadro_retrato.get_parent().remove_child(_quadro_retrato)
 	for filho in _raiz.get_children():
 		_raiz.remove_child(filho)
 		filho.queue_free()
@@ -94,7 +112,7 @@ func _montar() -> void:
 	meio.alignment = BoxContainer.ALIGNMENT_CENTER
 	meio.add_theme_constant_override("separation", 40)
 	meio.add_child(_painel_fixo(_montar_painel(), LARGURA_PAINEL))
-	meio.add_child(_montar_retrato())
+	meio.add_child(_obter_retrato())
 	meio.add_child(_painel_fixo(_montar_resumo(), LARGURA_RESUMO))
 	_raiz.add_child(meio)
 
@@ -154,20 +172,164 @@ func _montar_painel() -> Control:
 	return caixa
 
 
-## Retrato do centro: sempre a imagem da espécie (corpo inteiro, fundo transparente), em todas as etapas.
-func _montar_retrato() -> Control:
-	var quadro := Control.new()
-	quadro.custom_minimum_size = TAMANHO_RETRATO
-	quadro.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	quadro.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	quadro.clip_contents = true
-	quadro.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var imagem := _textura(_caminho_especie())
-	if imagem != null:
-		imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		imagem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		quadro.add_child(imagem)
-	return quadro
+## Retrato do centro (corpo inteiro, fundo transparente). Cria o quadro na primeira vez e depois só troca a imagem.
+func _obter_retrato() -> Control:
+	if _quadro_retrato == null:
+		_criar_quadro_retrato()
+	_trocar_retrato(_caminho_retrato_atual())
+	return _quadro_retrato
+
+
+func _criar_quadro_retrato() -> void:
+	_quadro_retrato = Control.new()
+	_quadro_retrato.custom_minimum_size = TAMANHO_RETRATO
+	_quadro_retrato.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_quadro_retrato.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_quadro_retrato.clip_contents = true
+	_quadro_retrato.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_imagem_retrato = _imagem_cheia()
+	_quadro_retrato.add_child(_imagem_retrato)
+
+
+func _imagem_cheia() -> TextureRect:
+	var imagem := TextureRect.new()
+	imagem.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	imagem.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	imagem.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	imagem.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	imagem.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	return imagem
+
+
+## Caminho do sprite do retrato: humano com classe usa o sprite da classe; os demais, o da espécie.
+func _caminho_retrato_atual() -> String:
+	if str(_escolhas["especie"]) == "humano":
+		var caminho_classe := "%shumano_%s_%s.png" % [PASTA_CLASSES, _escolhas["classe"], _escolhas["identidade"]]
+		if ResourceLoader.exists(caminho_classe):
+			return caminho_classe
+	return _caminho_especie()
+
+
+## Troca a imagem do retrato; se já havia uma, a antiga some de cima para baixo.
+func _trocar_retrato(caminho: String) -> void:
+	if caminho == _caminho_retrato or _imagem_retrato == null:
+		return
+	var anterior := _caminho_retrato
+	_caminho_retrato = caminho
+	var nova := _carregar(caminho)
+	if nova == null:
+		return
+	_imagem_retrato.texture = nova
+	var antiga: Texture2D = _carregar(anterior) if anterior != "" else null
+	if antiga != null:
+		_animar_troca(antiga)
+
+
+func _animar_troca(antiga: Texture2D) -> void:
+	if _tween_retrato != null and _tween_retrato.is_valid():
+		_tween_retrato.kill()
+	_limpar_efeitos_troca()
+	if _shader_troca == null:
+		_shader_troca = _criar_shader_troca()
+
+	_sobreposicao_retrato = _imagem_cheia()
+	_sobreposicao_retrato.texture = antiga
+	_material_troca = ShaderMaterial.new()
+	_material_troca.shader = _shader_troca
+	_material_troca.set_shader_parameter("progress", 0.0)
+	_sobreposicao_retrato.material = _material_troca
+	_quadro_retrato.add_child(_sobreposicao_retrato)
+
+	_vapor_troca = _criar_vapor()
+	_quadro_retrato.add_child(_vapor_troca)
+
+	_tween_retrato = create_tween()
+	_tween_retrato.tween_method(_passo_troca, 0.0, 1.0, DURACAO_TROCA)
+	_tween_retrato.finished.connect(_fim_troca)
+
+
+func _passo_troca(progresso: float) -> void:
+	if _material_troca == null or _vapor_troca == null:
+		return
+	_material_troca.set_shader_parameter("progress", progresso)
+	var area := _area_imagem()
+	_vapor_troca.position = Vector2(area.position.x + area.size.x * 0.5, area.position.y + area.size.y * progresso)
+
+
+func _fim_troca() -> void:
+	if _vapor_troca != null and is_instance_valid(_vapor_troca):
+		_vapor_troca.emitting = false
+		get_tree().create_timer(1.5).timeout.connect(_vapor_troca.queue_free)
+		_vapor_troca = null
+	if _sobreposicao_retrato != null and is_instance_valid(_sobreposicao_retrato):
+		_sobreposicao_retrato.queue_free()
+	_sobreposicao_retrato = null
+	_material_troca = null
+
+
+func _limpar_efeitos_troca() -> void:
+	if _sobreposicao_retrato != null and is_instance_valid(_sobreposicao_retrato):
+		_sobreposicao_retrato.queue_free()
+	if _vapor_troca != null and is_instance_valid(_vapor_troca):
+		_vapor_troca.queue_free()
+	_sobreposicao_retrato = null
+	_vapor_troca = null
+	_material_troca = null
+
+
+## Área do quadro onde a imagem aparece de fato (STRETCH_KEEP_ASPECT_CENTERED).
+func _area_imagem() -> Rect2:
+	var quadro := Rect2(Vector2.ZERO, TAMANHO_RETRATO)
+	var tex: Texture2D = _imagem_retrato.texture if _imagem_retrato != null else null
+	if tex == null:
+		return quadro
+	var escala := minf(quadro.size.x / tex.get_width(), quadro.size.y / tex.get_height())
+	var tamanho := Vector2(tex.get_width(), tex.get_height()) * escala
+	return Rect2((quadro.size - tamanho) * 0.5, tamanho)
+
+
+func _criar_vapor() -> CPUParticles2D:
+	var area := _area_imagem()
+	var vapor := CPUParticles2D.new()
+	vapor.emitting = true
+	vapor.amount = 30
+	vapor.lifetime = 0.9
+	vapor.one_shot = false
+	vapor.local_coords = false
+	vapor.direction = Vector2(0, -1)
+	vapor.spread = 40.0
+	vapor.gravity = Vector2(0, -25)
+	vapor.initial_velocity_min = 8.0
+	vapor.initial_velocity_max = 36.0
+	vapor.scale_amount_min = 3.0
+	vapor.scale_amount_max = 9.0
+	vapor.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	vapor.emission_rect_extents = Vector2(area.size.x * 0.5, 4.0)
+	var degrade := Gradient.new()
+	degrade.set_color(0, COR_VAPOR)
+	degrade.set_color(1, Color(COR_VAPOR.r, COR_VAPOR.g, COR_VAPOR.b, 0.0))
+	vapor.color_ramp = degrade
+	return vapor
+
+
+func _criar_shader_troca() -> Shader:
+	var shader := Shader.new()
+	shader.code = """
+shader_type canvas_item;
+uniform float progress : hint_range(0.0, 1.0) = 0.0;
+uniform vec4 brass_color : source_color = vec4(0.79, 0.64, 0.29, 1.0);
+uniform float edge_width : hint_range(0.0, 0.2) = 0.04;
+
+void fragment() {
+	vec4 tex = texture(TEXTURE, UV);
+	if (UV.y < progress) {
+		discard;
+	}
+	float edge = (1.0 - smoothstep(0.0, edge_width, UV.y - progress)) * step(0.01, tex.a);
+	COLOR = vec4(mix(tex.rgb, brass_color.rgb, edge * 0.9), tex.a);
+}
+"""
+	return shader
 
 
 ## Ficha à direita, no estilo do BG3: nome, espécie, classe, background, atributos, PV e perícias.
