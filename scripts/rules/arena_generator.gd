@@ -46,14 +46,15 @@ static func pools_para(catalogo: Dictionary, tipo: String) -> Dictionary:
 
 ## Gera um layout válido e diferente de todos em `historico` (lista de assinaturas).
 ## Mesma semente e mesmo histórico sempre dão o mesmo resultado. Devolve {} se não achar.
-static func gerar(catalogo: Dictionary, tipo: String, semente: int, historico: Array = []) -> Dictionary:
+## `agrupamento` é quantos hexes de campo vizinhos recebem o mesmo tile (1 = sem agrupar).
+static func gerar(catalogo: Dictionary, tipo: String, semente: int, historico: Array = [], agrupamento: int = 1) -> Dictionary:
 	var pools := pools_para(catalogo, tipo)
 	if pools.is_empty():
 		return {}
 	for tentativa in range(TENTATIVAS_MAX):
 		var rng := RandomNumberGenerator.new()
 		rng.seed = semente * 1000 + tentativa
-		var layout := _montar(semente, pools, rng)
+		var layout := _montar(semente, pools, rng, agrupamento)
 		if not valido(layout):
 			continue
 		if historico.has(layout["assinatura"]):
@@ -143,7 +144,7 @@ static func assinatura_de(layout: Dictionary) -> String:
 	return ";".join(partes)
 
 
-static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
+static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator, agrupamento: int) -> Dictionary:
 	var x0 := rng.randi_range(3, LARGURA - 3 - LARGURA_PISTA)
 	var trilho_x := -1
 	var trilho := ""
@@ -172,6 +173,7 @@ static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator)
 			tiles[i] = _escolher(pools[papel], rng)
 			if x == trilho_x:
 				tiles[i] = trilho
+	_agrupar_campo(papeis, tiles, pools, agrupamento, rng)
 
 	var props: Array = []
 	for x in range(1, LARGURA - 1):
@@ -220,6 +222,37 @@ static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator)
 	}
 	layout["assinatura"] = assinatura_de(layout)
 	return layout
+
+
+## Junta hexes de campo vizinhos num grupo de até `agrupamento` hexes com o mesmo tile.
+static func _agrupar_campo(papeis: Array, tiles: Array, pools: Dictionary, agrupamento: int, rng: RandomNumberGenerator) -> void:
+	if agrupamento <= 1:
+		return
+	var campo: Array[Vector2i] = []
+	for y in range(ALTURA):
+		for x in range(LARGURA):
+			if papeis[_indice(x, y)] == "campo":
+				campo.append(Vector2i(x, y))
+	_embaralhar(campo, rng)
+	var visitados: Dictionary = {}
+	for inicio in campo:
+		if visitados.has(inicio):
+			continue
+		var tile := _escolher(pools["campo"], rng)
+		var grupo: Array[Vector2i] = [inicio]
+		var fila: Array[Vector2i] = [inicio]
+		visitados[inicio] = true
+		while grupo.size() < agrupamento and not fila.is_empty():
+			var atual: Vector2i = fila.pop_front()
+			for v in vizinhos(atual):
+				if grupo.size() >= agrupamento:
+					break
+				if papeis[_indice(v.x, v.y)] == "campo" and not visitados.has(v):
+					visitados[v] = true
+					grupo.append(v)
+					fila.append(v)
+		for c in grupo:
+			tiles[_indice(c.x, c.y)] = tile
 
 
 static func _prop(x: int, y: int, tipo: String, pools: Dictionary, rng: RandomNumberGenerator) -> Dictionary:

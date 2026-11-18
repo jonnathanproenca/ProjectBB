@@ -15,6 +15,11 @@ const MAX_LEVEL: int = 5
 ## segue o SRD 5.2 / PHB).
 const MULTICLASS_ENABLED: bool = true
 
+## Arenas: quantos hexes de campo vizinhos recebem o mesmo tile (1 = sem agrupar).
+## Agrupar deixa blocos contínuos, como um trecho de terra amarela, e reduz a sensação de bagunça.
+const ARENA_AGRUPAMENTO_PADRAO: int = 3
+const ARENA_AGRUPAMENTO_MAX: int = 6
+
 ## Versão da regra de referência.
 const RULESET: String = "SRD 5.2"
 

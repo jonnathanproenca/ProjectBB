@@ -1,6 +1,6 @@
 class_name ArenaTeste
 extends Control
-## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; Esc volta ao mundo.
+## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; + e - mudam o agrupamento de campo; Esc volta ao mundo.
 ## Regra: scripts/rules/arena_generator.gd. Assets: manifesto gerado por tools/gerar_manifesto_arenas.py.
 
 const MUNDO_SCENE: String = "res://scenes/mundo.tscn"
@@ -23,6 +23,7 @@ var _semente: int = 0
 var _texturas: Dictionary = {}
 var _rotulo: Label = null
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _agrupamento: int = GameConfig.ARENA_AGRUPAMENTO_PADRAO
 
 
 func _ready() -> void:
@@ -47,7 +48,7 @@ func _nova_arena() -> void:
 	var tentativas := 0
 	while layout.is_empty() and tentativas < TENTATIVAS_SEMENTE:
 		_semente = _rng.randi() & 0x7fffffff
-		layout = ArenaGenerator.gerar(_catalogo, TIPO, _semente, _historico)
+		layout = ArenaGenerator.gerar(_catalogo, TIPO, _semente, _historico, _agrupamento)
 		tentativas += 1
 	if layout.is_empty():
 		_rotulo.text = "Não gerou nenhum mapa. Confira o manifesto: falta tile ou cobertura de algum papel."
@@ -55,7 +56,7 @@ func _nova_arena() -> void:
 		return
 	_layout = layout
 	_historico = ArenaGenerator.registrar(_historico, layout, HISTORICO_LIMITE)
-	_rotulo.text = "Semente %d  |  N ou Espaço: outra arena  |  Esc: voltar" % _semente
+	_rotulo.text = "Semente %d  |  Agrupamento %d (+/-)  |  N ou Espaço: outra arena  |  Esc: voltar" % [_semente, _agrupamento]
 	queue_redraw()
 
 
@@ -64,6 +65,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		return
 	var tecla := event as InputEventKey
 	if tecla.keycode == KEY_N or tecla.keycode == KEY_SPACE:
+		_nova_arena()
+		get_viewport().set_input_as_handled()
+	elif tecla.keycode == KEY_EQUAL or tecla.keycode == KEY_PLUS or tecla.keycode == KEY_KP_ADD:
+		_agrupamento = mini(_agrupamento + 1, GameConfig.ARENA_AGRUPAMENTO_MAX)
+		_nova_arena()
+		get_viewport().set_input_as_handled()
+	elif tecla.keycode == KEY_MINUS or tecla.keycode == KEY_KP_SUBTRACT:
+		_agrupamento = maxi(_agrupamento - 1, 1)
 		_nova_arena()
 		get_viewport().set_input_as_handled()
 	elif tecla.keycode == KEY_ESCAPE:

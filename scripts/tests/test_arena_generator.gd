@@ -75,6 +75,13 @@ func _initialize() -> void:
 				continuo = false
 		_check(continuo, "trilho contínuo de cima a baixo (semente %d)" % semente)
 
+	var pares_sem := 0
+	var pares_com := 0
+	for semente in range(1, 21):
+		pares_sem += _pares_iguais(ArenaGenerator.gerar(cat, "estrada", semente, [], 1))
+		pares_com += _pares_iguais(ArenaGenerator.gerar(cat, "estrada", semente, [], 3))
+	_check(pares_com > pares_sem, "agrupamento 3 aumenta pares vizinhos de campo com o mesmo tile (%d > %d)" % [pares_com, pares_sem])
+
 	_check(ArenaGenerator._perto_da_pista(4, 5), "coluna vizinha à pista conta como perto")
 	_check(not ArenaGenerator._perto_da_pista(2, 5), "coluna longe da pista não conta")
 	_check(not ArenaGenerator._perto_da_pista(5, 5), "dentro da pista não conta")
@@ -90,6 +97,24 @@ func _initialize() -> void:
 	else:
 		print("FALHAS: ", _failures)
 		quit(1)
+
+
+## Conta pares de hexes de campo vizinhos com o mesmo tile.
+func _pares_iguais(layout: Dictionary) -> int:
+	if layout.is_empty():
+		return 0
+	var tiles: Array = layout["tiles"]
+	var papeis: Array = layout["papeis"]
+	var pares := 0
+	for y in range(ArenaGenerator.ALTURA):
+		for x in range(ArenaGenerator.LARGURA):
+			var p := Vector2i(x, y)
+			if papeis[ArenaGenerator._indice(x, y)] != "campo":
+				continue
+			for v in ArenaGenerator.vizinhos(p):
+				if papeis[ArenaGenerator._indice(v.x, v.y)] == "campo" and tiles[ArenaGenerator._indice(v.x, v.y)] == tiles[ArenaGenerator._indice(x, y)]:
+					pares += 1
+	return pares / 2
 
 
 func _catalogo_falso() -> Dictionary:
