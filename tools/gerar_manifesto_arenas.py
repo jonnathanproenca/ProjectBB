@@ -28,7 +28,16 @@ TILES_REPO_ESTRADA = {
 # Pastas novas (Flow / Pixel Lab) da arena de estrada, classificadas pelo nome.
 PASTAS_TILES_NOVOS_ESTRADA = [ARENAS / "estrada" / "tiles_flow"]
 PASTAS_PROPS_NOVOS = {
-    "estrada": ["estrada_antiga", "acampamento", "patio_poco"],
+    "estrada": [
+        "estrada_antiga",
+        "acampamento",
+        "patio_poco",
+        "ruina_pedra",
+        "taverna_antiga",
+        "floresta_caverna",
+        "igreja_cemiterio",
+        "beco_urbano",
+    ],
 }
 
 PALAVRAS_TILE = [
