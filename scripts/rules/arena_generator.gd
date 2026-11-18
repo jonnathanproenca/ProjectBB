@@ -6,7 +6,9 @@ extends RefCounted
 ##
 ## Grade: 12 x 9 hexes flat-top. Colunas ímpares ficam meio hex abaixo das pares.
 ## Zonas: borda (muro externo), pista (duas colunas N-S), centro (dois hexes no meio
-## da pista), campo (resto). Coberturas ficam no campo, perto da pista (até
+## da pista), campo (resto). Se houver papel "trilho", a coluna da pista de
+## entrada vira uma linha contínua de trilho, de cima a baixo, e a pista fica
+## a 2 hexes da borda (x0 = 2 ou LARGURA - 2 - LARGURA_PISTA). Coberturas ficam no campo, perto da pista (até
 ## DISTANCIA_PISTA_MAX colunas), alternadas entre os dois lados. Assim a pista lê como eixo.
 
 const LARGURA: int = 12
@@ -143,6 +145,12 @@ static func assinatura_de(layout: Dictionary) -> String:
 
 static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
 	var x0 := rng.randi_range(3, LARGURA - 3 - LARGURA_PISTA)
+	var trilho_x := -1
+	var trilho := ""
+	if pools.has("trilho"):
+		x0 = [2, LARGURA - 2 - LARGURA_PISTA][rng.randi_range(0, 1)]
+		trilho_x = x0
+		trilho = _escolher(pools["trilho"], rng)
 	var yc := int(ALTURA / 2.0)
 	var papeis: Array = []
 	var tiles: Array = []
@@ -162,6 +170,8 @@ static func _montar(semente: int, pools: Dictionary, rng: RandomNumberGenerator)
 			var i := _indice(x, y)
 			papeis[i] = papel
 			tiles[i] = _escolher(pools[papel], rng)
+			if x == trilho_x:
+				tiles[i] = trilho
 
 	var props: Array = []
 	for x in range(1, LARGURA - 1):

@@ -60,6 +60,21 @@ func _initialize() -> void:
 	_check(simetria_ok, "vizinhança é simétrica e de distância 1")
 	_check(ArenaGenerator.vizinhos(Vector2i(1, 1)).has(Vector2i(2, 2)), "coluna ímpar desce meio hex para o vizinho")
 
+	var com_trilho := _catalogo_falso()
+	(com_trilho["tiles"] as Array).append({"arquivo": "trilho_a", "tipo_arena": "estrada", "papel": "trilho"})
+	for semente in range(1, 21):
+		var t := ArenaGenerator.gerar(com_trilho, "estrada", semente)
+		if t.is_empty():
+			_check(false, "com trilho ainda gera layout (semente %d)" % semente)
+			continue
+		var x_trilho: int = t["x0"]
+		_check(x_trilho == 2 or x_trilho == ArenaGenerator.LARGURA - 2 - ArenaGenerator.LARGURA_PISTA, "trilho fica a 2 hexes da borda (semente %d)" % semente)
+		var continuo := true
+		for y in range(ArenaGenerator.ALTURA):
+			if t["tiles"][y * ArenaGenerator.LARGURA + x_trilho] != "trilho_a":
+				continuo = false
+		_check(continuo, "trilho contínuo de cima a baixo (semente %d)" % semente)
+
 	_check(ArenaGenerator._perto_da_pista(4, 5), "coluna vizinha à pista conta como perto")
 	_check(not ArenaGenerator._perto_da_pista(2, 5), "coluna longe da pista não conta")
 	_check(not ArenaGenerator._perto_da_pista(5, 5), "dentro da pista não conta")

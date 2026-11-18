@@ -52,6 +52,10 @@ TILES_ESTRADA = {
     ],
 }
 
+# Trilho de trem: vira uma linha contínua de cima a baixo na coluna da pista.
+# Asset já commitado no repositório, fora da pasta do Flow.
+TILES_TRILHO = [ARENAS / "tiles" / "tile_03_trilha_carroca_sulcos.png"]
+
 # Props que ficam no chão e têm cara de cobertura baixa. Tipo pelo nome (cerca, lampião, cobertura).
 PROPS_ESTRADA = {
     "prop_18_carroca_tombada", "prop_20_pilha_barris", "prop_21_poste_lampiao_apagado",
@@ -98,6 +102,11 @@ def main() -> None:
             if not arq.exists():
                 raise SystemExit(f"tile ausente: {arq.relative_to(RAIZ)}")
             tiles.append(entrada(arq, "estrada", papel))
+
+    for arq in TILES_TRILHO:
+        if not arq.exists():
+            raise SystemExit(f"trilho ausente: {arq.relative_to(RAIZ)}")
+        tiles.append(entrada(arq, "estrada", "trilho"))
 
     candidatos = [PASTA_TILES.parent.parent / "props" / f"{n}.png" for n in PROPS_ESTRADA]
     candidatos += [PASTA_PROPS / tema / f"{n}.png" for tema in TEMAS_PROPS for n in PROPS_ESTRADA]
