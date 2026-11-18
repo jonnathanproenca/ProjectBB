@@ -190,7 +190,9 @@ func _criar_quadro_retrato() -> void:
 	_quadro_retrato.custom_minimum_size = TAMANHO_RETRATO
 	_quadro_retrato.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	_quadro_retrato.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_quadro_retrato.clip_contents = true
+	# Sem corte: a figura pode passar do quadro e ficar sobre os painéis vizinhos.
+	_quadro_retrato.clip_contents = false
+	_quadro_retrato.z_index = 2
 	_quadro_retrato.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_imagem_retrato = _imagem_cheia()
 	_quadro_retrato.add_child(_imagem_retrato)
