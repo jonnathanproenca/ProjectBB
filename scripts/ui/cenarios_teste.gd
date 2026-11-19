@@ -18,6 +18,7 @@ const PASSO_ZOOM: float = 2.0
 const PITCH_MINIMO: float = -1.4
 const PITCH_MAXIMO: float = 0.2
 const LARGURA_CAMINHO: float = 1.4
+const LARGURA_MAXIMA_TUMBA: float = 1.6
 const QUANTIDADE_TUFOS: int = 2400
 const CANDIDATOS_TUFOS: int = 9000
 ## Caminho de terra do portão do cemitério até a frente da casa, contornando a casa pelo lado leste (x, z).
@@ -32,6 +33,7 @@ var _raiz_cenario: Node3D = null
 var _indice: int = 0
 var _yaw: float = 0.0
 var _pitch: float = 0.0
+var _girando: bool = false
 
 
 func _ready() -> void:
@@ -49,13 +51,15 @@ func _unhandled_input(evento: InputEvent) -> void:
 			elif tecla.keycode == KEY_ESCAPE:
 				get_tree().change_scene_to_file(ARENA_SCENE)
 	elif evento is InputEventMouseMotion:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		if _girando:
 			var movimento: InputEventMouseMotion = evento as InputEventMouseMotion
 			_yaw -= movimento.relative.x * SENSIBILIDADE_MOUSE
 			_pitch = clampf(_pitch - movimento.relative.y * SENSIBILIDADE_MOUSE, PITCH_MINIMO, PITCH_MAXIMO)
 			_camera.rotation = Vector3(_pitch, _yaw, 0.0)
 	elif evento is InputEventMouseButton:
 		var botao: InputEventMouseButton = evento as InputEventMouseButton
+		if botao.button_index == MOUSE_BUTTON_RIGHT:
+			_girando = botao.pressed
 		if botao.pressed:
 			if botao.button_index == MOUSE_BUTTON_WHEEL_UP:
 				_camera.position += -_camera.global_basis.z * PASSO_ZOOM
@@ -105,7 +109,8 @@ func _mostrar(i: int) -> void:
 		var pos: Vector3 = dados["pos"]
 		var rot: float = float(dados["rot"])
 		var altura: float = float(dados["altura"])
-		_colocar_peca(_raiz_cenario, caminho, pos, rot, Vector3.ONE, altura)
+		var largura_max: float = LARGURA_MAXIMA_TUMBA if str(dados["arquivo"]).begins_with("grave_") else 0.0
+		_colocar_peca(_raiz_cenario, caminho, pos, rot, Vector3.ONE, altura, largura_max)
 	if i == 2:
 		_montar_muro(_raiz_cenario)
 
@@ -199,7 +204,8 @@ func _montar_casa(raiz: Node3D) -> void:
 
 
 ## Coloca um modelo. Se altura > 0, escala o modelo para essa altura e apoia a base no chão.
-func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escala: Vector3, altura: float) -> Node3D:
+## largura_maxima > 0 limita o maior lado da base, para peças largas (lápides chatas) não ficarem enormes.
+func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escala: Vector3, altura: float, largura_maxima: float = 0.0) -> Node3D:
 	var cena: PackedScene = load(caminho) as PackedScene
 	if cena == null:
 		push_warning("Modelo não encontrado: %s" % caminho)
@@ -210,6 +216,8 @@ func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escal
 	if altura > 0.0:
 		var caixa: AABB = _aabb_de(no)
 		fator = altura / maxf(caixa.size.y, 0.001)
+		if largura_maxima > 0.0:
+			fator = minf(fator, largura_maxima / maxf(maxf(caixa.size.x, caixa.size.z), 0.001))
 		deslocamento_y = -caixa.position.y * fator
 	no.scale = escala * fator
 	no.rotation_degrees = Vector3(0.0, rot, 0.0)
@@ -251,16 +259,29 @@ func _montar_muro(raiz: Node3D) -> void:
 	var comprimento_peca: float = 2.36
 	var comprimento_segmento: float = 2.0
 	var escala_x: float = comprimento_segmento / comprimento_peca / (altura_muro / 1.2)
-	var trechos: Array = [[-12.0, -2.0], [2.0, 12.0]]
-	for trecho in trechos:
-		var inicio: float = trecho[0]
-		var fim: float = trecho[1]
-		var x: float = inicio
-		while x < fim - 0.01:
+	## Pontas (perto do portão e das quinas) com a peça irregular; miolo contínuo, em bloco.
+	## Cada lado: peça de 4 m, miolo de 4 m, peça de 2 m junto ao portão.
+	var pontas: Array = [[-12.0, -8.0], [-4.0, -2.0], [2.0, 4.0], [8.0, 12.0]]
+	for ponta in pontas:
+		var x: float = ponta[0]
+		while x < ponta[1] - 0.01:
 			var no: Node3D = _colocar_peca(raiz, caminho, Vector3(x + comprimento_segmento / 2.0, 0.0, 11.5), 0.0, Vector3(escala_x, 1.0, 1.0), altura_muro)
 			if no != null:
 				_aplicar_material(no, material)
 			x += comprimento_segmento
+	for miolo in [[-8.0, -4.0], [4.0, 8.0]]:
+		_colocar_bloco_muro(raiz, miolo[0], miolo[1], altura_muro - 0.2, material)
+
+
+## Trecho contínuo de muro em bloco, do mesmo material de pedra das pontas.
+func _colocar_bloco_muro(raiz: Node3D, inicio: float, fim: float, altura: float, material: Material) -> void:
+	var malha: BoxMesh = BoxMesh.new()
+	malha.size = Vector3(fim - inicio, altura, 0.5)
+	var bloco: MeshInstance3D = MeshInstance3D.new()
+	bloco.mesh = malha
+	bloco.material_override = material
+	bloco.position = Vector3((inicio + fim) / 2.0, altura / 2.0, 11.5)
+	raiz.add_child(bloco)
 
 
 ## Aplica um material a todas as malhas de um nó e dos seus filhos.
@@ -325,10 +346,21 @@ func _material_grama() -> StandardMaterial3D:
 	return material
 
 
+## Terra batida: grãos mais finos e contrastados, com relevo leve para parecer pisoteada.
 func _material_caminho() -> StandardMaterial3D:
-	var textura: NoiseTexture2D = _textura_ruido(_ruido_fractal(0.12, 3), Color(0.34, 0.25, 0.16), Color(0.52, 0.41, 0.28))
+	var ruido: FastNoiseLite = _ruido_fractal(0.22, 4)
+	var textura: NoiseTexture2D = _textura_ruido(ruido, Color(0.30, 0.21, 0.13), Color(0.60, 0.47, 0.31))
+	var relevo: NoiseTexture2D = NoiseTexture2D.new()
+	relevo.noise = ruido
+	relevo.width = 256
+	relevo.height = 256
+	relevo.seamless = true
+	relevo.as_normal_map = true
+	relevo.bump_strength = 3.0
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_texture = textura
+	material.normal_enabled = true
+	material.normal_texture = relevo
 	material.roughness = 1.0
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	return material

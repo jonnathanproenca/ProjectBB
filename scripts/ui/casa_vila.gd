@@ -70,15 +70,34 @@ static func criar_telhado() -> MeshInstance3D:
 	for v in [a, f, d, b, c, e]:
 		var normal_empena: Vector3 = Vector3(-1.0, 0.0, 0.0) if v.x < 0.0 else Vector3(1.0, 0.0, 0.0)
 		_vertice_telhado(st, v, normal_empena)
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_texture = load("res://assets/vila_3d/T_WoodTrim_BaseColor.png") as Texture2D
-	material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	material.roughness = 0.9
 	var telhado: MeshInstance3D = MeshInstance3D.new()
 	telhado.mesh = st.commit()
-	telhado.material_override = material
+	telhado.material_override = _material_telhado()
 	telhado.name = "Telhado"
 	return telhado
+
+
+## Madeira em um tom só, com veio suave por ruído. Não usa o atlas de acabamento (que mistura cores).
+static func _material_telhado() -> StandardMaterial3D:
+	var ruido: FastNoiseLite = FastNoiseLite.new()
+	ruido.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	ruido.fractal_type = FastNoiseLite.FRACTAL_FBM
+	ruido.fractal_octaves = 3
+	ruido.frequency = 0.05
+	var degrade: Gradient = Gradient.new()
+	degrade.set_color(0, Color(0.36, 0.22, 0.12))
+	degrade.set_color(1, Color(0.49, 0.32, 0.18))
+	var textura: NoiseTexture2D = NoiseTexture2D.new()
+	textura.noise = ruido
+	textura.color_ramp = degrade
+	textura.width = 512
+	textura.height = 512
+	textura.seamless = true
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_texture = textura
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.roughness = 0.9
+	return material
 
 
 static func _vertice_telhado(st: SurfaceTool, v: Vector3, normal: Vector3) -> void:
