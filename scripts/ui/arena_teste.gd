@@ -1,6 +1,7 @@
 class_name ArenaTeste
 extends Control
-## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; + e - mudam o agrupamento de campo; M troca o estilo (V1 ou V2); Esc volta ao mundo.
+## Tela de teste das arenas procedurais. N ou Espaço gera outro mapa; + e - mudam o agrupamento de campo; M troca o estilo (V1, V2 ou V3); Esc volta ao mundo.
+## V3 (Blender 3D) abre a cena dos cenários 3D (scenes/cenarios_teste.tscn), que tem os próprios botões.
 ## Regra: scripts/rules/arena_generator.gd. Assets: manifestos gerados por tools/gerar_manifesto_arenas.py e tools/gerar_manifesto_arenas_v2.py.
 
 const MUNDO_SCENE: String = "res://scenes/mundo.tscn"
@@ -16,7 +17,9 @@ const COR_FALTA: Color = Color(1.0, 0.0, 1.0, 0.5)
 const HISTORICO_LIMITE: int = 20
 const TENTATIVAS_SEMENTE: int = 10
 const MANIFESTOS: Array[String] = [ArenaCatalogo.CAMINHO_PADRAO, "res://assets/arenas/manifesto_v2.json"]
-const NOMES_ESTILOS: Array[String] = ["V1 (Flow)", "V2 (Blender)"]
+const NOMES_ESTILOS: Array[String] = ["V1 (Flow)", "V2 (Blender)", "V3 (Blender 3D)"]
+const ESTILO_3D: int = 2
+const CENARIOS_3D_SCENE: String = "res://scenes/cenarios_teste.tscn"
 
 var _estilo: int = 0
 var _catalogo: Dictionary = {}
@@ -83,11 +86,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_nova_arena()
 		get_viewport().set_input_as_handled()
 	elif tecla.keycode == KEY_M:
-		_estilo = (_estilo + 1) % MANIFESTOS.size()
+		_estilo = (_estilo + 1) % NOMES_ESTILOS.size()
+		get_viewport().set_input_as_handled()
+		if _estilo == ESTILO_3D:
+			get_tree().change_scene_to_file(CENARIOS_3D_SCENE)
+			return
 		_recarregar_catalogo()
 		_historico.clear()
 		_nova_arena()
-		get_viewport().set_input_as_handled()
 	elif tecla.keycode == KEY_ESCAPE:
 		get_tree().change_scene_to_file(MUNDO_SCENE)
 

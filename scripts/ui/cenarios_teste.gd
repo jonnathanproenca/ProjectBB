@@ -9,6 +9,7 @@ const PASTA_CENARIO: String = "res://assets/cenario_teste/"
 const PASTA_VILA: String = "res://assets/vila_3d/"
 const TAMANHO_CHAO: float = 60.0
 const TOTAL_CENARIOS: int = 3
+const ARENA_SCENE: String = "res://scenes/arena_teste.tscn"
 
 var _camera: Camera3D
 var _botao: Button
@@ -25,8 +26,11 @@ func _ready() -> void:
 func _unhandled_input(evento: InputEvent) -> void:
 	if evento is InputEventKey:
 		var tecla: InputEventKey = evento as InputEventKey
-		if tecla.pressed and not tecla.echo and tecla.keycode == KEY_N:
-			_proximo()
+		if tecla.pressed and not tecla.echo:
+			if tecla.keycode == KEY_N:
+				_proximo()
+			elif tecla.keycode == KEY_ESCAPE:
+				get_tree().change_scene_to_file(ARENA_SCENE)
 
 
 func _proximo() -> void:
