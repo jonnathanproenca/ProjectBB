@@ -17,6 +17,14 @@ const SENSIBILIDADE_MOUSE: float = 0.005
 const PASSO_ZOOM: float = 2.0
 const PITCH_MINIMO: float = -1.4
 const PITCH_MAXIMO: float = 0.2
+const LARGURA_CAMINHO: float = 1.4
+const QUANTIDADE_TUFOS: int = 2400
+const CANDIDATOS_TUFOS: int = 9000
+## Caminho de terra do portão do cemitério até a frente da casa, contornando a casa pelo lado leste (x, z).
+const PONTOS_CAMINHO: Array[Vector2] = [
+	Vector2(0.0, 13.0), Vector2(0.0, 8.0), Vector2(0.5, 4.5), Vector2(3.5, 3.2), Vector2(6.5, 2.0),
+	Vector2(6.5, -3.2), Vector2(2.0, -4.2), Vector2(-3.0, -4.0), Vector2(-3.0, -2.6),
+]
 
 var _camera: Camera3D
 var _botao: Button
@@ -262,34 +270,194 @@ func _aplicar_material(no: Node, material: Material) -> void:
 		_aplicar_material(filho, material)
 
 
-## Pedra procedural: ruído celular como cor e como relevo (normal map). Sem download.
+## Pedra procedural: ruído fractal suave como cor e relevo leve. Triplanar, para não esticar sobre o FBX.
 func _material_pedra() -> StandardMaterial3D:
-	var ruido: FastNoiseLite = FastNoiseLite.new()
-	ruido.noise_type = FastNoiseLite.TYPE_CELLULAR
-	ruido.frequency = 0.08
-
-	var cor: NoiseTexture2D = NoiseTexture2D.new()
-	cor.noise = ruido
-	cor.width = 256
-	cor.height = 256
-	cor.seamless = true
-
+	var ruido: FastNoiseLite = _ruido_fractal(0.06, 4)
+	var cor: NoiseTexture2D = _textura_ruido(ruido, Color(0.40, 0.38, 0.35), Color(0.68, 0.65, 0.60))
 	var relevo: NoiseTexture2D = NoiseTexture2D.new()
 	relevo.noise = ruido
 	relevo.width = 256
 	relevo.height = 256
 	relevo.seamless = true
 	relevo.as_normal_map = true
-	relevo.bump_strength = 6.0
+	relevo.bump_strength = 2.0
 
 	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_color = Color(0.56, 0.54, 0.5)
 	material.albedo_texture = cor
 	material.normal_enabled = true
 	material.normal_texture = relevo
 	material.roughness = 0.95
-	material.uv1_scale = Vector3(2.0, 1.0, 2.0)
+	material.uv1_triplanar = true
+	material.uv1_scale = Vector3(0.4, 0.4, 0.4)
 	return material
+
+
+func _ruido_fractal(frequencia: float, oitavas: int) -> FastNoiseLite:
+	var ruido: FastNoiseLite = FastNoiseLite.new()
+	ruido.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	ruido.fractal_type = FastNoiseLite.FRACTAL_FBM
+	ruido.fractal_octaves = oitavas
+	ruido.frequency = frequencia
+	return ruido
+
+
+## Textura seamless em tons entre duas cores, gerada do ruído.
+func _textura_ruido(ruido: FastNoiseLite, cor_escura: Color, cor_clara: Color) -> NoiseTexture2D:
+	var degrade: Gradient = Gradient.new()
+	degrade.set_color(0, cor_escura)
+	degrade.set_color(1, cor_clara)
+	var textura: NoiseTexture2D = NoiseTexture2D.new()
+	textura.noise = ruido
+	textura.color_ramp = degrade
+	textura.width = 256
+	textura.height = 256
+	textura.seamless = true
+	return textura
+
+
+func _material_grama() -> StandardMaterial3D:
+	var textura: NoiseTexture2D = _textura_ruido(_ruido_fractal(0.035, 5), Color(0.20, 0.34, 0.13), Color(0.38, 0.56, 0.22))
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_texture = textura
+	material.roughness = 1.0
+	material.uv1_scale = Vector3(12.0, 12.0, 1.0)
+	return material
+
+
+func _material_caminho() -> StandardMaterial3D:
+	var textura: NoiseTexture2D = _textura_ruido(_ruido_fractal(0.12, 3), Color(0.34, 0.25, 0.16), Color(0.52, 0.41, 0.28))
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_texture = textura
+	material.roughness = 1.0
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return material
+
+
+func _material_tufo() -> StandardMaterial3D:
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.vertex_color_use_as_albedo = true
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.roughness = 1.0
+	return material
+
+
+## Chão: grama, caminho de terra batida e tufos de grama espalhados fora do caminho e da casa.
+func _montar_chao() -> void:
+	var chao: MeshInstance3D = MeshInstance3D.new()
+	var plano: PlaneMesh = PlaneMesh.new()
+	plano.size = Vector2(TAMANHO_CHAO, TAMANHO_CHAO)
+	chao.mesh = plano
+	chao.material_override = _material_grama()
+	add_child(chao)
+
+	var caminho: MeshInstance3D = MeshInstance3D.new()
+	caminho.mesh = _malha_caminho()
+	caminho.material_override = _material_caminho()
+	add_child(caminho)
+
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = 42
+	var pontos: Array[Vector3] = []
+	var tentativas: int = 0
+	while pontos.size() < QUANTIDADE_TUFOS and tentativas < CANDIDATOS_TUFOS:
+		tentativas += 1
+		var p: Vector2 = Vector2(rng.randf_range(-TAMANHO_CHAO / 2.0, TAMANHO_CHAO / 2.0), rng.randf_range(-TAMANHO_CHAO / 2.0, TAMANHO_CHAO / 2.0))
+		if _bloqueado_tufo(p):
+			continue
+		pontos.append(Vector3(p.x, 0.0, p.y))
+
+	var mm: MultiMesh = MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.use_colors = true
+	mm.mesh = _malha_tufo()
+	mm.instance_count = pontos.size()
+	for i in range(pontos.size()):
+		var base: Basis = Basis.from_euler(Vector3(0.0, rng.randf() * TAU, 0.0)).scaled(Vector3.ONE * rng.randf_range(0.8, 1.4))
+		mm.set_instance_transform(i, Transform3D(base, pontos[i]))
+		var tom: float = rng.randf_range(0.85, 1.1)
+		mm.set_instance_color(i, Color(tom, tom, tom))
+
+	var tufos: MultiMeshInstance3D = MultiMeshInstance3D.new()
+	tufos.multimesh = mm
+	tufos.material_override = _material_tufo()
+	add_child(tufos)
+
+
+## Faixa de terra batida ao longo dos pontos do caminho, com disco em cada curva para não ter buraco.
+func _malha_caminho() -> ArrayMesh:
+	var st: SurfaceTool = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var meia: float = LARGURA_CAMINHO / 2.0
+	for k in range(PONTOS_CAMINHO.size() - 1):
+		var a: Vector2 = PONTOS_CAMINHO[k]
+		var b: Vector2 = PONTOS_CAMINHO[k + 1]
+		var d: Vector2 = (b - a).normalized()
+		var p: Vector2 = Vector2(-d.y, d.x) * meia
+		_vertice_caminho(st, a - p)
+		_vertice_caminho(st, a + p)
+		_vertice_caminho(st, b + p)
+		_vertice_caminho(st, a - p)
+		_vertice_caminho(st, b + p)
+		_vertice_caminho(st, b - p)
+	for c in PONTOS_CAMINHO:
+		for s in range(12):
+			var ang0: float = TAU * float(s) / 12.0
+			var ang1: float = TAU * float(s + 1) / 12.0
+			_vertice_caminho(st, c)
+			_vertice_caminho(st, c + Vector2(cos(ang0), sin(ang0)) * meia)
+			_vertice_caminho(st, c + Vector2(cos(ang1), sin(ang1)) * meia)
+	st.generate_normals()
+	return st.commit()
+
+
+func _vertice_caminho(st: SurfaceTool, v: Vector2) -> void:
+	st.set_normal(Vector3.UP)
+	st.set_uv(Vector2(v.x / 3.0, v.y / 3.0))
+	st.add_vertex(Vector3(v.x, 0.02, v.y))
+
+
+## Cinco lâminas em forma de V por tufo, mais escuras na base e mais claras na ponta.
+func _malha_tufo() -> ArrayMesh:
+	var st: SurfaceTool = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = 7
+	var cor_base: Color = Color(0.16, 0.30, 0.10)
+	var cor_ponta: Color = Color(0.46, 0.66, 0.24)
+	for k in range(5):
+		var ang: float = TAU * float(k) / 5.0 + rng.randf_range(-0.3, 0.3)
+		var altura: float = rng.randf_range(0.28, 0.46)
+		var direcao: Vector3 = Vector3(sin(ang), 0.0, cos(ang))
+		var lateral: Vector3 = Vector3(cos(ang), 0.0, -sin(ang)) * 0.035
+		var ponta: Vector3 = direcao * 0.12 + Vector3(0.0, altura, 0.0)
+		st.set_color(cor_base)
+		st.add_vertex(-lateral)
+		st.set_color(cor_base)
+		st.add_vertex(lateral)
+		st.set_color(cor_ponta)
+		st.add_vertex(ponta)
+	st.generate_normals()
+	return st.commit()
+
+
+func _distancia_segmento(p: Vector2, a: Vector2, b: Vector2) -> float:
+	var ab: Vector2 = b - a
+	var t: float = clampf((p - a).dot(ab) / maxf(ab.length_squared(), 0.0001), 0.0, 1.0)
+	return p.distance_to(a + ab * t)
+
+
+func _distancia_caminho(p: Vector2) -> float:
+	var menor: float = INF
+	for k in range(PONTOS_CAMINHO.size() - 1):
+		menor = minf(menor, _distancia_segmento(p, PONTOS_CAMINHO[k], PONTOS_CAMINHO[k + 1]))
+	return menor
+
+
+## Fica fora dos tufos: o caminho, a área da casa e um pequeno afastamento.
+func _bloqueado_tufo(p: Vector2) -> bool:
+	if _distancia_caminho(p) < LARGURA_CAMINHO / 2.0 + 0.3:
+		return true
+	return absf(p.x) < 4.5 and absf(p.y) < 2.0
 
 
 func _aplicar_camera(i: int) -> void:
@@ -318,14 +486,7 @@ func _configurar_ambiente() -> void:
 	sol.rotation_degrees = Vector3(-50.0, -30.0, 0.0)
 	add_child(sol)
 
-	var chao: MeshInstance3D = MeshInstance3D.new()
-	var plano: PlaneMesh = PlaneMesh.new()
-	plano.size = Vector2(TAMANHO_CHAO, TAMANHO_CHAO)
-	chao.mesh = plano
-	var material_chao: StandardMaterial3D = StandardMaterial3D.new()
-	material_chao.albedo_color = Color(0.3, 0.45, 0.25)
-	chao.material_override = material_chao
-	add_child(chao)
+	_montar_chao()
 
 	_camera = Camera3D.new()
 	add_child(_camera)
