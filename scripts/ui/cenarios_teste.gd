@@ -2,6 +2,7 @@ class_name CenariosTeste
 extends Node3D
 ## Três opções de cenário para comparar: casa da vila + cemitério + árvores.
 ## Cenário 3 tem muro de pedra com a peça EA03_Fence_Cobble_01a (CC0, itch.io). Troque com o botão ou com a tecla N; Esc volta à arena.
+## Câmera livre: WASD anda, Q/E sobe e desce, Shift acelera, botão direito arrasta para girar, roda do mouse aproxima/afasta.
 ## Coordenadas em metros, Y para cima. Posições convertidas do teste no Blender (Godot z = -Blender y).
 ## Modelos de lápides e árvores: pacotes CC0 (polyy.ai), copiados para assets/cenario_teste/.
 
@@ -11,11 +12,18 @@ const TAMANHO_CHAO: float = 60.0
 const TOTAL_CENARIOS: int = 3
 const ARENA_SCENE: String = "res://scenes/arena_teste.tscn"
 const PASTA_MURO: String = "res://assets/cenario_teste/muro_pedra/"
+const VELOCIDADE_CAMERA: float = 12.0
+const SENSIBILIDADE_MOUSE: float = 0.005
+const PASSO_ZOOM: float = 2.0
+const PITCH_MINIMO: float = -1.4
+const PITCH_MAXIMO: float = 0.2
 
 var _camera: Camera3D
 var _botao: Button
 var _raiz_cenario: Node3D = null
 var _indice: int = 0
+var _yaw: float = 0.0
+var _pitch: float = 0.0
 
 
 func _ready() -> void:
@@ -32,6 +40,41 @@ func _unhandled_input(evento: InputEvent) -> void:
 				_proximo()
 			elif tecla.keycode == KEY_ESCAPE:
 				get_tree().change_scene_to_file(ARENA_SCENE)
+	elif evento is InputEventMouseMotion:
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+			var movimento: InputEventMouseMotion = evento as InputEventMouseMotion
+			_yaw -= movimento.relative.x * SENSIBILIDADE_MOUSE
+			_pitch = clampf(_pitch - movimento.relative.y * SENSIBILIDADE_MOUSE, PITCH_MINIMO, PITCH_MAXIMO)
+			_camera.rotation = Vector3(_pitch, _yaw, 0.0)
+	elif evento is InputEventMouseButton:
+		var botao: InputEventMouseButton = evento as InputEventMouseButton
+		if botao.pressed:
+			if botao.button_index == MOUSE_BUTTON_WHEEL_UP:
+				_camera.position += -_camera.global_basis.z * PASSO_ZOOM
+			elif botao.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				_camera.position -= -_camera.global_basis.z * PASSO_ZOOM
+
+
+## Movimento livre da câmera: WASD anda no plano, Q/E sobe e desce, Shift acelera.
+func _process(delta: float) -> void:
+	var frente: Vector3 = Vector3(-sin(_yaw), 0.0, -cos(_yaw))
+	var direita: Vector3 = Vector3(cos(_yaw), 0.0, -sin(_yaw))
+	var mov: Vector3 = Vector3.ZERO
+	if Input.is_key_pressed(KEY_W):
+		mov += frente
+	if Input.is_key_pressed(KEY_S):
+		mov -= frente
+	if Input.is_key_pressed(KEY_D):
+		mov += direita
+	if Input.is_key_pressed(KEY_A):
+		mov -= direita
+	if Input.is_key_pressed(KEY_E):
+		mov += Vector3.UP
+	if Input.is_key_pressed(KEY_Q):
+		mov -= Vector3.UP
+	if mov != Vector3.ZERO:
+		var velocidade: float = VELOCIDADE_CAMERA * (2.5 if Input.is_key_pressed(KEY_SHIFT) else 1.0)
+		_camera.position += mov.normalized() * velocidade * delta
 
 
 func _proximo() -> void:
@@ -256,6 +299,8 @@ func _aplicar_camera(i: int) -> void:
 	_camera.position = posicoes[i]
 	_camera.fov = campos[i]
 	_camera.look_at(alvos[i], Vector3.UP)
+	_yaw = _camera.rotation.y
+	_pitch = _camera.rotation.x
 
 
 func _configurar_ambiente() -> void:
