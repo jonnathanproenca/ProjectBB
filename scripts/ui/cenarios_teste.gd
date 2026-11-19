@@ -1,7 +1,7 @@
 class_name CenariosTeste
 extends Node3D
 ## Três opções de cenário para comparar: casa da vila + cemitério + árvores.
-## Cenário 3 tem muro de pedra procedural (sem textura externa). Troque com o botão ou com a tecla N.
+## Cenário 3 tem muro de pedra com a peça EA03_Fence_Cobble_01a (CC0, itch.io). Troque com o botão ou com a tecla N; Esc volta à arena.
 ## Coordenadas em metros, Y para cima. Posições convertidas do teste no Blender (Godot z = -Blender y).
 ## Modelos de lápides e árvores: pacotes CC0 (polyy.ai), copiados para assets/cenario_teste/.
 
@@ -10,6 +10,7 @@ const PASTA_VILA: String = "res://assets/vila_3d/"
 const TAMANHO_CHAO: float = 60.0
 const TOTAL_CENARIOS: int = 3
 const ARENA_SCENE: String = "res://scenes/arena_teste.tscn"
+const PASTA_MURO: String = "res://assets/cenario_teste/muro_pedra/"
 
 var _camera: Camera3D
 var _botao: Button
@@ -146,11 +147,11 @@ func _montar_casa(raiz: Node3D) -> void:
 
 
 ## Coloca um modelo. Se altura > 0, escala o modelo para essa altura e apoia a base no chão.
-func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escala: Vector3, altura: float) -> void:
+func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escala: Vector3, altura: float) -> Node3D:
 	var cena: PackedScene = load(caminho) as PackedScene
 	if cena == null:
 		push_warning("Modelo não encontrado: %s" % caminho)
-		return
+		return null
 	var no: Node3D = cena.instantiate() as Node3D
 	var fator: float = 1.0
 	var deslocamento_y: float = 0.0
@@ -162,6 +163,7 @@ func _colocar_peca(pai: Node3D, caminho: String, pos: Vector3, rot: float, escal
 	no.rotation_degrees = Vector3(0.0, rot, 0.0)
 	no.position = pos + Vector3(0.0, deslocamento_y, 0.0)
 	pai.add_child(no)
+	return no
 
 
 ## AABB do conjunto de malhas, no referencial do nó raiz (sem contar a transformação do próprio nó).
@@ -188,24 +190,33 @@ func _aabb_de(no: Node3D) -> AABB:
 
 
 ## Muro de pedra na borda do cemitério (z = 11.5), com vão de 2 m no meio como portão.
+## Peça EA03_Fence_Cobble_01a (2,36 m de comprimento e 1,2 m de altura, pacote FbxLODS, CC0),
+## esticada para 2 m de comprimento e 1,3 m de altura. O FBX não traz textura: o material de pedra é aplicado aqui.
 func _montar_muro(raiz: Node3D) -> void:
 	var material: StandardMaterial3D = _material_pedra()
+	var caminho: String = PASTA_MURO + "EA03_Fence_Cobble_01a.fbx"
+	var altura_muro: float = 1.3
+	var comprimento_peca: float = 2.36
+	var comprimento_segmento: float = 2.0
+	var escala_x: float = comprimento_segmento / comprimento_peca / (altura_muro / 1.2)
 	var trechos: Array = [[-12.0, -2.0], [2.0, 12.0]]
 	for trecho in trechos:
 		var inicio: float = trecho[0]
 		var fim: float = trecho[1]
 		var x: float = inicio
 		while x < fim - 0.01:
-			var comp: float = minf(2.0, fim - x)
-			var h: float = 1.3 + 0.3 * absf(sin(x * 1.7))
-			var caixa: BoxMesh = BoxMesh.new()
-			caixa.size = Vector3(comp, h, 0.5)
-			var bloco: MeshInstance3D = MeshInstance3D.new()
-			bloco.mesh = caixa
-			bloco.material_override = material
-			bloco.position = Vector3(x + comp / 2.0, h / 2.0, 11.5)
-			raiz.add_child(bloco)
-			x += comp
+			var no: Node3D = _colocar_peca(raiz, caminho, Vector3(x + comprimento_segmento / 2.0, 0.0, 11.5), 0.0, Vector3(escala_x, 1.0, 1.0), altura_muro)
+			if no != null:
+				_aplicar_material(no, material)
+			x += comprimento_segmento
+
+
+## Aplica um material a todas as malhas de um nó e dos seus filhos.
+func _aplicar_material(no: Node, material: Material) -> void:
+	if no is MeshInstance3D:
+		(no as MeshInstance3D).material_override = material
+	for filho in no.get_children():
+		_aplicar_material(filho, material)
 
 
 ## Pedra procedural: ruído celular como cor e como relevo (normal map). Sem download.
