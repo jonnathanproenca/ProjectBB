@@ -195,6 +195,7 @@ func _montar_casa(raiz: Node3D) -> void:
 		var rot: float = float(dados["rotacao_y"])
 		var escala: Vector3 = dados["escala"]
 		_colocar_peca(raiz, caminho, pos, rot, escala, 0.0)
+	raiz.add_child(CasaVila.criar_telhado())
 
 
 ## Coloca um modelo. Se altura > 0, escala o modelo para essa altura e apoia a base no chão.

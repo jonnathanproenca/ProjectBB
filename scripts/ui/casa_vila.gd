@@ -26,20 +26,13 @@ const PECAS: Array = [
 	{"arquivo": "Wall_Plaster_Straight", "posicao": Vector3(4.0, 0.0, 0.75), "rotacao_y": 90.0, "escala": Vector3(0.75, 1.0, 1.0)},
 	{"arquivo": "Wall_Plaster_Straight", "posicao": Vector3(0.0, 0.0, -1.0), "rotacao_y": 90.0, "escala": Vector3(0.5, 1.0, 1.0)},
 	{"arquivo": "Wall_Plaster_Straight", "posicao": Vector3(0.0, 0.0, 1.0), "rotacao_y": 90.0, "escala": Vector3(0.5, 1.0, 1.0)},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(-3.39, 3.12, 0.0), "rotacao_y": 180.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(-3.39, 3.12, 0.0), "rotacao_y": 0.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(-1.13, 3.12, 0.0), "rotacao_y": 180.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(-1.13, 3.12, 0.0), "rotacao_y": 0.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(1.13, 3.12, 0.0), "rotacao_y": 180.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(1.13, 3.12, 0.0), "rotacao_y": 0.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(3.39, 3.12, 0.0), "rotacao_y": 180.0, "escala": Vector3.ONE},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(3.39, 3.12, 0.0), "rotacao_y": 0.0, "escala": Vector3.ONE},
 	{"arquivo": "Prop_Crate", "posicao": Vector3(5.2, 0.0, -1.8), "rotacao_y": -20.0, "escala": Vector3.ONE},
 ]
 
 
 func _ready() -> void:
 	_configurar_luz_e_camera()
+	add_child(criar_telhado())
 	for peca in PECAS:
 		var caminho: String = PASTA + str(peca["arquivo"]) + ".gltf"
 		var cena: PackedScene = load(caminho) as PackedScene
@@ -51,6 +44,47 @@ func _ready() -> void:
 		no.rotation_degrees = Vector3(0.0, float(peca["rotacao_y"]), 0.0)
 		no.scale = peca["escala"]
 		add_child(no)
+
+
+## Telhado de duas águas como uma malha única (sem emendas), com empenas nas duas pontas.
+## Beiral em y = 3,12 sobre as paredes; cumeeira em y = 4,12. Sobra de 0,4 m nas pontas e nas laterais.
+static func criar_telhado() -> MeshInstance3D:
+	var meia_x: float = 4.4
+	var meia_z: float = 1.9
+	var beiral: float = 3.12
+	var cumeeira: float = 4.12
+	var st: SurfaceTool = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var normal_frente: Vector3 = Vector3(0.0, 1.0, -0.5).normalized()
+	var normal_fundo: Vector3 = Vector3(0.0, 1.0, 0.5).normalized()
+	var a: Vector3 = Vector3(-meia_x, beiral, -meia_z)
+	var b: Vector3 = Vector3(meia_x, beiral, -meia_z)
+	var c: Vector3 = Vector3(meia_x, cumeeira, 0.0)
+	var d: Vector3 = Vector3(-meia_x, cumeeira, 0.0)
+	var e: Vector3 = Vector3(meia_x, beiral, meia_z)
+	var f: Vector3 = Vector3(-meia_x, beiral, meia_z)
+	for v in [a, b, c, a, c, d]:
+		_vertice_telhado(st, v, normal_frente)
+	for v in [d, c, e, d, e, f]:
+		_vertice_telhado(st, v, normal_fundo)
+	for v in [a, f, d, b, c, e]:
+		var normal_empena: Vector3 = Vector3(-1.0, 0.0, 0.0) if v.x < 0.0 else Vector3(1.0, 0.0, 0.0)
+		_vertice_telhado(st, v, normal_empena)
+	var material: StandardMaterial3D = StandardMaterial3D.new()
+	material.albedo_texture = load("res://assets/vila_3d/T_WoodTrim_BaseColor.png") as Texture2D
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.roughness = 0.9
+	var telhado: MeshInstance3D = MeshInstance3D.new()
+	telhado.mesh = st.commit()
+	telhado.material_override = material
+	telhado.name = "Telhado"
+	return telhado
+
+
+static func _vertice_telhado(st: SurfaceTool, v: Vector3, normal: Vector3) -> void:
+	st.set_normal(normal)
+	st.set_uv(Vector2(v.x, v.z) * 0.5)
+	st.add_vertex(v)
 
 
 func _configurar_luz_e_camera() -> void:
