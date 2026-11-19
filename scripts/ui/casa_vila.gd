@@ -2,8 +2,8 @@ class_name CasaVila
 extends Node3D
 ## Casa de vila montada com peças do kit Medieval Village MegaKit (Quaternius, CC0).
 ## Peças em metros (1 unidade = 1 m), eixo Y para cima. Cada peça tem o próprio pivô.
-## Posições validadas no Blender (eixo Y do glTF = profundidade no Blender). Ver ADR-072.
-## Pendência: o telhado ainda não fecha no cume; revisar antes de usar em arena.
+## Posições validadas no Blender (eixo Y do glTF = profundidade no Blender). Ver ADR-072 e ADR-073.
+## Telhado de duas águas: cada peça tem a borda alta no cume (z = 0) e a borda baixa no topo da parede (y = 3,12).
 
 const PASTA: String = "res://assets/vila_3d/"
 
@@ -13,8 +13,8 @@ const PECAS: Array = [
 	{"arquivo": "Wall_Plaster_Straight", "posicao": Vector3(0.0, 0.0, 0.91), "rotacao_y": 180.0},
 	{"arquivo": "Wall_Plaster_Window_Wide_Flat", "posicao": Vector3(-0.91, 0.0, 0.0), "rotacao_y": -90.0},
 	{"arquivo": "Wall_Plaster_Straight", "posicao": Vector3(0.91, 0.0, 0.0), "rotacao_y": 90.0},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(0.0, 3.0, -0.78), "rotacao_y": 0.0},
-	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(0.0, 3.0, 0.78), "rotacao_y": 180.0},
+	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(0.0, 3.12, 0.0), "rotacao_y": 180.0},
+	{"arquivo": "Roof_Wooden_2x1", "posicao": Vector3(0.0, 3.12, 0.0), "rotacao_y": 0.0},
 	{"arquivo": "Prop_Crate", "posicao": Vector3(1.9, 0.0, -1.3), "rotacao_y": -20.0},
 ]
 
